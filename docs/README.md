@@ -12,6 +12,9 @@
 | [offer-part-8.md](offer-part-8.md) | Спека промышленного сайта и решения, которые не переоткрывать |
 | [../PLAN.md](../PLAN.md) | Пошаговый план: файл, правка, критерий готовности |
 | [../monolith-content.md](../monolith-content.md) | Старый внутренний бриф («агентство полного цикла») — не оффер |
+| [cases-shotlist.md](cases-shotlist.md) | Что снимать по каждому кейсу и когда считать его готовым |
+| [../tools/rack_gen.py](../tools/rack_gen.py) | Параметрический генератор стеллажей + студия + батч (Blender) |
+| [../tools/contact-sheet.js](../tools/contact-sheet.js) | Контактный лист серии для приёмки: `node tools/contact-sheet.js assets/cases` |
 | [../assets/cases/README.md](../assets/cases/README.md) | Как положить первый кейс в Capabilities |
 
 Полный бизнес-документ с рынком, сайтом №1 и прайсом остаётся вне этого репозитория (`~/Desktop/Anastasia_Malutina_AI_Content_2026.md`). Сюда вынесено только то, что нужно, чтобы продолжать сайт №2.

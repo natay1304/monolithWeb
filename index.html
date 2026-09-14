@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" data-palette="1">
+<html lang="ru" data-palette="3">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MONOLITH STUDIO — Modern marketing for industries that build the world</title>
-  <meta name="description" content="Digital production studio for traditional industries. Cinematics, landing presentations, campaigns and spaces — precise as a blueprint, shot like cinema.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MONOLITH STUDIO — визуал продукта из чертежей и каталога</title>
+  <meta name="description" content="Фотореалистичный визуал из ваших CAD и каталога: герой-рендеры, среда применения, взрыв-схемы, 360° и интерактив. Первые кадры — за 24–48 часов после модели.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=25">
 </head>
 <body>
 
@@ -22,17 +22,17 @@
   <header id="header">
     <a class="brand" href="#/main">MONOLITH<span class="brand-ai">.STUDIO</span></a>
     <nav id="nav">
-      <a href="#/main"         data-route="main"         data-i18n="nav.main">01 // MAIN</a>
-      <a href="#/lab"          data-route="lab"          data-i18n="nav.lab">02 // LAB</a>
-      <a href="#/capabilities" data-route="capabilities" data-i18n="nav.capabilities">03 // CAPABILITIES</a>
-      <a href="#/brief"        data-route="brief"        data-i18n="nav.brief">04 // BRIEF</a>
+      <a href="#/main"         data-route="main"         data-i18n="nav.main">01 // ГЛАВНАЯ</a>
+      <a href="#/lab"          data-route="lab"          data-i18n="nav.lab">02 // КАК ЭТО УСТРОЕНО</a>
+      <a href="#/capabilities" data-route="capabilities" data-i18n="nav.capabilities">03 // РАБОТЫ</a>
+      <a href="#/brief"        data-route="brief"        data-i18n="nav.brief">04 // БРИФ</a>
     </nav>
     <div class="header-controls">
-      <!--button id="palBtn" class="ctl" type="button" aria-label="Switch palette">P_01</button-->
-      <button id="langBtn" class="ctl" type="button" aria-label="Switch language">RU</button>
-      <button id="burger" class="ctl burger" type="button" aria-label="Menu"><i></i><i></i></button>
+      <button id="langBtn" class="ctl" type="button" aria-label="Switch language">EN</button>
+      <button id="burger" class="ctl burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
     </div>
   </header>
+  <div id="navScrim" class="nav-scrim" hidden></div>
 
   <!-- ============ PAGES ============ -->
   <main id="pages">
@@ -42,11 +42,15 @@
       <div class="wrap">
 
         <div class="hero" data-animate>
-          <p class="label" data-i18n="hero.label">01 // MAIN — MANIFESTO</p>
-          <h1 class="hero-title" data-i18n="hero.tagline">Modern marketing for industries that build the world.</h1>
+          <p class="label" data-i18n="hero.label">01 // ГЛАВНАЯ — ОФФЕР</p>
+          <h1 class="hero-title" data-i18n="hero.tagline">Визуал продукта из ваших чертежей и каталога. Точный, как модель. Готовый к тендеру и сайту.</h1>
           <div class="hero-manifesto">
             <p data-i18n="hero.p1"></p>
             <p data-i18n="hero.p2"></p>
+          </div>
+          <div class="hero-cta">
+            <a class="submit-btn" href="#/brief" data-intent="trial" data-i18n="hero.ctaTrial">Получить тестовый рендер</a>
+            <a class="cta-ghost" href="#/lab" data-i18n="hero.ctaLab">Как это устроено</a>
           </div>
         </div>
 
@@ -57,12 +61,21 @@
         </div>
 
         <div class="block" data-animate>
-          <p class="label" data-i18n="oldway.title">THE OLD WAY / THE MONOLITH WAY</p>
+          <p class="label oldway-title" data-i18n="oldway.title">КАК СЕЙЧАС / КАК С НАМИ</p>
           <div class="oldway" id="oldway"></div>
         </div>
 
         <div class="block" data-animate>
-          <p class="label" data-i18n="deliv.title">DELIVERABLES</p>
+          <p class="label" data-i18n="economy.title">СКОЛЬКО СТОИТ ЗАКРЫТЬ КАТАЛОГ</p>
+          <div class="table economy" id="economy"></div>
+          <p class="table-note" data-i18n="economy.note"></p>
+          <p class="label packs-label" data-i18n="packs.title">ПАКЕТЫ ОТ</p>
+          <div class="packs" id="packs"></div>
+          <p class="table-note" data-i18n="packs.note"></p>
+        </div>
+
+        <div class="block" data-animate>
+          <p class="label" data-i18n="deliv.title">ЧТО ВЫ ПОЛУЧАЕТЕ</p>
           <div class="deliverables" id="deliverables"></div>
         </div>
 
@@ -71,15 +84,15 @@
         </div>
 
         <div class="block" data-animate>
-          <p class="label" data-i18n="industries.title">INDUSTRIES</p>
+          <p class="label" data-i18n="industries.title">ИНДУСТРИИ</p>
           <ol class="industries" id="industries"></ol>
           <p class="industries-open" data-i18n="industries.open"></p>
         </div>
 
         <div class="block" data-animate>
-          <p class="label" data-i18n="principles.title">PRINCIPLES</p>
+          <p class="label" data-i18n="principles.title">ПРИНЦИПЫ</p>
           <div class="principles" id="principles"></div>
-          <p class="principles-line mono" data-i18n="principles.line">REMOTE-FIRST · WORLDWIDE · NDA BY DEFAULT</p>
+          <p class="principles-line mono" data-i18n="principles.line">REMOTE-FIRST · NDA BY DEFAULT</p>
         </div>
 
       </div>
@@ -90,31 +103,32 @@
       <div class="wrap">
 
         <div class="hero" data-animate>
-          <p class="label" data-i18n="lab.label">02 // LAB — PIPELINE</p>
+          <p class="label" data-i18n="lab.label">02 // КАК ЭТО УСТРОЕНО — ПАЙПЛАЙН</p>
           <h1 class="page-title" data-i18n="lab.title"></h1>
+          <p class="lab-tech" data-i18n="lab.tech"></p>
         </div>
 
         <div class="pipeline" id="pipeline" data-animate></div>
 
         <div class="block" data-animate>
-          <p class="label" data-i18n="matrix.title">INPUT MATRIX</p>
-          <div class="table matrix" id="matrix"></div>
+          <p class="label" data-i18n="matrix.title">ЧТО НУЖНО НА ВХОДЕ</p>
+          <div id="matrix"></div>
           <p class="table-note" data-i18n="matrix.note"></p>
         </div>
 
         <div class="block" data-animate>
-          <p class="label" data-i18n="compare.title">THREE WAYS TO GET IT DONE</p>
-          <div class="table compare" id="compare"></div>
+          <p class="label" data-i18n="compare.title">ТРИ СПОСОБА ПОЛУЧИТЬ ВИЗУАЛ</p>
+          <div id="compare"></div>
         </div>
 
         <div class="block" data-animate>
-          <p class="label" data-i18n="iter.title">ITERATION LOOP</p>
+          <p class="label" data-i18n="iter.title">ЦИКЛ СОГЛАСОВАНИЯ</p>
           <div class="iterations" id="iterations"></div>
           <p class="table-note" data-i18n="iter.note"></p>
         </div>
 
         <div class="block" data-animate>
-          <p class="label" data-i18n="faq.title">FAQ</p>
+          <p class="label" data-i18n="faq.title">ВОПРОСЫ</p>
           <div class="faq" id="faq"></div>
         </div>
 
@@ -126,7 +140,7 @@
       <div class="wrap">
 
         <div class="hero" data-animate>
-          <p class="label" data-i18n="cap.label">03 // CAPABILITIES</p>
+          <p class="label" data-i18n="cap.label">03 // РАБОТЫ</p>
           <h1 class="page-title" data-i18n="cap.title"></h1>
           <p class="badge mono" id="capBadge" data-i18n="cap.badge"></p>
         </div>
@@ -134,11 +148,16 @@
         <div class="cap-filters mono" id="capFilters" data-animate></div>
 
         <div class="cap-section" id="casesSection" hidden>
-          <p class="label" data-i18n="cap.cases">CASES</p>
+          <p class="label" data-i18n="cap.cases">КЕЙСЫ</p>
           <div class="cap-grid" id="caseGrid"></div>
         </div>
 
         <div class="cap-grid" id="capGrid" data-animate></div>
+
+        <div class="cap-section extra-section" id="extraSection" hidden>
+          <p class="label" data-i18n="cap.also">ТАКЖЕ</p>
+          <div class="cap-grid" id="extraGrid"></div>
+        </div>
 
       </div>
     </section>
@@ -148,7 +167,7 @@
       <div class="wrap">
 
         <div class="hero" data-animate>
-          <p class="label" data-i18n="brief.label">04 // BRIEF</p>
+          <p class="label" data-i18n="brief.label">04 // БРИФ</p>
           <h1 class="page-title" data-i18n="brief.title"></h1>
         </div>
 
@@ -156,52 +175,52 @@
 
           <form class="brief-form" id="briefForm" novalidate data-animate>
             <div class="field">
-              <label class="mono" for="fCompany" data-i18n="form.company">COMPANY</label>
-              <input type="text" id="fCompany" name="company" required>
+              <label class="mono" for="fCompany" data-i18n="form.company">КОМПАНИЯ</label>
+              <input type="text" id="fCompany" name="company" required autocomplete="organization">
             </div>
             <div class="field">
-              <label class="mono" for="fIndustry" data-i18n="form.industry">INDUSTRY</label>
+              <label class="mono" for="fIndustry" data-i18n="form.industry">СФЕРА</label>
               <select id="fIndustry" name="industry"></select>
             </div>
             <div class="field">
-              <span class="mono field-legend" data-i18n="form.needs">WHAT DO YOU NEED</span>
+              <span class="mono field-legend" data-i18n="form.needs">ЧТО НУЖНО</span>
               <div class="needs" id="fNeeds"></div>
             </div>
             <div class="field">
-              <span class="mono field-legend" data-i18n="form.stage">PROJECT STAGE</span>
+              <span class="mono field-legend" data-i18n="form.stage">СТАДИЯ</span>
               <div class="stages" id="fStages"></div>
             </div>
             <div class="field">
               <label class="mono" for="fEmail" data-i18n="form.email">EMAIL</label>
-              <input type="email" id="fEmail" name="email" required>
+              <input type="email" id="fEmail" name="email" required autocomplete="email">
             </div>
             <div class="field">
-              <label class="mono" for="fMessage" data-i18n="form.message">MESSAGE</label>
+              <label class="mono" for="fMessage" data-i18n="form.message">СООБЩЕНИЕ</label>
               <textarea id="fMessage" name="message" rows="5"></textarea>
             </div>
             <p class="form-error mono" id="formError" data-i18n="form.required" hidden></p>
-            <button type="submit" class="submit-btn" id="submitBtn" data-i18n="form.submit">SEND BRIEF</button>
+            <button type="submit" class="submit-btn" id="submitBtn" data-i18n="form.submit">Открыть в почте</button>
           </form>
 
           <div class="brief-done" id="briefDone" hidden>
-            <p class="done-title" data-i18n="brief.doneTitle">BRIEF RECEIVED</p>
+            <p class="done-title" data-i18n="brief.doneTitle">ОТКРОЙТЕ ПОЧТОВЫЙ КЛИЕНТ</p>
             <p class="done-text" data-i18n="brief.doneText"></p>
-            <a class="done-mail mono" id="mailtoLink" href="#" data-i18n="brief.doneMail">OPEN IN MAIL CLIENT</a>
-            <button class="ctl" id="briefAgain" type="button" data-i18n="brief.again">NEW BRIEF</button>
+            <a class="done-mail mono" id="mailtoLink" href="#" data-i18n="brief.doneMail">ОТКРЫТЬ В ПОЧТЕ</a>
+            <button class="ctl" id="briefAgain" type="button" data-i18n="brief.again">НОВЫЙ БРИФ</button>
           </div>
 
           <aside class="brief-aside" data-animate>
             <div class="aside-block">
-              <p class="label" data-i18n="steps.title">AFTER YOU HIT SEND</p>
+              <p class="label" data-i18n="steps.title">ЧТО ПРОИСХОДИТ ПОСЛЕ ОТПРАВКИ</p>
               <div class="steps" id="briefSteps"></div>
             </div>
             <div class="aside-block">
-              <p class="label" data-i18n="time.title">TIMELINES</p>
+              <p class="label" data-i18n="time.title">СРОКИ И МАСШТАБ</p>
               <div class="timelines" id="timelines"></div>
               <p class="table-note" data-i18n="time.note"></p>
             </div>
             <div class="aside-block">
-              <p class="label" data-i18n="check.title">BRING TO THE BRIEF</p>
+              <p class="label" data-i18n="check.title">ЧТО ПРИГОДИТСЯ</p>
               <ul class="checklist" id="checklist"></ul>
             </div>
           </aside>
@@ -212,15 +231,13 @@
 
   </main>
 
+  <div class="cta-scrim" aria-hidden="true"></div>
+  <a id="stickyCta" class="sticky-cta" href="#/brief" data-i18n="cta.sticky">Отправить бриф</a>
+
   <!-- ============ FOOTER / STATUS BAR ============ -->
   <footer id="footer">
     <div class="footer-main">
-      <a class="footer-mail mono" id="footerMail" href="mailto:hello@monolith.ai">HELLO@MONOLITH.AI</a>
-      <div class="footer-links mono">
-        <a href="#" rel="noopener" aria-disabled="true">LINKEDIN</a>
-        <a href="#" rel="noopener" aria-disabled="true">VIMEO</a>
-        <a href="#" rel="noopener" aria-disabled="true">BEHANCE</a>
-      </div>
+      <a class="footer-mail mono" id="footerMail" href="mailto:hello@monolith.studio">HELLO@MONOLITH.STUDIO</a>
       <p class="footer-rights mono" data-i18n="footer.rights"></p>
     </div>
     <div class="statusbar mono">
@@ -243,7 +260,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="content.js?v=6"></script>
-  <script src="app.js?v=6"></script>
+  <script src="content.js?v=25"></script>
+  <script src="app.js?v=25"></script>
 </body>
 </html>
