@@ -12,10 +12,11 @@
   const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const FINE    = window.matchMedia('(pointer: fine)').matches;
   const MOBILE  = window.innerWidth < 768;
+  const COARSE  = window.matchMedia('(pointer: coarse)').matches;
 
   const state = {
-    lang:    localStorage.getItem('m_lang') || 'en',
-    palette: parseInt(localStorage.getItem('m_palette') || '1', 10),
+    lang:    localStorage.getItem('m_lang') || 'ru',
+    palette: parseInt(localStorage.getItem('m_palette') || '3', 10),
     route:   'main',
     transitioning: false
   };
@@ -23,17 +24,49 @@
   const PAGES = ['main', 'lab', 'capabilities', 'brief'];
   const PAGE_INDEX = { main: '01', lab: '02', capabilities: '03', brief: '04' };
 
+  if (MOBILE) document.body.classList.add('lite-gl');
+
+  /* shared so goTo() works with or without the scene */
+  const w  = { normal: 1, wireframe: 0, metric: 0, exploded: 0 };
+  const fx = { converge: 0, pulse: 0 };
+  const STATE_WEIGHTS = {
+    main:         { normal: 1,    wireframe: 0, metric: 0, exploded: 0 },
+    lab:          { normal: 0.55, wireframe: 0.45, metric: 0, exploded: 0 },
+    capabilities: { normal: 0,    wireframe: 0, metric: 1, exploded: 0 },
+    brief:        { normal: 0.65, wireframe: 0, metric: 0, exploded: 0.35 }
+  };
+  const FIELD_X = { main: 7, lab: 0, capabilities: 0, brief: 3 };
+  const FIELD_Y = { main: 2, lab: 0, capabilities: 0, brief: 0 };   // lifts the field in frame on the home page
+  const camPos  = { x: 0, y: 15, z: 36 };
+  const camLook = { x: 0, y: 2, z: 0 };
+  const camFov  = { fov: 45 };
+  let fieldGroup = { position: { x: FIELD_X.main, y: 0, z: 0 }, rotation: { x: 0, y: 0, z: 0 } };
+
+  let tweenCamera = function () {};
+  let buildHeroRecede = function () {};
+  let tweenWeights = function (target) { Object.assign(w, target || {}); };
+  let pulse = function () {};
+  let setHistogram = function () {};
+  let startLoop = function () {};
+  let stopLoop = function () {};
+  let freezeField = function () {};
+  let setFogBoost = function () {};
+  let staticFrame = function () {};
+  let fogResize = function () {};
+  let makeFogSprite = function () {};
+
   /* ==========================================================
      1. WEBGL ENGINE — field of columns (InstancedMesh)
      ========================================================== */
-  const COLS = MOBILE ? 24 : 40;
-  const ROWS = MOBILE ? 16 : 26;
-  const GAP  = 1.18;
+  const COLS = MOBILE ? 16 : 40;
+  const ROWS = MOBILE ? 11 : 26;
+  const GAP  = MOBILE ? 1.35 : 1.18;
   const COUNT = COLS * ROWS;
 
+  if (typeof THREE !== 'undefined') {
   const canvas   = $('#gl');
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, alpha: true });
+  renderer.setPixelRatio(MOBILE ? 1 : Math.min(window.devicePixelRatio, 1.75));
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x000000, 0);
 
@@ -56,12 +89,10 @@
   const wire = new THREE.InstancedMesh(boxGeo, wireMat, COUNT);
   mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
   wire.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-  // group lets mouse/scroll rotate the whole field in 3D
-  const fieldGroup = new THREE.Group();
+  fieldGroup = new THREE.Group();
   fieldGroup.add(mesh, wire);
   scene.add(fieldGroup);
 
-  // subtle per-instance brightness variation, set once
   const c0 = new THREE.Color();
   for (let i = 0; i < COUNT; i++) {
     const v = 0.8 + Math.random() * 0.2;
@@ -69,7 +100,6 @@
   }
   if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
 
-  // per-instance explode directions (precomputed)
   const exDir = new Float32Array(COUNT * 3);
   for (let i = 0; i < COUNT; i++) {
     const a = Math.random() * Math.PI * 2;
@@ -78,27 +108,19 @@
     exDir[i * 3 + 2] = Math.sin(a) * (0.6 + Math.random() * 1.6);
   }
 
-  /* geometry state weights — GSAP tweens these, per-frame loop blends */
-  const w  = { normal: 1, wireframe: 0, metric: 0, exploded: 0 };
-  const fx = { converge: 0, pulse: 0 };
-
-  /* metric histogram: per-column normalized targets, lerped per frame */
   const histTarget  = new Float32Array(COLS);
   const histCurrent = new Float32Array(COLS);
-  function setHistogram(nums) {
+  setHistogram = function (nums) {
     if (!nums || !nums.length) nums = [3, 8, 5, 12, 7, 4, 10];
     const max = Math.max(...nums);
     for (let c = 0; c < COLS; c++) {
       const n = nums[c % nums.length] / max;
-      // deterministic step pattern, quantized — a "bar chart" look
       histTarget[c] = 0.15 + Math.round(n * 6) / 6 * 0.85;
     }
-  }
+  };
   setHistogram(null);
 
-  /* pointer inertia (lerp 0.04) + camera parallax */
   const mouse = { x: 0, y: 0, lx: 0, ly: 0 };
-  /* scroll drives field rotation, camera drift and wave phase */
   const scroll = { y: window.scrollY, ly: window.scrollY };
   window.addEventListener('scroll', () => { scroll.y = window.scrollY; }, { passive: true });
   window.addEventListener('mousemove', (e) => {
@@ -108,31 +130,32 @@
     if (FINE) cursorMove(e.clientX, e.clientY);
   });
 
-  /* camera state per route — position, lookAt, fov (dolly-zoom on fov) */
   const CAMERA_STATES = {
     main:         { pos: { x: 0,   y: 15,  z: 36 }, look: { x: 0, y: 2, z: 0 },  fov: 45 },
-    /* lab: macro angle — camera in between the columns, wireframe lines showing */
     lab:          { pos: { x: 3.2, y: 4.3, z: 10.5 }, look: { x: -4, y: 1.6, z: -7 }, fov: 55 },
     capabilities: { pos: { x: 0,   y: 48,  z: 12 }, look: { x: 0, y: 0, z: 0 },  fov: 20 },
     brief:        { pos: { x: -14, y: 3.5, z: 23 }, look: { x: 0, y: 5, z: -4 }, fov: 60 }
   };
-  /* per-route horizontal shift of the whole field — on MAIN the columns
-     move right so the hero text sits on clear background */
-  const FIELD_X = { main: 7, lab: 0, capabilities: 0, brief: 3 };
+  /* recede target: pushes the column field far into the distance once the
+     reader scrolls past the hero, so it stops competing with body text.
+     A wide fov keeps the extra distance reading as "smaller", not "zoomed". */
+  const HERO_FAR = { pos: { x: 0, y: 70, z: 220 }, fov: 55 };
+  /* ...but the desktop home page keeps its field. There the scroll only backs
+     the camera off along its own sight line until the columns read about a
+     third smaller — same angle, same colour — and they go on living there. */
+  const HERO_MAIN_BACK = 1.5;   // × distance to the look point ⇒ ~1/3 smaller on screen
+  const backOff = (cs, k) => ({
+    x: cs.look.x + (cs.pos.x - cs.look.x) * k,
+    y: cs.look.y + (cs.pos.y - cs.look.y) * k,
+    z: cs.look.z + (cs.pos.z - cs.look.z) * k
+  });
 
-  const STATE_WEIGHTS = {
-    main:         { normal: 1,    wireframe: 0, metric: 0, exploded: 0 },
-    lab:          { normal: 0.55, wireframe: 0.45, metric: 0, exploded: 0 },
-    capabilities: { normal: 0,    wireframe: 0, metric: 1, exploded: 0 },
-    brief:        { normal: 0.65, wireframe: 0, metric: 0, exploded: 0.35 }
-  };
-
-  const camPos  = { ...CAMERA_STATES.main.pos };
-  const camLook = { ...CAMERA_STATES.main.look };
-  const camFov  = { fov: CAMERA_STATES.main.fov };
+  Object.assign(camPos, CAMERA_STATES.main.pos);
+  Object.assign(camLook, CAMERA_STATES.main.look);
+  camFov.fov = CAMERA_STATES.main.fov;
   const lookVec = new THREE.Vector3();
 
-  function tweenCamera(route, instant) {
+  tweenCamera = function (route, instant) {
     const cs = CAMERA_STATES[route];
     if (instant || REDUCED) {
       Object.assign(camPos, cs.pos); Object.assign(camLook, cs.look); camFov.fov = cs.fov;
@@ -142,23 +165,53 @@
     gsap.to(camPos,  { ...cs.pos,  ...opts });
     gsap.to(camLook, { ...cs.look, ...opts });
     gsap.to(camFov,  { fov: cs.fov, ...opts });
-  }
+  };
 
-  function tweenWeights(target, dur) {
+  let heroRecedeTl = null;
+  let freezeCall = null;
+  buildHeroRecede = function (route) {
+    if (heroRecedeTl) heroRecedeTl.kill();
+    const near = CAMERA_STATES[route];
+    // the desktop home page is the one place the field stays on screen
+    const keepField = !MOBILE && route === 'main';
+    const far = keepField ? { pos: backOff(near, HERO_MAIN_BACK), fov: near.fov } : HERO_FAR;
+    heroRecedeTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#page-' + route,
+        // hold the field in frame for the first third of a screen, then drift
+        start: () => 'top top-=' + Math.round(window.innerHeight * 0.35),
+        end: () => '+=' + Math.round(window.innerHeight * 1.05),
+        scrub: 1,
+        // freeze only after the scrub has settled, so a fast flick down
+        // doesn't strand the field mid-flight. A field that stays on screen
+        // must never be frozen — it would stop dead in front of the reader.
+        onLeave:     () => { if (!keepField) freezeCall = gsap.delayedCall(1.4, () => { fieldFrozen = true; }); },
+        onEnterBack: () => { if (freezeCall) freezeCall.kill(); startLoop(); }
+      }
+    })
+      .to(camPos, { ...far.pos, ease: 'none' }, 0)
+      .to(camFov, { fov: far.fov, ease: 'none' }, 0);
+    // fading and sliding the canvas is only for the routes that clear it out;
+    // on the home page the columns keep their colour exactly as they are
+    if (!keepField) heroRecedeTl.to('#gl', { xPercent: -35, opacity: 0, ease: 'power1.in' }, 0);
+  };
+
+  tweenWeights = function (target, dur) {
     if (REDUCED) { Object.assign(w, target); return; }
     gsap.to(w, { ...target, duration: dur || 1.4, ease: 'power3.inOut', overwrite: 'auto' });
-  }
+  };
 
-  function pulse() {
+  pulse = function () {
     if (REDUCED) return;
     gsap.fromTo(pulseLightSrc, { intensity: 2.2 }, { intensity: 0, duration: 1.1, ease: 'power2.out', overwrite: 'auto' });
-  }
+  };
 
   /* per-frame update */
   const dummy = new THREE.Object3D();
   let simT = 0, lastT = performance.now();
   let frames = 0, fpsLast = performance.now();
   let rafId = null;
+  let fieldFrozen = false;   // field receded out of view: skip its work, keep the fog alive
 
   function updateField(dt) {
     simT += dt * (1 - 0.78 * w.wireframe);                    // wireframe "freezes" the waves
@@ -190,11 +243,11 @@
         dummy.rotation.set(0, 0, 0);
         dummy.updateMatrix();
         mesh.setMatrixAt(i, dummy.matrix);
-        wire.setMatrixAt(i, dummy.matrix);
+        if (!MOBILE || w.wireframe > 0.01) wire.setMatrixAt(i, dummy.matrix);
       }
     }
     mesh.instanceMatrix.needsUpdate = true;
-    wire.instanceMatrix.needsUpdate = true;
+    if (!MOBILE || w.wireframe > 0.01) wire.instanceMatrix.needsUpdate = true;
     wireMat.opacity = w.wireframe * 0.7;
   }
 
@@ -207,7 +260,7 @@
     // mouse tilts the whole field in 3D, scroll slowly rotates and sinks it
     fieldGroup.rotation.y = mouse.lx * 0.14 + sf * 0.22;
     fieldGroup.rotation.x = mouse.ly * 0.07 - sf * 0.045;
-    fieldGroup.position.y = -sf * 1.1;
+    fieldGroup.position.y = (FIELD_Y[state.route] || 0) - sf * 1.1;
 
     // MAIN: scroll drives a camera rail — orbit around the field, descend, widen fov
     let bx = camPos.x, by = camPos.y, bz = camPos.z, fovAdd = 0;
@@ -239,8 +292,12 @@
     rafId = requestAnimationFrame(loop);
     const dt = Math.min(0.05, (now - lastT) / 1000);
     lastT = now;
-    updateField(dt);
-    renderFrame();
+    if (fieldFrozen) {
+      scroll.ly += (scroll.y - scroll.ly) * 0.06;   // renderFrame is skipped, but the fog reads this
+    } else {
+      updateField(dt);
+      renderFrame();
+    }
     fogUpdate(dt);
     frames++;
     if (now - fpsLast > 500) {
@@ -249,9 +306,12 @@
     }
   }
 
-  function startLoop() { if (rafId === null && !REDUCED) { lastT = performance.now(); rafId = requestAnimationFrame(loop); } }
-  function stopLoop()  { if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; } }
-  function staticFrame() { updateField(0.016); renderFrame(); fogUpdate(0.016); }
+  startLoop = function () { fieldFrozen = false; if (rafId === null && !REDUCED) { lastT = performance.now(); rafId = requestAnimationFrame(loop); } };
+  stopLoop  = function () { if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; } };
+  staticFrame = function () { updateField(0.016); renderFrame(); fogUpdate(0.016); };
+  // exposes the field-freeze switch to code outside this THREE-guarded block (the loop keeps
+  // running so fog keeps drifting; only the field's own update/render is skipped)
+  freezeField = function (v) { fieldFrozen = v; };
 
   document.addEventListener('visibilitychange', () => (document.hidden ? stopLoop() : startLoop()));
 
@@ -263,63 +323,66 @@
     if (REDUCED) staticFrame();
   });
 
-  /* ==========================================================
-     1b. PARTICLE FOG — accent-tinted soft cloud on a 2D layer
-         between the scene and the text; drifts under the text
-         while scrolling, breathes slowly at rest
-     ========================================================== */
-  const fogCanvas = $('#fog');
-  const fctx = fogCanvas.getContext('2d');
-  const FOG_N = MOBILE ? 26 : 46;
-  const fogParts = [];
-  for (let i = 0; i < FOG_N; i++) {
-    fogParts.push({
-      u: Math.pow(Math.random(), 1.5) * 0.9 - 0.05,     // biased toward the text side
-      v: Math.random() * 1.1 - 0.05,
-      r: 90 + Math.random() * 160,
-      ph: Math.random() * Math.PI * 2,
-      dp: 0.4 + Math.random() * 0.6                     // depth: size/speed/opacity factor
-    });
-  }
   let fogSprite = null;
-  function makeFogSprite() {
-    const hex = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-    const n = parseInt(hex.slice(1), 16);
-    const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
-    const s = document.createElement('canvas'); s.width = s.height = 256;
-    const c = s.getContext('2d');
-    const grad = c.createRadialGradient(128, 128, 0, 128, 128, 128);
-    grad.addColorStop(0,    'rgba(' + r + ',' + g + ',' + b + ',0.55)');
-    grad.addColorStop(0.55, 'rgba(' + r + ',' + g + ',' + b + ',0.18)');
-    grad.addColorStop(1,    'rgba(' + r + ',' + g + ',' + b + ',0)');
-    c.fillStyle = grad; c.fillRect(0, 0, 256, 256);
-    fogSprite = s;
-  }
-  function fogResize() { fogCanvas.width = window.innerWidth; fogCanvas.height = window.innerHeight; }
-  let fogT = 0;
-  function fogUpdate(dt) {
-    if (!fogSprite) return;
-    fogT += dt;
-    const wpx = fogCanvas.width, hpx = fogCanvas.height;
-    fctx.clearRect(0, 0, wpx, hpx);
-    const sv = Math.max(-600, Math.min(600, scroll.y - scroll.ly));   // scroll velocity proxy
-    for (const p of fogParts) {
-      // baseline slow circulation; scrolling advects the cloud toward the text
-      p.u += dt * 0.006 * p.dp - sv * dt * 0.00022 * p.dp;
-      p.v += Math.sin(fogT * 0.25 + p.ph) * dt * 0.01 - sv * dt * 0.00006 * p.dp;
-      if (p.u > 1.12) p.u = -0.12; else if (p.u < -0.12) p.u = 1.12;
-      if (p.v > 1.12) p.v = -0.12; else if (p.v < -0.12) p.v = 1.12;
-      const x = p.u * wpx + Math.sin(fogT * 0.18 + p.ph) * 36 * p.dp;
-      const y = p.v * hpx + Math.cos(fogT * 0.14 + p.ph * 1.7) * 24 * p.dp;
-      fctx.globalAlpha = 0.16 * p.dp;
-      fctx.drawImage(fogSprite, x - p.r, y - p.r, p.r * 2, p.r * 2);
+  function fogUpdate() {}
+  {
+    const fogCanvas = $('#fog');
+    const fctx = fogCanvas.getContext('2d');
+    // phones get fewer, smaller blobs: the canvas is ~4x smaller, so the same
+    // count and radius would mean heavy overdraw for the same visual density
+    const FOG_N = MOBILE ? 18 : 46;
+    const FOG_R = MOBILE ? 0.5 : 1;
+    const fogParts = [];
+    for (let i = 0; i < FOG_N; i++) {
+      fogParts.push({
+        u: Math.pow(Math.random(), 1.5) * 0.9 - 0.05,
+        v: Math.random() * 1.1 - 0.05,
+        r: (90 + Math.random() * 160) * FOG_R,
+        ph: Math.random() * Math.PI * 2,
+        dp: 0.4 + Math.random() * 0.6
+      });
     }
-    fctx.globalAlpha = 1;
+    makeFogSprite = function () {
+      const hex = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+      const n = parseInt(hex.slice(1), 16);
+      const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+      const s = document.createElement('canvas'); s.width = s.height = 256;
+      const c = s.getContext('2d');
+      const grad = c.createRadialGradient(128, 128, 0, 128, 128, 128);
+      grad.addColorStop(0,    'rgba(' + r + ',' + g + ',' + b + ',0.55)');
+      grad.addColorStop(0.55, 'rgba(' + r + ',' + g + ',' + b + ',0.18)');
+      grad.addColorStop(1,    'rgba(' + r + ',' + g + ',' + b + ',0)');
+      c.fillStyle = grad; c.fillRect(0, 0, 256, 256);
+      fogSprite = s;
+    };
+    fogResize = function () { fogCanvas.width = window.innerWidth; fogCanvas.height = window.innerHeight; };
+    let fogT = 0;
+    // dialled up on pages that have no field to lean on (e.g. brief on a phone,
+    // where the field is frozen out) so the fog reads as the scene, not a hint of one
+    let fogBoost = 1;
+    setFogBoost = function (v) { fogBoost = v; };
+    fogUpdate = function (dt) {
+      if (!fogSprite) return;
+      fogT += dt;
+      const wpx = fogCanvas.width, hpx = fogCanvas.height;
+      fctx.clearRect(0, 0, wpx, hpx);
+      const sv = Math.max(-600, Math.min(600, scroll.y - scroll.ly));
+      const rScale = 1 + (fogBoost - 1) * 0.3;
+      for (const p of fogParts) {
+        p.u += dt * 0.006 * p.dp - sv * dt * 0.00022 * p.dp;
+        p.v += Math.sin(fogT * 0.25 + p.ph) * dt * 0.01 - sv * dt * 0.00006 * p.dp;
+        if (p.u > 1.12) p.u = -0.12; else if (p.u < -0.12) p.u = 1.12;
+        if (p.v > 1.12) p.v = -0.12; else if (p.v < -0.12) p.v = 1.12;
+        const x = p.u * wpx + Math.sin(fogT * 0.18 + p.ph) * 36 * p.dp;
+        const y = p.v * hpx + Math.cos(fogT * 0.14 + p.ph * 1.7) * 24 * p.dp;
+        const r = p.r * rScale;
+        fctx.globalAlpha = Math.min(1, 0.16 * p.dp * fogBoost);
+        fctx.drawImage(fogSprite, x - r, y - r, r * 2, r * 2);
+      }
+      fctx.globalAlpha = 1;
+    };
   }
 
-  /* ==========================================================
-     2. PALETTES — CSS vars + tweened Three colors
-     ========================================================== */
   const PALETTES_3D = [
     null,
     { fog: 0xffffff, col: 0xc9d2de, amb: 0xffffff, dir: 0xeaf1ff, accent: 0x2563eb, fogNear: 34, fogFar: 100, dirInt: 1.1  },
@@ -328,11 +391,7 @@
     { fog: 0xeef2f0, col: 0xbccec4, amb: 0xeef6f2, dir: 0xdff0ea, accent: 0x0f766e, fogNear: 28, fogFar: 84,  dirInt: 1.0  }
   ];
 
-  function applyPalette(n, instant) {
-    state.palette = n;
-    localStorage.setItem('m_palette', String(n));
-    document.documentElement.setAttribute('data-palette', String(n));
-    if ($('#palBtn')) $('#palBtn').textContent = 'P_0' + n;
+  window.__monolithApply3D = function (n, instant) {
     const p = PALETTES_3D[n];
     const dur = (instant || REDUCED) ? 0 : 1.2;
     const cFog = new THREE.Color(p.fog), cCol = new THREE.Color(p.col),
@@ -346,8 +405,16 @@
     gsap.to(dirLight,         { intensity: p.dirInt, duration: dur });
     gsap.to(wireMat.color,    { r: cAcc.r, g: cAcc.g, b: cAcc.b, duration: dur });
     pulseLightSrc.color.set(p.accent);
-    makeFogSprite();                                  // fog re-tints with the palette accent
+    makeFogSprite();
     if (REDUCED) staticFrame();
+  };
+  } // end WebGL engine
+
+  function applyPalette(n, instant) {
+    state.palette = n;
+    localStorage.setItem('m_palette', String(n));
+    document.documentElement.setAttribute('data-palette', String(n));
+    if (window.__monolithApply3D) window.__monolithApply3D(n, instant);
   }
 
   $('#palBtn')?.addEventListener('click', () => applyPalette(1));
@@ -369,9 +436,14 @@
 
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+  const TICKER_ANIMATED = !MOBILE && !REDUCED && !COARSE;
+
   function renderTicker(el, items, sep) {
     const one = items.map((it) => `<span>${esc(it)}<i>${sep}</i></span>`).join('');
-    el.innerHTML = one + one; // duplicated for a seamless -50% loop
+    // duplicated only when the marquee actually animates (-50% loop); static tickers
+    // (mobile / coarse pointer / reduced motion match the CSS that turns the animation off)
+    // must not repeat the list, or the same text visibly appears twice.
+    el.innerHTML = TICKER_ANIMATED ? one + one : one;
   }
 
   function renderDynamic() {
@@ -383,32 +455,96 @@
     renderTicker($('#inputTicker'), ['INPUT:', ...INPUT_TICKER[L]], ' /');
     renderTicker($('#scenarioTicker'), SCENARIO_TICKER[L], ' //');
 
-    $('#oldway').innerHTML =
-      `<div class="oldway-head"><div>${esc(T(UI['oldway.colA']))}</div><div>${esc(T(UI['oldway.colB']))}</div></div>` +
-      OLDWAY_ROWS.map((r) => `<div class="oldway-row"><div>${esc(r.old[L])}</div><div>${esc(r.neu[L])}</div></div>`).join('');
+    $('#oldway').innerHTML = OLDWAY_ROWS.map((r) =>
+      `<article class="oldway-card">
+        <div class="oldway-pain"><span class="ow-tag mono">${esc(T(UI['oldway.colA']))}</span><p>${esc(r.old[L])}</p></div>
+        <div class="oldway-arrow" aria-hidden="true"></div>
+        <div class="oldway-fix"><span class="ow-tag mono">${esc(T(UI['oldway.colB']))}</span><p>${esc(r.neu[L])}</p></div>
+      </article>`).join('');
+
+    if ($('#economy')) {
+      const eh = [T(UI['economy.h0']), T(UI['economy.h1']), T(UI['economy.h2'])];
+      const ordered = [...ECONOMY_ROWS].sort((a, b) => (b.ours ? 1 : 0) - (a.ours ? 1 : 0));
+      $('#economy').innerHTML =
+        `<div class="table economy-desktop">
+          <div class="trow thead"><div>${eh[0]}</div><div>${eh[1]}</div><div>${eh[2]}</div></div>` +
+          ECONOMY_ROWS.map((r) =>
+            `<div class="trow${r.ours ? ' ours' : ''}"><div data-h="${eh[0]}">${esc(r.method[L])}</div><div data-h="${eh[1]}">${esc(r.time[L])}</div><div data-h="${eh[2]}"${r.ours ? ' class="hl"' : ''}>${esc(r.cost[L])}</div></div>`).join('') +
+        `</div>
+        <div class="econ-mobile">` +
+          ordered.map((r) =>
+            `<article class="econ-card${r.ours ? ' is-ours' : ''}">
+              ${r.ours ? `<span class="econ-badge mono">${esc(T(UI['economy.ours']))}</span>` : ''}
+              <h3 class="econ-name">${esc(r.method[L])}</h3>
+              <div class="spec-row"><dt>${esc(eh[1])}</dt><dd>${esc(r.time[L])}</dd></div>
+              <div class="spec-row"><dt>${esc(eh[2])}</dt><dd>${esc(r.cost[L])}</dd></div>
+            </article>`).join('') +
+        `</div>`;
+    }
+    if ($('#packs')) {
+      $('#packs').innerHTML = PACKAGES.map((p) =>
+        `<div class="pack"><span class="pack-name">${esc(p.name[L])}</span><span class="pack-price mono">${esc(p.price[L])}</span></div>`).join('');
+    }
 
     $('#deliverables').innerHTML = DELIVERABLES.map((d) =>
       `<div class="deliverable"><span class="d-index">${d.index} //</span><h3>${esc(d.title[L])}</h3><p>${esc(d.text[L])}</p></div>`).join('');
 
-    $('#industries').innerHTML = INDUSTRIES.map((i) => `<li>${esc(i[L])}</li>`).join('');
+    $('#industries').innerHTML = INDUSTRIES.map((i) =>
+      `<li class="ind-item"><div class="ind-body">
+        <button class="ind-q" type="button"><span>${esc(i[L])}</span><span class="q-plus">+</span></button>
+        <div class="ind-a"><p>${esc(i.text[L])}</p></div>
+      </div></li>`).join('');
 
     $('#principles').innerHTML = PRINCIPLES.map((p) =>
       `<div class="principle"><span class="p-index">${p.index} //</span><h3>${esc(p.title[L])}</h3><p>${esc(p.text[L])}</p></div>`).join('');
 
     $('#pipeline').innerHTML = PIPELINE.map((s) =>
-      `<div class="stage" data-stage="${s.id}"><span class="s-id">${s.id} //</span><h3>${s.name}</h3><p>${esc(s.text[L])}</p></div>`).join('');
+      `<div class="stage" data-stage="${s.id}"><span class="s-id">${s.id} //</span><h3>${esc(s.name[L] || s.name)}</h3><p>${esc(s.text[L])}</p></div>`).join('');
 
     const mh = ['matrix.h0', 'matrix.h1', 'matrix.h2', 'matrix.h3'].map((k) => T(UI[k]));
     $('#matrix').innerHTML =
-      `<div class="trow thead"><div>${mh[0]}</div><div>${mh[1]}</div><div>${mh[2]}</div><div>${mh[3]}</div></div>` +
-      INPUT_MATRIX.map((r) =>
-        `<div class="trow"><div data-h="${mh[0]}">${esc(r.type[L])}</div><div data-h="${mh[1]}">${esc(r.req[L])}</div><div data-h="${mh[2]}" class="dim">${esc(r.plus[L])}</div><div data-h="${mh[3]}" class="dim">${esc(r.not[L])}</div></div>`).join('');
+      `<div class="table matrix matrix-desktop">` +
+        `<div class="trow thead"><div>${mh[0]}</div><div>${mh[1]}</div><div>${mh[2]}</div><div>${mh[3]}</div></div>` +
+        INPUT_MATRIX.map((r) =>
+          `<div class="trow"><div>${esc(r.type[L])}</div><div>${esc(r.req[L])}</div><div class="dim">${esc(r.plus[L])}</div><div class="dim">${esc(r.not[L])}</div></div>`).join('') +
+      `</div>` +
+      `<div class="matrix-mobile">` +
+        INPUT_MATRIX.map((r, i) =>
+          `<details class="matrix-item"${i === 0 ? ' open' : ''}>
+            <summary>${esc(r.type[L])}</summary>
+            <ul>
+              <li class="must"><span class="mx-k mono">${esc(mh[1])}</span>${esc(r.req[L])}</li>
+              <li class="plus"><span class="mx-k mono">${esc(mh[2])}</span>${esc(r.plus[L])}</li>
+              <li class="skip"><span class="mx-k mono">${esc(mh[3])}</span>${esc(r.not[L])}</li>
+            </ul>
+          </details>`).join('') +
+      `</div>`;
 
-    const ch = ['', T(UI['compare.h1']), T(UI['compare.h2']), T(UI['compare.h3'])];
+    const ch = [T(UI['compare.h1']), T(UI['compare.h2']), T(UI['compare.h3'])];
+    const specs = [
+      { title: ch[2], rows: COMPARE_ROWS.map((r) => ({ k: r.label[L], v: r.c[L] })), ours: true },
+      { title: ch[0], rows: COMPARE_ROWS.map((r) => ({ k: r.label[L], v: r.a[L] })), ours: false },
+      { title: ch[1], rows: COMPARE_ROWS.map((r) => ({ k: r.label[L], v: r.b[L] })), ours: false }
+    ];
     $('#compare').innerHTML =
-      `<div class="trow thead"><div></div><div>${ch[1]}</div><div>${ch[2]}</div><div class="hl">${ch[3]}</div></div>` +
-      COMPARE_ROWS.map((r) =>
-        `<div class="trow"><div data-h="">${esc(r.label[L])}</div><div data-h="${ch[1]}" class="dim">${esc(r.a[L])}</div><div data-h="${ch[2]}" class="dim">${esc(r.b[L])}</div><div data-h="${ch[3]}" class="hl">${esc(r.c[L])}</div></div>`).join('');
+      `<div class="table compare compare-desktop">` +
+        `<div class="trow thead"><div></div><div>${ch[0]}</div><div>${ch[1]}</div><div class="hl">${ch[2]}</div></div>` +
+        COMPARE_ROWS.map((r) =>
+          `<div class="trow"><div>${esc(r.label[L])}</div><div class="dim">${esc(r.a[L])}</div><div class="dim">${esc(r.b[L])}</div><div class="hl">${esc(r.c[L])}</div></div>`).join('') +
+      `</div>` +
+      `<div class="compare-mobile">
+        <div class="compare-track" id="compareTrack">` +
+          specs.map((s, i) =>
+            `<article class="compare-spec${s.ours ? ' is-ours' : ''}" data-i="${i}">
+              ${s.ours ? `<span class="compare-badge mono">${esc(T(UI['compare.ours']))}</span>` : ''}
+              <h3>${esc(s.title)}</h3>
+              <dl>` + s.rows.map((row) =>
+                `<div class="spec-row"><dt>${esc(row.k)}</dt><dd>${esc(row.v)}</dd></div>`).join('') +
+              `</dl>
+            </article>`).join('') +
+        `</div>
+        <div class="compare-dots" id="compareDots"></div>
+      </div>`;
 
     $('#iterations').innerHTML = ITERATIONS.map((it) =>
       `<div class="iteration"><span class="i-index">${it.index} //</span><p>${esc(it.text[L])}</p></div>`).join('');
@@ -424,12 +560,34 @@
   /* ---------- 03 CAPABILITIES / CASES ---------- */
   let capFilter = 'ALL';
 
+  function hasRealMedia(item) {
+    return !!((item.gallery && item.gallery.length > 1) || item.model3d ||
+      (item.media && (item.media.type === 'image' || item.media.type === 'video') && item.media.src));
+  }
+
   function mediaHTML(item) {
+    if (item.gallery && item.gallery.length > 1) {
+      const alt = esc(item.title[state.lang]);
+      return `<div class="cap-carousel">
+          <div class="cap-track">` +
+            item.gallery.map((src) => `<div class="cap-slide"><img src="${esc(src)}" alt="${alt}" loading="lazy"></div>`).join('') +
+          `</div>
+          <button type="button" class="cap-arrow cap-arrow-prev" data-dir="-1" aria-label="Prev">‹</button>
+          <button type="button" class="cap-arrow cap-arrow-next" data-dir="1" aria-label="Next">›</button>
+          <div class="cap-dots">` +
+            item.gallery.map((_, i) => `<button type="button" class="cap-dot${i === 0 ? ' active' : ''}" data-i="${i}" aria-label="${i + 1}"></button>`).join('') +
+          `</div>
+        </div>`;
+    }
+    if (item.model3d)
+      return `<model-viewer class="cap-model" src="${esc(item.model3d)}"
+          alt="${esc(item.title[state.lang])}" camera-controls touch-action="pan-y" auto-rotate
+          shadow-intensity="0.7" exposure="1"></model-viewer>`;
     if (item.media && item.media.type === 'image' && item.media.src)
       return `<img src="${esc(item.media.src)}" alt="${esc(item.title[state.lang])}" loading="lazy">`;
     if (item.media && item.media.type === 'video' && item.media.src)
       return `<video src="${esc(item.media.src)}" autoplay muted loop playsinline></video>`;
-    return `<span class="m-cross">+</span><span class="m-index">${item.index}</span>`;
+    return '';
   }
 
   function cardHTML(item) {
@@ -445,46 +603,72 @@
       : `<span class="c-index">${item.index}</span>`;
     const quote = (item.kind === 'case' && item.quote)
       ? `<div class="cap-quote">«${esc(item.quote.text[L])}»<span class="q-author">— ${esc(item.quote.author[L])}</span></div>` : '';
+    // 'open' = someone else's model under a licence, 'own' = geometry we generated
+    const demo = item.demo ? `<span class="case-demo mono">${esc(T(UI['case.demo_' + item.demo]))}</span>` : '';
+    const story = item.story ? `<details class="case-story">
+        <summary>${esc(T(UI['case.open']))}</summary>
+        ${['task', 'limits', 'approach', 'result'].map((k) => `<div class="cs-row">
+          <span class="cs-key mono">${esc(T(UI['case.' + k]))}</span>
+          <p>${esc(item.story[k][L])}</p>
+        </div>`).join('')}
+      </details>` : '';
+    // CC BY models oblige us to credit the author; it also backs the demo label
+    const source = item.source ? `<p class="case-source">${esc(T(UI['case.source']))}:
+        <a href="${esc(item.source.url)}" target="_blank" rel="noopener noreferrer">${esc(item.source.model)}</a>, ${esc(item.source.license)}</p>` : '';
+    // no real media yet — skip the media block entirely rather than show an empty tile
+    const mediaBlock = mediaHTML(item);
+    const media = mediaBlock ? `<div class="cap-media">${mediaBlock}</div>` : '';
     return `<article class="cap-card" data-id="${item.id}" data-sector="${esc(item.sector.en)}">
-        <div class="cap-media">${mediaHTML(item)}</div>
+        ${media}
         <div class="cap-body">
           <div class="cap-top"><span class="c-sector">${esc(item.sector[L])}</span>${meta}</div>
+          ${demo}
           <h3>${esc(item.title[L])}</h3>
           <p class="c-desc">${esc(item.description[L])}</p>
-          ${io}${metrics}${quote}
+          ${io}${metrics}${story}${source}${quote}
         </div>
       </article>`;
   }
 
   function renderArchive() {
-    const caps  = ARCHIVE_ITEMS.filter((i) => i.kind === 'capability');
-    const cases = ARCHIVE_ITEMS.filter((i) => i.kind === 'case');
+    const caps  = ARCHIVE_ITEMS.filter((i) => i.kind === 'capability' && !i.extra);
+    const extra = ARCHIVE_ITEMS.filter((i) => i.kind === 'capability' && i.extra);
+    // hide cases that don't have real media yet — a placeholder isn't a case study
+    const cases = ARCHIVE_ITEMS.filter((i) => i.kind === 'case' && hasRealMedia(i));
 
-    // filters built from the data — stays correct as the array grows
     const sectors = [...new Map(ARCHIVE_ITEMS.map((i) => [i.sector.en, i.sector])).values()];
     $('#capFilters').innerHTML =
       `<button data-f="ALL" class="${capFilter === 'ALL' ? 'active' : ''}">${T(UI['cap.all'])}</button>` +
       sectors.map((s) =>
         `<button data-f="${esc(s.en)}" class="${capFilter === s.en ? 'active' : ''}">${esc(s[state.lang])}</button>`).join('');
 
-    $('#capGrid').innerHTML = caps.map(cardHTML).join('');
-    const casesSection = $('#casesSection');
-    if (cases.length) {
-      casesSection.hidden = false;
-      $('#caseGrid').innerHTML = cases.map(cardHTML).join('');
-      $('#capBadge').style.display = 'none';    // first real case hides "coming soon"
-    } else {
-      casesSection.hidden = true;
-      $('#capBadge').style.display = '';
-    }
+    // cases and capabilities are one grid, not two — a demo case is not a separate
+    // category from a service card, it's just a card with a demo badge and a story.
+    // Within that grid, anything with real media (photo, video, 3D model) floats to
+    // the top — a card with only a description isn't proof yet.
+    const mainItems = [...cases, ...caps]
+      .map((item, i) => ({ item, i }))
+      .sort((a, b) => (hasRealMedia(b.item) - hasRealMedia(a.item)) || (a.i - b.i))
+      .map((x) => x.item);
+    $('#capGrid').innerHTML = mainItems.map(cardHTML).join('');
+    // visibility of #extraSection itself is recomputed in applyCapFilter() below,
+    // since a filter — not just an empty data set — can also empty this tier
+    if (extra.length) $('#extraGrid').innerHTML = extra.map(cardHTML).join('');
+    $('#capBadge').style.display = cases.length ? 'none' : '';
     applyCapFilter();
   }
 
   function applyCapFilter() {
-    $$('#capGrid .cap-card, #caseGrid .cap-card').forEach((card) => {
+    $$('#capGrid .cap-card, #extraGrid .cap-card').forEach((card) => {
       card.style.display = (capFilter === 'ALL' || card.dataset.sector === capFilter) ? '' : 'none';
     });
     $$('#capFilters button').forEach((b) => b.classList.toggle('active', b.dataset.f === capFilter));
+    // a filter can empty the "also" tier entirely — hide the whole section
+    // (title included) rather than leave a heading with nothing under it
+    const extraSection = $('#extraSection');
+    if (extraSection) {
+      extraSection.hidden = !$$('#extraGrid .cap-card').some((c) => c.style.display !== 'none');
+    }
   }
 
   /* ---------- 04 BRIEF ---------- */
@@ -494,10 +678,10 @@
       `<div class="step"><span class="st-index">${s.index} //</span><span class="st-tag">${esc(s.tag[L])}</span><p>${esc(s.text[L])}</p></div>`).join('');
 
     $('#timelines').innerHTML =
-      `<div class="timeline-row thead"><div>${T(UI['time.h0'])}</div><div>${T(UI['time.h1'])}</div><div>${T(UI['time.h2'])}</div></div>` +
+      `<div class="timeline-row thead"><div>${T(UI['time.h0'])}</div><div class="t-meta">${T(UI['time.h1'])} · ${T(UI['time.h2'])}</div></div>` +
       TIMELINES.map((t) => {
         const dots = '●'.repeat(t.tier) + `<i>${'●'.repeat(5 - t.tier)}</i>`;
-        return `<div class="timeline-row"><div class="t-product">${esc(t.product[L])}</div><div class="t-time">${esc(t.time[L])}</div><div class="t-tier">${dots}</div></div>`;
+        return `<div class="timeline-row"><div class="t-product">${esc(t.product[L])}</div><div class="t-meta"><span class="t-time">${esc(t.time[L])}</span><span class="t-tier">${dots}</span></div></div>`;
       }).join('');
 
     $('#checklist').innerHTML = CHECKLIST.map((c) => `<li>${esc(c[L])}</li>`).join('');
@@ -510,8 +694,8 @@
       INDUSTRIES.map((i) => `<option value="${esc(i.en)}">${esc(i[L])}</option>`).join('') +
       `<option value="Other">${T(UI['form.other'])}</option>`;
 
-    $('#fNeeds').innerHTML = FORM_NEEDS.map((n) =>
-      `<label class="chip"><input type="checkbox" name="needs" value="${esc(n.en)}"><span>${esc(n[L])}</span></label>`).join('');
+    $('#fNeeds').innerHTML = FORM_NEEDS.map((n, i) =>
+      `<label class="chip"><input type="checkbox" name="needs" value="${esc(n.en)}"${i === 0 && sessionStorage.getItem('m_intent') === 'trial' ? ' checked' : ''}><span>${esc(n[L])}</span></label>`).join('');
 
     $('#fStages').innerHTML = FORM_STAGES.map((s, i) =>
       `<label class="chip"><input type="radio" name="stage" value="${esc(s.en)}" ${i === 0 ? 'checked' : ''}><span>${esc(s[L])}</span></label>`).join('');
@@ -531,12 +715,14 @@
      4. INTERACTION BINDINGS for re-rendered content
      ========================================================== */
   function bindDynamic() {
-    // FAQ accordion
-    $$('.faq-item').forEach((item) => {
-      const btn = $('.faq-q', item), ans = $('.faq-a', item);
-      btn.addEventListener('click', () => {
-        const open = item.classList.toggle('open');
-        gsap.to(ans, { height: open ? 'auto' : 0, duration: REDUCED ? 0 : 0.45, ease: 'power2.inOut' });
+    // FAQ accordion — and the industries list, which opens the same way
+    [['.faq-item', '.faq-q', '.faq-a'], ['.ind-item', '.ind-q', '.ind-a']].forEach(([itemSel, btnSel, ansSel]) => {
+      $$(itemSel).forEach((item) => {
+        const btn = $(btnSel, item), ans = $(ansSel, item);
+        btn.addEventListener('click', () => {
+          const open = item.classList.toggle('open');
+          gsap.to(ans, { height: open ? 'auto' : 0, duration: REDUCED ? 0 : 0.45, ease: 'power2.inOut' });
+        });
       });
     });
 
@@ -559,15 +745,90 @@
       card.addEventListener('mouseleave', () => { setHistogram(null); if (REDUCED) staticFrame(); });
     });
 
+    // case cards: gallery carousel — scroll-snap track (native touch swipe),
+    // mouse-drag swipe, dot nav and prev/next arrows, one instance per card
+    $$('.cap-carousel').forEach((car) => {
+      const track = $('.cap-track', car);
+      const dotsWrap = $('.cap-dots', car);
+      const prevBtn = $('.cap-arrow-prev', car);
+      const nextBtn = $('.cap-arrow-next', car);
+      const last = $$('.cap-slide', track).length - 1;
+
+      const setActive = (i) => {
+        $$('.cap-dot', dotsWrap).forEach((d, di) => d.classList.toggle('active', di === i));
+        if (prevBtn) prevBtn.disabled = i <= 0;
+        if (nextBtn) nextBtn.disabled = i >= last;
+      };
+      const goTo = (i) => {
+        const clamped = Math.max(0, Math.min(last, i));
+        track.scrollTo({ left: clamped * track.clientWidth, behavior: REDUCED ? 'auto' : 'smooth' });
+      };
+      const current = () => Math.round(track.scrollLeft / (track.clientWidth || 1));
+
+      track.addEventListener('scroll', () => setActive(current()), { passive: true });
+      setActive(0);
+
+      $$('.cap-dot', dotsWrap).forEach((d) => {
+        d.addEventListener('click', (e) => { e.stopPropagation(); goTo(parseInt(d.dataset.i, 10)); });
+      });
+      [prevBtn, nextBtn].forEach((btn) => {
+        if (!btn) return;
+        btn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current() + parseInt(btn.dataset.dir, 10)); });
+      });
+
+      // touch already swipes natively via overflow-x + scroll-snap; add the
+      // same drag-to-swipe for a mouse, which has no native horizontal drag
+      let dragging = false, startX = 0, startScroll = 0;
+      track.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        dragging = true;
+        startX = e.clientX; startScroll = track.scrollLeft;
+        track.setPointerCapture(e.pointerId);
+        track.classList.add('dragging');
+      });
+      track.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        track.scrollLeft = startScroll - (e.clientX - startX);
+      });
+      const endDrag = () => {
+        if (!dragging) return;
+        dragging = false;
+        track.classList.remove('dragging');
+        goTo(Math.round(track.scrollLeft / (track.clientWidth || 1)));
+      };
+      track.addEventListener('pointerup', endDrag);
+      track.addEventListener('pointercancel', endDrag);
+      track.addEventListener('dragstart', (e) => e.preventDefault());
+    });
+
     // sector filters
     $$('#capFilters button').forEach((b) => {
       b.addEventListener('click', () => { capFilter = b.dataset.f; applyCapFilter(); });
     });
 
-    // brief inputs: focus → light impulse in the geometry
     $$('#briefForm input, #briefForm select, #briefForm textarea').forEach((el) => {
       el.addEventListener('focus', pulse);
     });
+
+    const track = $('#compareTrack');
+    const dotsWrap = $('#compareDots');
+    if (track && dotsWrap) {
+      const cards = $$('.compare-spec', track);
+      dotsWrap.innerHTML = cards.map((_, i) => `<button type="button" class="compare-dot${i === 0 ? ' active' : ''}" data-i="${i}" aria-label="${i + 1}"></button>`).join('');
+      const setDot = (i) => {
+        $$('.compare-dot', dotsWrap).forEach((d, di) => d.classList.toggle('active', di === i));
+      };
+      track.addEventListener('scroll', () => {
+        const w = track.clientWidth || 1;
+        setDot(Math.round(track.scrollLeft / w));
+      }, { passive: true });
+      $$('.compare-dot', dotsWrap).forEach((d) => {
+        d.addEventListener('click', () => {
+          const i = parseInt(d.dataset.i, 10);
+          track.scrollTo({ left: i * track.clientWidth, behavior: REDUCED ? 'auto' : 'smooth' });
+        });
+      });
+    }
   }
 
   /* ---------- brief form: validate → converge → confirmation + mailto ---------- */
@@ -583,7 +844,7 @@
     ].join('\n');
     $('#mailtoLink').href = 'mailto:' + CONTACT_EMAIL +
       '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    // No backend by design — an honest mock. Real integration goes here.
+    return $('#mailtoLink').href;
   }
 
   $('#briefForm').addEventListener('submit', (e) => {
@@ -597,21 +858,23 @@
     $('#formError').hidden = valid;
     if (!valid) return;
 
-    submitBrief({
+    const href = submitBrief({
       company, email,
       industry: $('#fIndustry').value,
       needs: $$('#fNeeds input:checked').map((i) => i.value),
       stage: ($('#fStages input:checked') || {}).value || '',
       message: $('#fMessage').value.trim()
     });
+    sessionStorage.removeItem('m_intent');
 
     const showDone = () => { $('#briefForm').hidden = true; $('#briefDone').hidden = false; };
-    if (REDUCED || document.hidden) { showDone(); if (REDUCED) staticFrame(); return; }
-    // columns converge to the center, then release
-    gsap.timeline()
-      .to(fx, { converge: 1, duration: 1.1, ease: 'power3.in' })
-      .call(showDone)
-      .to(fx, { converge: 0, duration: 1.8, ease: 'power3.out', delay: 0.25 });
+    window.location.href = href;
+    showDone();
+    if (!MOBILE && !REDUCED && !document.hidden) {
+      gsap.timeline()
+        .to(fx, { converge: 1, duration: 1.1, ease: 'power3.in' })
+        .to(fx, { converge: 0, duration: 1.8, ease: 'power3.out', delay: 0.25 });
+    }
   });
 
   $('#briefAgain').addEventListener('click', () => {
@@ -666,14 +929,23 @@
   ];
 
   function pageAnims(route) {
+    gsap.set('#gl', { xPercent: 0, opacity: 1 });   // a receded field must not carry over to another route
+    startLoop();
+    // brief on a phone is a form to fill in, not a scene to watch — kill the
+    // field and let only the fog drift behind it
+    const noMotion = MOBILE && route === 'brief';
+    setFogBoost(noMotion ? 2.4 : 1);
+    if (noMotion) { freezeField(true); gsap.set('#gl', { opacity: 0 }); }
     if (REDUCED || document.hidden) return;   // hidden tab: show content plainly, no reveal tweens
     ScrollTrigger.getAll().forEach((t) => t.kill());
-    $$('#page-' + route + ' [data-animate]').forEach((el) => {
-      gsap.fromTo(el, { opacity: 0, y: 26 }, {
-        opacity: 1, y: 0, duration: 0.85, ease: 'power2.out',
-        scrollTrigger: { trigger: el, start: 'top 90%' }
+    if (!noMotion) {
+      $$('#page-' + route + ' [data-animate]').forEach((el) => {
+        gsap.fromTo(el, { opacity: 0, y: 26 }, {
+          opacity: 1, y: 0, duration: 0.85, ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 90%' }
+        });
       });
-    });
+    }
     if (route === 'main') {
       heroEntrance();
       ScrollTrigger.create({
@@ -686,6 +958,9 @@
         onLeaveBack: () => tweenWeights(idx ? MAIN_CHOREO[idx - 1][1] : STATE_WEIGHTS.main, 1.1)
       }));
     }
+    // scrolling past the opening screen drifts the field off to the left and
+    // fades it, so it stops fighting body text; scrolling back brings it in
+    if (!noMotion && (route === 'main' || route === 'brief')) buildHeroRecede(route);
     ScrollTrigger.refresh();
   }
 
@@ -698,6 +973,9 @@
     const prev = state.route;
     state.route = route;
     setNav(route);
+    const sticky = $('#stickyCta');
+    if (sticky) sticky.hidden = route === 'brief';
+    document.body.classList.toggle('on-brief', route === 'brief');
 
     // hidden tab: timers are throttled, tweens would stall — switch instantly
     if (instant || document.hidden) {
@@ -744,6 +1022,10 @@
     const route = routeFromHash();
     if (route !== state.route) goTo(route);
     document.body.classList.remove('nav-open');
+    const scrim = $('#navScrim');
+    if (scrim) scrim.hidden = true;
+    const burger = $('#burger');
+    if (burger) burger.setAttribute('aria-expanded', 'false');
   });
 
   /* ==========================================================
@@ -765,10 +1047,28 @@
     cursorMove = (x, y) => { qx(x); qy(y); };
     document.addEventListener('mouseover', (e) => {
       cur.classList.toggle('on-link', !!e.target.closest('a, button, input, select, textarea, label, .cap-card'));
+      // <model-viewer> paints its own grab/grabbing cursor inside its shadow root —
+      // that boundary can't be reached from outside CSS, so hide ours there instead
+      // of fighting a cursor we can't override, and let its native one be the only one
+      cur.classList.toggle('on-model', !!e.target.closest('model-viewer'));
     });
   }
 
-  $('#burger').addEventListener('click', () => document.body.classList.toggle('nav-open'));
+  $('#burger').addEventListener('click', () => {
+    const open = document.body.classList.toggle('nav-open');
+    $('#burger').setAttribute('aria-expanded', open ? 'true' : 'false');
+    const scrim = $('#navScrim');
+    if (scrim) scrim.hidden = !open;
+  });
+  $('#navScrim')?.addEventListener('click', () => {
+    document.body.classList.remove('nav-open');
+    $('#burger').setAttribute('aria-expanded', 'false');
+    $('#navScrim').hidden = true;
+  });
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('[data-intent="trial"]');
+    if (a) sessionStorage.setItem('m_intent', 'trial');
+  });
   $('#footerMail').href = 'mailto:' + CONTACT_EMAIL;
   $('#footerMail').textContent = CONTACT_EMAIL.toUpperCase();
 
