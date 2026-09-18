@@ -1,5 +1,5 @@
 /* ============================================================
-   MONOLITH.STUDIO — content.js
+   MONOLITH.CONTACT — content.js
    ALL site content lives here: UI dictionaries (EN/RU),
    open data arrays (INDUSTRIES, ARCHIVE_ITEMS, …).
    Adding an industry / capability / future case study =
@@ -45,8 +45,8 @@ const UI = {
   'industries.open':   { en: 'The list is open. If your industry isn’t here yet — all the more interesting.',
                          ru: 'Список открыт. Если вашей индустрии здесь нет — тем интереснее задача.' },
   'principles.title':  { en: 'PRINCIPLES', ru: 'ПРИНЦИПЫ' },
-  'principles.line':   { en: 'REMOTE-FIRST · NDA BY DEFAULT',
-                         ru: 'REMOTE-FIRST · NDA BY DEFAULT' },
+  'principles.line':   { en: 'REMOTE-FIRST',
+                         ru: 'REMOTE-FIRST' },
 
   'lab.label':         { en: '02 // HOW IT WORKS — PIPELINE', ru: '02 // КАК ЭТО УСТРОЕНО — ПАЙПЛАЙН' },
   'lab.title':         { en: 'Four stages between your files and the final frame.',
@@ -80,6 +80,8 @@ const UI = {
   'cap.all':           { en: 'ALL',   ru: 'ВСЕ' },
   'cap.input':         { en: 'INPUT',  ru: 'ВХОД' },
   'cap.output':        { en: 'OUTPUT', ru: 'ВЫХОД' },
+  'cap.footnote':      { en: 'The number of deliverables, source files and timeline — I discuss those individually for each project.',
+                         ru: 'Количество материалов, исходники и сроки обсуждаю индивидуально для каждого проекта.' },
 
   'case.demo_open':    { en: 'DEMO PROJECT ON AN OPEN MODEL', ru: 'ДЕМОНСТРАЦИОННЫЙ ПРОЕКТ НА ОТКРЫТОЙ МОДЕЛИ' },
   'case.demo_own':     { en: 'OUR OWN PARAMETRIC MODEL', ru: 'СОБСТВЕННАЯ ПАРАМЕТРИЧЕСКАЯ МОДЕЛЬ' },
@@ -117,8 +119,8 @@ const UI = {
   'time.h2':           { en: 'BUDGET SCALE', ru: 'МАСШТАБ БЮДЖЕТА' },
   'check.title':       { en: 'BRING TO THE BRIEF', ru: 'ЧТО ПРИГОДИТСЯ' },
 
-  'footer.rights':     { en: 'MONOLITH.STUDIO — PRODUCT VISUALS FROM YOUR DRAWINGS AND CATALOGUE',
-                         ru: 'MONOLITH.STUDIO — ВИЗУАЛ ПРОДУКТА ИЗ ЧЕРТЕЖЕЙ И КАТАЛОГА' },
+  'footer.rights':     { en: 'MONOLITH.CONTACT — PRODUCT VISUALS FROM YOUR DRAWINGS AND CATALOGUE',
+                         ru: 'MONOLITH.CONTACT — ВИЗУАЛ ПРОДУКТА ИЗ ЧЕРТЕЖЕЙ И КАТАЛОГА' },
   'status.sys':        { en: 'SYS_STATUS: ACTIVE', ru: 'SYS_STATUS: ACTIVE' },
   'overlay.reroute':   { en: 'REROUTE', ru: 'REROUTE' }
 };
@@ -219,14 +221,30 @@ const INPUT_TICKER = {
 
 /* ---------- Industries — OPEN list. Append to extend.
      Also feeds the BRIEF form select (+ "Other" is always added). ---------- */
+/* `text` opens under the name on click. Each one names the actual objects of
+   that industry and the deliverable that closes them — no generic promises. */
 const INDUSTRIES = [
-  { en: 'Construction & development',     ru: 'Строительство и девелопмент' },
-  { en: 'Manufacturing & machinery',      ru: 'Производство и машиностроение' },
-  { en: 'Tools & fixtures',               ru: 'Инструмент и оснастка' },
-  { en: 'Energy & infrastructure',        ru: 'Энергетика и инфраструктура' },
-  { en: 'Agro & food production',         ru: 'Агро и пищепром' },
-  { en: 'Logistics, warehouses, ports',   ru: 'Логистика, склады, порты' },
-  { en: 'Special machinery & equipment',  ru: 'Спецтехника и оборудование' }
+  { en: 'Construction & development',     ru: 'Строительство и девелопмент',
+    text: { en: 'The site before the first excavation: a district cinematic, tender angles, facade nodes and sections taken straight from BIM. Input — CAD/BIM, master plan, facade designs. Output — frames that hold up next to the project documentation, for the tender bid and for selling floor space.',
+            ru: 'Объект до первого котлована: синематик квартала, ракурсы под тендер, фасадные узлы и разрезы прямо из BIM. Вход — CAD/BIM, генплан, фасадные решения. Выход — кадры, которые можно положить рядом с проектной документацией: для тендерной заявки и для продажи площадей.' } },
+  { en: 'Manufacturing & machinery',      ru: 'Производство и машиностроение',
+    text: { en: 'The component there is no point photographing — the value is inside. A longitudinal section of a hydraulic cylinder, a 12–16 position exploded view of a gearbox, a 360° of a pump unit: all cut from one assembly, with the shop floor running.',
+            ru: 'Узел, который бессмысленно фотографировать: ценность внутри. Продольный разрез гидроцилиндра, взрыв-схема редуктора на 12–16 позиций, 360° насосной станции — всё режется из одной сборки, без остановки цеха.' } },
+  { en: 'Tools & fixtures',               ru: 'Инструмент и оснастка',
+    text: { en: 'A catalogue pack for dense geometry: 8 angles on white, macro on the thread and the rating plate, build variants, a service exploded view. The acceptance test is blunt — a 100% crop must not fall apart on the markings.',
+            ru: 'Каталожный пакет на плотную геометрию: 8 ракурсов на белом, макро на резьбу и шильдик, комплектации, сервисная взрыв-схема. Приёмка простая — кроп 100% не должен разваливать маркировку.' } },
+  { en: 'Energy & infrastructure',        ru: 'Энергетика и инфраструктура',
+    text: { en: 'Objects you cannot switch off and can barely shoot: a cooling tower, a substation, transmission pylons, a heat main. We supply scale and setting — day, dusk, winter — plus assembly diagrams for the tender pack.',
+            ru: 'Объекты, которые нельзя остановить и трудно снять: градирня, подстанция, опоры ЛЭП, теплотрасса. Даём масштаб и среду — день, сумерки, зима — плюс схемы монтажа в тендерный пакет.' } },
+  { en: 'Agro & food production',         ru: 'Агро и пищепром',
+    text: { en: 'Feed mix as a stream of golden grain, a dryer and silo in the field, a packing line in working light. Plus the packaging catalogue: label and pack-size variants re-rendered instead of re-shot.',
+            ru: 'Комбикорм как поток золотого зерна, зерносушилка и силос в поле, линия фасовки в рабочем свете. Плюс каталог упаковки: варианты этикетки и фасовки перерендериваются, а не переснимаются.' } },
+  { en: 'Logistics, warehouses, ports',   ru: 'Логистика, склады, порты',
+    text: { en: 'A size range there is no sense shooting position by position: 20 SKU of pallet racking from a single setup, the aisle between rows, the picking zone. Adding a twenty-first position costs a render, not a new shoot.',
+            ru: 'Типоразмерный ряд, который бессмысленно снимать по позициям: 20 SKU паллетных стеллажей одним сетапом, проход между рядами, зона комплектации. Двадцать первая позиция стоит рендера, а не новой съёмки.' } },
+  { en: 'Special machinery & equipment',  ru: 'Спецтехника и оборудование',
+    text: { en: 'The machine and what hangs on it: hero, profile, macro on the eyes and pins, context on site. If the source is an open mesh with no rigging, we say so plainly and do not draw a section that is not in the model.',
+            ru: 'Машина и то, что на неё навешивается: герой, профиль, макро на проушины и пальцы, контекст на площадке. Если исходник — открытый меш без rigging, говорим прямо и не рисуем разрез, которого в модели нет.' } }
 ];
 
 /* ---------- Principles ---------- */
@@ -258,11 +276,11 @@ const PIPELINE = [
     text: { en: 'We assemble the digital scene: your site, product or space in exact geometry. The model is the source of truth.',
             ru: 'Собираем цифровую сцену: объект, продукт или пространство в точной геометрии. Модель — источник правды.' } },
   { id: '03', name: { en: 'SETTING', ru: 'СРЕДА' },
-    text: { en: 'Light, weather, season, environment, people and machinery in frame. This is the only layer where generative tools are used.',
-            ru: 'Свет, погода, сезон, среда, люди и техника в кадре. Единственный слой, где используются генеративные инструменты.' } },
+    text: { en: 'Light, weather, season, environment, people and machinery in frame.',
+            ru: 'Свет, погода, сезон, среда, люди и техника в кадре.' } },
   { id: '04', name: { en: 'OUTPUT', ru: 'ФИНАЛ' },
-    text: { en: 'Final formats: stills, 4K video, 360°, print layouts, a 3D viewer for the product page.',
-            ru: 'Финальные форматы: стиллы, 4K-видео, 360°, макеты для печати, 3D-просмотрщик на страницу товара.' } }
+    text: { en: 'Final formats: stills, video, 360°, print layouts, a 3D viewer for the product page.',
+            ru: 'Финальные форматы: стиллы, видео, 360°, макеты для печати, 3D-просмотрщик на страницу товара.' } }
 ];
 
 /* ---------- LAB: input matrix ---------- */
@@ -336,14 +354,6 @@ const FAQ = [
          ru: 'Насколько картинка будет соответствовать реальному объекту?' },
     a: { en: 'If documentation exists (CAD/BIM, master plan, drawings), geometry and layout follow it: this is a visualisation of your project, not a guess loosely based on it. Atmosphere — light, weather, staffage — is an artistic layer on top of a precise base, and it is always approved with you.',
          ru: 'Если на входе есть документация (CAD/BIM, генплан, чертежи), геометрия и компоновка соответствуют ей: это визуализация вашего проекта, а не догадка «по мотивам». Атмосфера — свет, погода, стаффаж — художественный слой поверх точной основы, и он всегда согласуется с вами.' } },
-  { q: { en: 'What about confidentiality? Our drawings are under NDA.',
-         ru: 'Что с конфиденциальностью? У нас чертежи под NDA.' },
-    a: { en: 'NDA comes before any materials change hands — by default. Sources are stored in an isolated project environment, never used for model training, and deleted on completion unless we agree to archive them for future updates.',
-         ru: 'NDA — до передачи любых материалов, по умолчанию. Исходники хранятся в изолированном контуре проекта, не используются для обучения моделей и удаляются по завершении, если не договорились об архиве для будущих обновлений.' } },
-  { q: { en: 'The project will change in six months. Does the film go to waste?',
-         ru: 'Проект изменится через полгода. Ролик придётся выбрасывать?' },
-    a: { en: 'No. The project scene is preserved, so an update is an increment, not a from-scratch production: we swap the changed buildings, refresh facades, regenerate the affected shots. Typically 15–30% of the original project cost.',
-         ru: 'Нет. Сцена проекта сохраняется, и обновление — это инкремент, а не производство с нуля: заменяем изменившиеся корпуса, обновляем фасады, перегенерируем затронутые кадры. Обычно это 15–30% стоимости исходного проекта.' } },
   { q: { en: 'All I have is phone photos. Is that enough?',
          ru: 'У меня только фотографии с телефона. Этого хватит?' },
     a: { en: 'In most cases — yes. For a storefront, a retail floor or a product, 5–10 photos in ordinary light are enough. A STEP file gives more precision, but the entry barrier is a catalogue and a phone. Send what you have.',
@@ -409,7 +419,7 @@ const ARCHIVE_ITEMS = [
     description: { en: 'A cinematic of a building, plant, terminal or district — before the first excavation. Project documentation becomes a finished site at any hour and season.',
                    ru: 'Синематик здания, завода, терминала или района — до первого котлована. Проектная документация превращается в построенный объект в любое время суток и сезон.' } },
 
-  { kind: 'capability', extra: false, id: 'cap-interactive', index: 'CAP_05',
+  { kind: 'capability', extra: false, id: 'cap-interactive', index: 'CAP_05', demo: 'own',
     title:  { en: 'VIEWER ON THE PRODUCT PAGE', ru: 'ПРОСМОТРЩИК НА СТРАНИЦЕ ТОВАРА' },
     sector: { en: 'DIGITAL', ru: 'DIGITAL' },
     input:  { en: 'Optimized 3D model', ru: 'Оптимизированная 3D-модель' },
@@ -418,7 +428,8 @@ const ARCHIVE_ITEMS = [
       { label: { en: 'WEIGHT, MB', ru: 'ВЕС, МБ' }, value: '<8', num: 8 },
       { label: { en: 'FORMATS', ru: 'ФОРМАТОВ' }, value: 'GLB', num: 1 },
       { label: { en: 'WEEKS', ru: 'НЕДЕЛИ' }, value: '1–3', num: 2 } ],
-    media: { type: 'placeholder', src: '' },
+    // geometry only, no studio/lights — exported straight from build_rack() so it can't drift from the stills
+    model3d: 'assets/cases/case-racking-3d.glb',
     description: { en: 'A 3D viewer the buyer can rotate on the product page, plus AR in the hall. Models are optimized so they do not stall the client’s site.',
                    ru: '3D-просмотрщик, который покупатель крутит на странице товара, плюс AR в цеху. Модели оптимизированы так, чтобы не вешать сайт клиента.' } },
 
@@ -498,8 +509,8 @@ const ARCHIVE_ITEMS = [
                   ru: 'Показать инструмент так, как его требует каталог: белый фон, повторяемая сетка ракурсов и сервисная взрыв-схема из той же модели.' },
       limits:   { en: 'Source geometry only — no drawings, no material spec, no brand book. Markings and fasteners must survive at 100% crop.',
                   ru: 'Только исходная геометрия — ни чертежей, ни спецификации материалов, ни брендбука. Маркировка и крепёж должны выдержать кроп 100%.' },
-      approach: { en: 'Geometry stays as delivered. Studio light, materials and the format pack are built around it; the exploded view is driven by the assembly tree, not redrawn by hand.',
-                  ru: 'Геометрия остаётся как есть. Вокруг неё собираются студийный свет, материалы и пакет форматов; взрыв-схема строится по дереву сборки, а не перерисовывается руками.' },
+      approach: { en: 'Geometry stays unchanged. Studio light, materials and the format pack are built around it; the exploded view is driven by the assembly tree, not redrawn by hand.',
+                  ru: 'Геометрия не меняется. Вокруг неё собираются студийный свет, материалы и пакет форматов; взрыв-схема строится по дереву сборки, а не перерисовывается руками.' },
       result:   { en: 'One model covers the product card, the service manual and the dealer pack. A spec change re-renders instead of re-shooting.',
                   ru: 'Одна модель закрывает карточку товара, сервисную документацию и дилерский пакет. Смена спецификации приводит к перерендеру, а не к пересъёмке.' } },
     source: { model: 'Angle Grinder — Nextty3', license: 'CC BY 4.0',
@@ -557,14 +568,92 @@ const ARCHIVE_ITEMS = [
       approach: { en: 'The size table drives the model; the scene is set up once and rendered as a batch. Context scenes come from the same setup at a different camera.',
                   ru: 'Таблица типоразмеров управляет моделью; сцена настраивается один раз и считается пакетом. Контекстные сцены — та же постановка с другой камеры.' },
       result:   { en: 'A size range covered at an hour per SKU, and a pipeline that absorbs the next twenty positions at the same rate.',
-                  ru: 'Типоразмерный ряд закрыт за час на позицию, и пайплайн принимает следующие двадцать позиций с той же скоростью.' } } }
+                  ru: 'Типоразмерный ряд закрыт за час на позицию, и пайплайн принимает следующие двадцать позиций с той же скоростью.' } } },
+
+  { kind: 'case', id: 'case-excavator', index: 'CASE_04', demo: 'open',
+    sector: { en: 'MACHINERY', ru: 'СПЕЦТЕХНИКА' },
+    year: '2026',
+    title:  { en: 'CRAWLER EXCAVATOR — CONSTRUCTION EQUIPMENT', ru: 'ГУСЕНИЧНЫЙ ЭКСКАВАТОР — СТРОИТЕЛЬНАЯ ТЕХНИКА' },
+    input:  { en: 'An open mesh: not rigged, not fully manifold', ru: 'Открытый меш: не rigged, не полностью манифолден' },
+    output: { en: 'Hero, profile, macro, one context scene', ru: 'Герой, профиль, макро, одна контекстная сцена' },
+    media: { type: 'image', src: 'assets/cases/case-excavator-01.jpg' },
+    gallery: ['assets/cases/case-excavator-01.jpg',
+              'assets/cases/case-excavator-02.jpg',
+              'assets/cases/case-excavator-03.jpg',
+              'assets/cases/case-excavator-04.jpg'],
+    metrics: [
+      { label: { en: 'FRAMES', ru: 'КАДРОВ' }, value: '4', num: 4 },
+      { label: { en: 'MATERIALS FROM SOURCE', ru: 'МАТЕРИАЛОВ ИЗ ИСХОДНИКА' }, value: '16', num: 16 },
+      { label: { en: 'TURNAROUND', ru: 'СРОК' }, value: '<48ч', num: 2 } ],
+    description: { en: 'A new vertical — construction equipment — opened model.',
+                   ru: 'Новая вертикаль — строительная техника — открытая модель.' },
+    story: {
+      task:     { en: 'Cover a new vertical fast, from an open model, without commissioning original CAD.',
+                  ru: 'Быстро закрыть новую вертикаль на открытой модели, без заказа оригинального CAD.' },
+      limits:   { en: 'The mesh is not rigged and not fully manifold: no boom animation, no section.',
+                  ru: 'Меш не rigged и не полностью манифолден: без анимации стрелы и без разреза.' },
+      approach: { en: 'Studio and site lighting rigs built once around the import; camera framing computed from the model’s own bounding box.',
+                  ru: 'Студийный и «полевой» свет собраны один раз вокруг импортированной модели; кадрирование камеры считается по её боксу.' },
+      result:   { en: 'Four frames: hero, profile, macro, context.',
+                  ru: 'Четыре кадра: герой, профиль, макро, контекст.' } },
+    source: { model: 'Гусеничный экскаватор — sloumod', license: 'CC BY 4.0',
+              url: 'https://sketchfab.com/3d-models/ef66e8b2650a44b6bc91edd2c0327a34' } },
+
+  { kind: 'case', id: 'case-conveyor', index: 'CASE_05', demo: 'own',
+    sector: { en: 'OBJECTS', ru: 'ОБЪЕКТЫ' },
+    year: '2026',
+    title:  { en: 'MODULAR ROLLER CONVEYOR — SKU SERIES', ru: 'МОДУЛЬНЫЙ РОЛИКОВЫЙ КОНВЕЙЕР — СЕРИЯ SKU' },
+    input:  { en: 'One roller module plus a length, width and duty-class table', ru: 'Один модуль ролика плюс таблица длины, ширины и класса нагрузки' },
+    output: { en: '20 SKU in one style, one line-up frame', ru: '20 SKU в едином стиле, один сводный кадр' },
+    media: { type: 'image', src: 'assets/cases/case-conveyor-01.jpg' },
+    gallery: ['assets/cases/case-conveyor-01.jpg',
+              'assets/cases/case-conveyor-02.jpg'],
+    metrics: [
+      { label: { en: 'SKU IN THE SERIES', ru: 'SKU В СЕРИИ' }, value: '20', num: 20 },
+      { label: { en: 'SIZE AXES', ru: 'ОСЕЙ ТИПОРАЗМЕРА' }, value: '3', num: 3 },
+      { label: { en: 'HOURS PER SKU', ru: 'ЧАСОВ НА SKU' }, value: '<1', num: 1 } ],
+    description: { en: 'The second catalogue-coverage case: one parametric roller module becomes a whole length/width/duty range without a separate shoot per item.',
+                   ru: 'Второй кейс про покрытие каталога: один параметрический модуль ролика превращается в весь ряд по длине, ширине и классу нагрузки без отдельной съёмки на позицию.' },
+    story: {
+      task:     { en: 'Close a modular conveyor range where length, width and duty class define 20 positions, without shooting each one.',
+                  ru: 'Закрыть размерный ряд модульного конвейера, где длина, ширина и класс нагрузки задают 20 позиций, без съёмки каждой отдельно.' },
+      limits:   { en: 'One camera and light setup for the whole range — frame and duty class change, the shot has to stay comparable across the range.',
+                  ru: 'Один сетап камеры и света на весь ряд — рама и класс нагрузки меняются, кадр должен оставаться сравнимым по всему ряду.' },
+      approach: { en: 'A length/width/duty table drives the module geometry; studio and light are set up once and rendered as a batch.',
+                  ru: 'Таблица длины/ширины/класса нагрузки управляет геометрией модуля; студия и свет настраиваются один раз и считаются пакетом.' },
+      result:   { en: 'Twenty positions and a line-up frame that reads as one conveyor range, not a set of unrelated parts.',
+                  ru: 'Двадцать позиций и сводный кадр, который читается как один ряд конвейера, а не набор случайных деталей.' } } },
+
+  { kind: 'case', id: 'case-conveyor-3d', index: 'CASE_06', demo: 'own',
+    sector: { en: 'DIGITAL', ru: 'DIGITAL' },
+    year: '2026',
+    title:  { en: 'MODULAR CONVEYOR — 3D VIEWER', ru: 'МОДУЛЬНЫЙ КОНВЕЙЕР — 3D-ПРОСМОТРЩИК' },
+    input:  { en: 'Same parametric module as the stills', ru: 'Тот же параметрический модуль, что и в рендерах' },
+    output: { en: 'Drag-to-orbit 3D model embedded on the page', ru: '3D-модель на странице, вращение перетаскиванием' },
+    // geometry only, no studio/lights — exported straight from build_conveyor() so it can't drift from the stills
+    model3d: 'assets/cases/case-conveyor-3d.glb',
+    metrics: [
+      { label: { en: 'FILE SIZE', ru: 'ВЕС ФАЙЛА' }, value: '<400 КБ', num: 400 },
+      { label: { en: 'FORMAT', ru: 'ФОРМАТ' }, value: 'glTF/GLB', num: 1 },
+      { label: { en: 'VIEW ANGLES', ru: 'УГЛОВ ОБЗОРА' }, value: '360°', num: 360 } ],
+    description: { en: 'The same geometry the catalogue renders came from, dropped straight onto the page — no separate 3D pipeline, nothing that can drift from the stills.',
+                   ru: 'Та же геометрия, из которой собраны каталожные рендеры, — прямо на странице: без отдельного 3D-пайплайна и без риска разойтись со стиллами.' },
+    story: {
+      task:     { en: 'Give the product page something a photo cannot: let the buyer turn the module themselves.',
+                  ru: 'Дать странице товара то, чего не может фотография: покупатель сам вращает модуль.' },
+      limits:   { en: 'Has to load fast on a phone, in the browser — no app, no plugin.',
+                  ru: 'Должно быстро грузиться на телефоне, в браузере — без приложения и без плагина.' },
+      approach: { en: 'The same build script exports geometry-only glTF alongside the stills; a standard web component handles the viewer, so there is no custom WebGL to maintain.',
+                  ru: 'Тот же скрипт сборки экспортирует geometry-only glTF рядом со стиллами; вьюер — стандартный веб-компонент, без своего WebGL на поддержке.' },
+      result:   { en: 'One extra export step, and the product page gets an interactive model already in sync with the catalogue renders.',
+                  ru: 'Один дополнительный шаг экспорта — и страница товара получает интерактивную модель, уже синхронную с каталожными рендерами.' } } }
 ];
 
 /* ---------- BRIEF: steps after send ---------- */
 const BRIEF_STEPS = [
   { index: 'S_01', tag: { en: '24 HOURS', ru: '24 ЧАСА' },
     text: { en: 'We reply and request any missing materials. If the project isn’t for us — we say so straight away.',
-            ru: 'Отвечаем и запрашиваем недостающие исходники. Если проект не наш — честно говорим сразу.' } },
+            ru: 'Отвечаем и запрашиваем недостающие исходники. Если проект не наш — говорим сразу.' } },
   { index: 'S_02', tag: { en: '30 MINUTES', ru: '30 МИНУТ' },
     text: { en: 'A call: goals, audience, deadlines (a trade show? a launch?), a walkthrough of your materials.',
             ru: 'Созвон: цели, аудитория, дедлайны (выставка? запуск?), разбор ваших материалов.' } },
@@ -624,4 +713,4 @@ const FORM_STAGES = [
   { en: 'Operating business', ru: 'Действующий бизнес' }
 ];
 
-const CONTACT_EMAIL = 'hello@monolith.studio';
+const CONTACT_EMAIL = 'mail@monolith.contact';

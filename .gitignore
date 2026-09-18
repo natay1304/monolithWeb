@@ -6,7 +6,7 @@
 ._*
 
 # Custom folder icons
-Icon
+Icon
 
 # Volume root files
 .DocumentRevisions-V100
@@ -61,3 +61,14 @@ out/
 .yarn/unplugged
 .yarn/install-state.gz
 .pnp.*
+
+### Monolith — internal only, not published on GitHub/Cloudflare Pages
+# Both hosts currently serve the whole repo as static files (no build step),
+# so anything kept out of git here also stays off the live domain.
+docs/
+tools/
+
+# Case source assets (raw CAD/scan files) — only the small render/glb outputs
+# in assets/cases/ ship to the site. Keep the attribution file, drop the rest.
+assets/sources/*/*
+!assets/sources/*/SOURCE.md

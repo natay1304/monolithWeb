@@ -3,12 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>MONOLITH STUDIO — визуал продукта из чертежей и каталога</title>
+  <title>MONOLITH CONTACT — визуал продукта из чертежей и каталога</title>
   <meta name="description" content="Фотореалистичный визуал из ваших CAD и каталога: герой-рендеры, среда применения, взрыв-схемы, 360° и интерактив. Первые кадры — за 24–48 часов после модели.">
+  <link rel="canonical" href="https://monolith.contact/">
+  <meta name="robots" content="index, follow">
+
+  <!-- OpenGraph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="MONOLITH.CONTACT">
+  <meta property="og:title" content="MONOLITH CONTACT — визуал продукта из чертежей и каталога">
+  <meta property="og:description" content="Фотореалистичный визуал из ваших CAD и каталога: герой-рендеры, среда применения, взрыв-схемы, 360° и интерактив. Первые кадры — за 24–48 часов после модели.">
+  <meta property="og:url" content="https://monolith.contact/">
+  <meta property="og:image" content="https://monolith.contact/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="MONOLITH.CONTACT">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MONOLITH CONTACT — визуал продукта из чертежей и каталога">
+  <meta name="twitter:description" content="Фотореалистичный визуал из ваших CAD и каталога: герой-рендеры, среда применения, взрыв-схемы, 360° и интерактив. Первые кадры — за 24–48 часов после модели.">
+  <meta name="twitter:image" content="https://monolith.contact/assets/og-image.jpg">
+
+  <meta name="theme-color" content="#c2410c">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "MONOLITH.CONTACT",
+    "url": "https://monolith.contact/",
+    "image": "https://monolith.contact/assets/og-image.jpg",
+    "description": "Фотореалистичный визуал из CAD и каталога: герой-рендеры, среда применения, взрыв-схемы, 360° и интерактивный 3D-просмотрщик на страницу товара.",
+    "areaServed": "Worldwide",
+    "knowsLanguage": ["ru", "en"]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=25">
+  <link rel="stylesheet" href="styles.css?v=35">
 </head>
 <body>
 
@@ -20,7 +60,7 @@
 
   <!-- ============ HEADER ============ -->
   <header id="header">
-    <a class="brand" href="#/main">MONOLITH<span class="brand-ai">.STUDIO</span></a>
+    <a class="brand" href="#/main">MONOLITH<span class="brand-ai">.CONTACT</span></a>
     <nav id="nav">
       <a href="#/main"         data-route="main"         data-i18n="nav.main">01 // ГЛАВНАЯ</a>
       <a href="#/lab"          data-route="lab"          data-i18n="nav.lab">02 // КАК ЭТО УСТРОЕНО</a>
@@ -92,7 +132,7 @@
         <div class="block" data-animate>
           <p class="label" data-i18n="principles.title">ПРИНЦИПЫ</p>
           <div class="principles" id="principles"></div>
-          <p class="principles-line mono" data-i18n="principles.line">REMOTE-FIRST · NDA BY DEFAULT</p>
+          <p class="principles-line mono" data-i18n="principles.line">REMOTE-FIRST</p>
         </div>
 
       </div>
@@ -147,17 +187,14 @@
 
         <div class="cap-filters mono" id="capFilters" data-animate></div>
 
-        <div class="cap-section" id="casesSection" hidden>
-          <p class="label" data-i18n="cap.cases">КЕЙСЫ</p>
-          <div class="cap-grid" id="caseGrid"></div>
-        </div>
-
         <div class="cap-grid" id="capGrid" data-animate></div>
 
         <div class="cap-section extra-section" id="extraSection" hidden>
           <p class="label" data-i18n="cap.also">ТАКЖЕ</p>
           <div class="cap-grid" id="extraGrid"></div>
         </div>
+
+        <p class="table-note cap-footnote" data-i18n="cap.footnote"></p>
 
       </div>
     </section>
@@ -237,7 +274,7 @@
   <!-- ============ FOOTER / STATUS BAR ============ -->
   <footer id="footer">
     <div class="footer-main">
-      <a class="footer-mail mono" id="footerMail" href="mailto:hello@monolith.studio">HELLO@MONOLITH.STUDIO</a>
+      <a class="footer-mail mono" id="footerMail" href="mailto:mail@monolith.contact">MAIL@MONOLITH.CONTACT</a>
       <p class="footer-rights mono" data-i18n="footer.rights"></p>
     </div>
     <div class="statusbar mono">
@@ -260,7 +297,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="content.js?v=25"></script>
-  <script src="app.js?v=25"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+  <script src="content.js?v=28"></script>
+  <script src="app.js?v=29"></script>
 </body>
 </html>

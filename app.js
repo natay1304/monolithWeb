@@ -48,6 +48,8 @@
   let setHistogram = function () {};
   let startLoop = function () {};
   let stopLoop = function () {};
+  let freezeField = function () {};
+  let setFogBoost = function () {};
   let staticFrame = function () {};
   let fogResize = function () {};
   let makeFogSprite = function () {};
@@ -137,6 +139,15 @@
      reader scrolls past the hero, so it stops competing with body text.
      A wide fov keeps the extra distance reading as "smaller", not "zoomed". */
   const HERO_FAR = { pos: { x: 0, y: 70, z: 220 }, fov: 55 };
+  /* ...but the desktop home page keeps its field. There the scroll only backs
+     the camera off along its own sight line until the columns read about a
+     third smaller — same angle, same colour — and they go on living there. */
+  const HERO_MAIN_BACK = 1.5;   // × distance to the look point ⇒ ~1/3 smaller on screen
+  const backOff = (cs, k) => ({
+    x: cs.look.x + (cs.pos.x - cs.look.x) * k,
+    y: cs.look.y + (cs.pos.y - cs.look.y) * k,
+    z: cs.look.z + (cs.pos.z - cs.look.z) * k
+  });
 
   Object.assign(camPos, CAMERA_STATES.main.pos);
   Object.assign(camLook, CAMERA_STATES.main.look);
@@ -159,6 +170,10 @@
   let freezeCall = null;
   buildHeroRecede = function (route) {
     if (heroRecedeTl) heroRecedeTl.kill();
+    const near = CAMERA_STATES[route];
+    // the desktop home page is the one place the field stays on screen
+    const keepField = !MOBILE && route === 'main';
+    const far = keepField ? { pos: backOff(near, HERO_MAIN_BACK), fov: near.fov } : HERO_FAR;
     heroRecedeTl = gsap.timeline({
       scrollTrigger: {
         trigger: '#page-' + route,
@@ -167,14 +182,17 @@
         end: () => '+=' + Math.round(window.innerHeight * 1.05),
         scrub: 1,
         // freeze only after the scrub has settled, so a fast flick down
-        // doesn't strand the field mid-flight
-        onLeave:     () => { freezeCall = gsap.delayedCall(1.4, () => { fieldFrozen = true; }); },
+        // doesn't strand the field mid-flight. A field that stays on screen
+        // must never be frozen — it would stop dead in front of the reader.
+        onLeave:     () => { if (!keepField) freezeCall = gsap.delayedCall(1.4, () => { fieldFrozen = true; }); },
         onEnterBack: () => { if (freezeCall) freezeCall.kill(); startLoop(); }
       }
     })
-      .to(camPos, { ...HERO_FAR.pos, ease: 'none' }, 0)
-      .to(camFov, { fov: HERO_FAR.fov, ease: 'none' }, 0)
-      .to('#gl', { xPercent: -35, opacity: 0, ease: 'power1.in' }, 0);
+      .to(camPos, { ...far.pos, ease: 'none' }, 0)
+      .to(camFov, { fov: far.fov, ease: 'none' }, 0);
+    // fading and sliding the canvas is only for the routes that clear it out;
+    // on the home page the columns keep their colour exactly as they are
+    if (!keepField) heroRecedeTl.to('#gl', { xPercent: -35, opacity: 0, ease: 'power1.in' }, 0);
   };
 
   tweenWeights = function (target, dur) {
@@ -290,6 +308,9 @@
   startLoop = function () { fieldFrozen = false; if (rafId === null && !REDUCED) { lastT = performance.now(); rafId = requestAnimationFrame(loop); } };
   stopLoop  = function () { if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; } };
   staticFrame = function () { updateField(0.016); renderFrame(); fogUpdate(0.016); };
+  // exposes the field-freeze switch to code outside this THREE-guarded block (the loop keeps
+  // running so fog keeps drifting; only the field's own update/render is skipped)
+  freezeField = function (v) { fieldFrozen = v; };
 
   document.addEventListener('visibilitychange', () => (document.hidden ? stopLoop() : startLoop()));
 
@@ -335,12 +356,17 @@
     };
     fogResize = function () { fogCanvas.width = window.innerWidth; fogCanvas.height = window.innerHeight; };
     let fogT = 0;
+    // dialled up on pages that have no field to lean on (e.g. brief on a phone,
+    // where the field is frozen out) so the fog reads as the scene, not a hint of one
+    let fogBoost = 1;
+    setFogBoost = function (v) { fogBoost = v; };
     fogUpdate = function (dt) {
       if (!fogSprite) return;
       fogT += dt;
       const wpx = fogCanvas.width, hpx = fogCanvas.height;
       fctx.clearRect(0, 0, wpx, hpx);
       const sv = Math.max(-600, Math.min(600, scroll.y - scroll.ly));
+      const rScale = 1 + (fogBoost - 1) * 0.3;
       for (const p of fogParts) {
         p.u += dt * 0.006 * p.dp - sv * dt * 0.00022 * p.dp;
         p.v += Math.sin(fogT * 0.25 + p.ph) * dt * 0.01 - sv * dt * 0.00006 * p.dp;
@@ -348,8 +374,9 @@
         if (p.v > 1.12) p.v = -0.12; else if (p.v < -0.12) p.v = 1.12;
         const x = p.u * wpx + Math.sin(fogT * 0.18 + p.ph) * 36 * p.dp;
         const y = p.v * hpx + Math.cos(fogT * 0.14 + p.ph * 1.7) * 24 * p.dp;
-        fctx.globalAlpha = 0.16 * p.dp;
-        fctx.drawImage(fogSprite, x - p.r, y - p.r, p.r * 2, p.r * 2);
+        const r = p.r * rScale;
+        fctx.globalAlpha = Math.min(1, 0.16 * p.dp * fogBoost);
+        fctx.drawImage(fogSprite, x - r, y - r, r * 2, r * 2);
       }
       fctx.globalAlpha = 1;
     };
@@ -461,7 +488,11 @@
     $('#deliverables').innerHTML = DELIVERABLES.map((d) =>
       `<div class="deliverable"><span class="d-index">${d.index} //</span><h3>${esc(d.title[L])}</h3><p>${esc(d.text[L])}</p></div>`).join('');
 
-    $('#industries').innerHTML = INDUSTRIES.map((i) => `<li>${esc(i[L])}</li>`).join('');
+    $('#industries').innerHTML = INDUSTRIES.map((i) =>
+      `<li class="ind-item"><div class="ind-body">
+        <button class="ind-q" type="button"><span>${esc(i[L])}</span><span class="q-plus">+</span></button>
+        <div class="ind-a"><p>${esc(i.text[L])}</p></div>
+      </div></li>`).join('');
 
     $('#principles').innerHTML = PRINCIPLES.map((p) =>
       `<div class="principle"><span class="p-index">${p.index} //</span><h3>${esc(p.title[L])}</h3><p>${esc(p.text[L])}</p></div>`).join('');
@@ -528,6 +559,11 @@
   /* ---------- 03 CAPABILITIES / CASES ---------- */
   let capFilter = 'ALL';
 
+  function hasRealMedia(item) {
+    return !!((item.gallery && item.gallery.length > 1) || item.model3d ||
+      (item.media && (item.media.type === 'image' || item.media.type === 'video') && item.media.src));
+  }
+
   function mediaHTML(item) {
     if (item.gallery && item.gallery.length > 1) {
       const alt = esc(item.title[state.lang]);
@@ -542,11 +578,15 @@
           `</div>
         </div>`;
     }
+    if (item.model3d)
+      return `<model-viewer class="cap-model" src="${esc(item.model3d)}"
+          alt="${esc(item.title[state.lang])}" camera-controls touch-action="pan-y" auto-rotate
+          shadow-intensity="0.7" exposure="1"></model-viewer>`;
     if (item.media && item.media.type === 'image' && item.media.src)
       return `<img src="${esc(item.media.src)}" alt="${esc(item.title[state.lang])}" loading="lazy">`;
     if (item.media && item.media.type === 'video' && item.media.src)
       return `<video src="${esc(item.media.src)}" autoplay muted loop playsinline></video>`;
-    return `<span class="m-cross">+</span><span class="m-index">${item.index}</span>`;
+    return '';
   }
 
   function cardHTML(item) {
@@ -574,8 +614,11 @@
     // CC BY models oblige us to credit the author; it also backs the demo label
     const source = item.source ? `<p class="case-source">${esc(T(UI['case.source']))}:
         <a href="${esc(item.source.url)}" target="_blank" rel="noopener noreferrer">${esc(item.source.model)}</a>, ${esc(item.source.license)}</p>` : '';
+    // no real media yet — skip the media block entirely rather than show an empty tile
+    const mediaBlock = mediaHTML(item);
+    const media = mediaBlock ? `<div class="cap-media">${mediaBlock}</div>` : '';
     return `<article class="cap-card" data-id="${item.id}" data-sector="${esc(item.sector.en)}">
-        <div class="cap-media">${mediaHTML(item)}</div>
+        ${media}
         <div class="cap-body">
           <div class="cap-top"><span class="c-sector">${esc(item.sector[L])}</span>${meta}</div>
           ${demo}
@@ -589,7 +632,8 @@
   function renderArchive() {
     const caps  = ARCHIVE_ITEMS.filter((i) => i.kind === 'capability' && !i.extra);
     const extra = ARCHIVE_ITEMS.filter((i) => i.kind === 'capability' && i.extra);
-    const cases = ARCHIVE_ITEMS.filter((i) => i.kind === 'case');
+    // hide cases that don't have real media yet — a placeholder isn't a case study
+    const cases = ARCHIVE_ITEMS.filter((i) => i.kind === 'case' && hasRealMedia(i));
 
     const sectors = [...new Map(ARCHIVE_ITEMS.map((i) => [i.sector.en, i.sector])).values()];
     $('#capFilters').innerHTML =
@@ -597,29 +641,33 @@
       sectors.map((s) =>
         `<button data-f="${esc(s.en)}" class="${capFilter === s.en ? 'active' : ''}">${esc(s[state.lang])}</button>`).join('');
 
-    $('#capGrid').innerHTML = caps.map(cardHTML).join('');
-    const extraSection = $('#extraSection');
-    if (extraSection) {
-      extraSection.hidden = extra.length === 0;
-      if (extra.length) $('#extraGrid').innerHTML = extra.map(cardHTML).join('');
-    }
-    const casesSection = $('#casesSection');
-    if (cases.length) {
-      casesSection.hidden = false;
-      $('#caseGrid').innerHTML = cases.map(cardHTML).join('');
-      $('#capBadge').style.display = 'none';
-    } else {
-      casesSection.hidden = true;
-      $('#capBadge').style.display = '';
-    }
+    // cases and capabilities are one grid, not two — a demo case is not a separate
+    // category from a service card, it's just a card with a demo badge and a story.
+    // Within that grid, anything with real media (photo, video, 3D model) floats to
+    // the top — a card with only a description isn't proof yet.
+    const mainItems = [...cases, ...caps]
+      .map((item, i) => ({ item, i }))
+      .sort((a, b) => (hasRealMedia(b.item) - hasRealMedia(a.item)) || (a.i - b.i))
+      .map((x) => x.item);
+    $('#capGrid').innerHTML = mainItems.map(cardHTML).join('');
+    // visibility of #extraSection itself is recomputed in applyCapFilter() below,
+    // since a filter — not just an empty data set — can also empty this tier
+    if (extra.length) $('#extraGrid').innerHTML = extra.map(cardHTML).join('');
+    $('#capBadge').style.display = cases.length ? 'none' : '';
     applyCapFilter();
   }
 
   function applyCapFilter() {
-    $$('#capGrid .cap-card, #caseGrid .cap-card, #extraGrid .cap-card').forEach((card) => {
+    $$('#capGrid .cap-card, #extraGrid .cap-card').forEach((card) => {
       card.style.display = (capFilter === 'ALL' || card.dataset.sector === capFilter) ? '' : 'none';
     });
     $$('#capFilters button').forEach((b) => b.classList.toggle('active', b.dataset.f === capFilter));
+    // a filter can empty the "also" tier entirely — hide the whole section
+    // (title included) rather than leave a heading with nothing under it
+    const extraSection = $('#extraSection');
+    if (extraSection) {
+      extraSection.hidden = !$$('#extraGrid .cap-card').some((c) => c.style.display !== 'none');
+    }
   }
 
   /* ---------- 04 BRIEF ---------- */
@@ -666,12 +714,14 @@
      4. INTERACTION BINDINGS for re-rendered content
      ========================================================== */
   function bindDynamic() {
-    // FAQ accordion
-    $$('.faq-item').forEach((item) => {
-      const btn = $('.faq-q', item), ans = $('.faq-a', item);
-      btn.addEventListener('click', () => {
-        const open = item.classList.toggle('open');
-        gsap.to(ans, { height: open ? 'auto' : 0, duration: REDUCED ? 0 : 0.45, ease: 'power2.inOut' });
+    // FAQ accordion — and the industries list, which opens the same way
+    [['.faq-item', '.faq-q', '.faq-a'], ['.ind-item', '.ind-q', '.ind-a']].forEach(([itemSel, btnSel, ansSel]) => {
+      $$(itemSel).forEach((item) => {
+        const btn = $(btnSel, item), ans = $(ansSel, item);
+        btn.addEventListener('click', () => {
+          const open = item.classList.toggle('open');
+          gsap.to(ans, { height: open ? 'auto' : 0, duration: REDUCED ? 0 : 0.45, ease: 'power2.inOut' });
+        });
       });
     });
 
@@ -880,14 +930,21 @@
   function pageAnims(route) {
     gsap.set('#gl', { xPercent: 0, opacity: 1 });   // a receded field must not carry over to another route
     startLoop();
+    // brief on a phone is a form to fill in, not a scene to watch — kill the
+    // field and let only the fog drift behind it
+    const noMotion = MOBILE && route === 'brief';
+    setFogBoost(noMotion ? 2.4 : 1);
+    if (noMotion) { freezeField(true); gsap.set('#gl', { opacity: 0 }); }
     if (REDUCED || document.hidden) return;   // hidden tab: show content plainly, no reveal tweens
     ScrollTrigger.getAll().forEach((t) => t.kill());
-    $$('#page-' + route + ' [data-animate]').forEach((el) => {
-      gsap.fromTo(el, { opacity: 0, y: 26 }, {
-        opacity: 1, y: 0, duration: 0.85, ease: 'power2.out',
-        scrollTrigger: { trigger: el, start: 'top 90%' }
+    if (!noMotion) {
+      $$('#page-' + route + ' [data-animate]').forEach((el) => {
+        gsap.fromTo(el, { opacity: 0, y: 26 }, {
+          opacity: 1, y: 0, duration: 0.85, ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 90%' }
+        });
       });
-    });
+    }
     if (route === 'main') {
       heroEntrance();
       ScrollTrigger.create({
@@ -902,7 +959,7 @@
     }
     // scrolling past the opening screen drifts the field off to the left and
     // fades it, so it stops fighting body text; scrolling back brings it in
-    if (route === 'main' || route === 'brief') buildHeroRecede(route);
+    if (!noMotion && (route === 'main' || route === 'brief')) buildHeroRecede(route);
     ScrollTrigger.refresh();
   }
 
@@ -989,6 +1046,10 @@
     cursorMove = (x, y) => { qx(x); qy(y); };
     document.addEventListener('mouseover', (e) => {
       cur.classList.toggle('on-link', !!e.target.closest('a, button, input, select, textarea, label, .cap-card'));
+      // <model-viewer> paints its own grab/grabbing cursor inside its shadow root —
+      // that boundary can't be reached from outside CSS, so hide ours there instead
+      // of fighting a cursor we can't override, and let its native one be the only one
+      cur.classList.toggle('on-model', !!e.target.closest('model-viewer'));
     });
   }
 
