@@ -12,6 +12,7 @@
   const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const FINE    = window.matchMedia('(pointer: fine)').matches;
   const MOBILE  = window.innerWidth < 768;
+  const COARSE  = window.matchMedia('(pointer: coarse)').matches;
 
   const state = {
     lang:    localStorage.getItem('m_lang') || 'ru',
@@ -435,7 +436,7 @@
 
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-  const TICKER_ANIMATED = !MOBILE && !REDUCED;
+  const TICKER_ANIMATED = !MOBILE && !REDUCED && !COARSE;
 
   function renderTicker(el, items, sep) {
     const one = items.map((it) => `<span>${esc(it)}<i>${sep}</i></span>`).join('');

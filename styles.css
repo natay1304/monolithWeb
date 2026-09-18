@@ -177,7 +177,7 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   max-width: 24ch; margin-bottom: 40px;
 }
 .hero-manifesto {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
   max-width: 980px; margin-top: 32px;
   background: rgba(255, 255, 255, 0.86);
   -webkit-backdrop-filter: blur(16px);
@@ -185,9 +185,11 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   border: 1px solid rgba(38, 32, 27, 0.08);
   border-radius: 20px;
   box-shadow: 0 10px 28px rgba(38, 32, 27, 0.05);
-  padding: 28px 32px;
+  padding: 20px 32px;
 }
-.hero-manifesto p { font-size: 17px; line-height: 1.65; color: var(--text); }
+/* kill the browser's default p margin — it was adding blank space the grid's
+   row-stretch then copied into the shorter column too, taller than the text needs */
+.hero-manifesto p { margin: 0; font-size: 17px; line-height: 1.65; color: var(--text); }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 36px; }
 .hero-cta .submit-btn { margin-top: 0; align-self: center; border: 1px solid transparent; }
 .cta-ghost {
@@ -778,6 +780,10 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
     padding: 6px 10px 10px;
   }
   .metric { padding: 16px 10px 14px; border-right: none; border-bottom: 1px solid rgba(38, 32, 27, 0.12); }
+  /* the desktop rule zeroing the first cell's left inset (it sits flush against
+     the container there) still wins here on specificity alone — same equal
+     specificity here beats it back purely on being later in the cascade */
+  .metric:first-child { padding-left: 10px; }
   .metric:nth-last-child(-n+2) { border-bottom: none; }
   .metric-value { font-size: 1.55rem; color: var(--text); }
   .metric-label { font-size: 12px; letter-spacing: 0.06em; color: rgba(38, 32, 27, 0.78); }
