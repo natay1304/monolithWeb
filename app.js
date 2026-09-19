@@ -36,7 +36,7 @@
     brief:        { normal: 0.65, wireframe: 0, metric: 0, exploded: 0.35 }
   };
   const FIELD_X = { main: 7, lab: 0, capabilities: 0, brief: 3 };
-  const FIELD_Y = { main: 2, lab: 0, capabilities: 0, brief: 0 };   // lifts the field in frame on the home page
+  const FIELD_Y = { main: 2, lab: 0, capabilities: 0, brief: 7 };   // lifts the field in frame on the home page
   const camPos  = { x: 0, y: 15, z: 36 };
   const camLook = { x: 0, y: 2, z: 0 };
   const camFov  = { fov: 45 };
@@ -172,8 +172,8 @@
   buildHeroRecede = function (route) {
     if (heroRecedeTl) heroRecedeTl.kill();
     const near = CAMERA_STATES[route];
-    // the desktop home page is the one place the field stays on screen
-    const keepField = !MOBILE && route === 'main';
+    // on desktop the field stays on screen instead of receding into the distance
+    const keepField = !MOBILE && (route === 'main' || route === 'brief');
     const far = keepField ? { pos: backOff(near, HERO_MAIN_BACK), fov: near.fov } : HERO_FAR;
     heroRecedeTl = gsap.timeline({
       scrollTrigger: {

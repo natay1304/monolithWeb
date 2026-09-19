@@ -510,8 +510,9 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .case-source a:hover { color: var(--accent); }
 
 /* ---------- Brief ---------- */
-.brief-layout { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 64px; margin-top: 32px; position: relative; }
-.brief-form { display: flex; flex-direction: column; gap: 26px; }
+.brief-layout { display: grid; grid-template-columns: 1.15fr 0.85fr; align-items: start; gap: 64px; margin-top: 32px; position: relative; }
+.brief-col { display: flex; flex-direction: column; gap: 32px; }
+.brief-form { display: flex; flex-direction: column; gap: 20px; }
 .field { display: flex; flex-direction: column; gap: 9px; }
 .field label, .field-legend { font-size: 10px; letter-spacing: 0.12em; color: var(--muted); }
 .field input, .field select, .field textarea {
@@ -526,7 +527,7 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%;
   background-size: 5px 5px; background-repeat: no-repeat;
 }
-.field textarea { resize: vertical; min-height: 110px; }
+.field textarea { resize: vertical; min-height: 88px; }
 .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
 .field input.invalid, .field select.invalid { border-color: #d43f3f; }
 .needs, .stages { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -547,6 +548,8 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   transition: background 0.3s ease, transform 0.2s ease;
 }
 .submit-btn:hover { background: var(--accent-2); transform: translateY(-1px); }
+/* brief page only — the hero CTA shares .submit-btn but wasn't asked to grow */
+#page-brief .submit-btn { font-size: 15px; }
 .form-error { color: #d43f3f; font-size: 11px; letter-spacing: 0.08em; }
 .brief-done { padding: 48px 0; }
 .brief-done .done-title {
@@ -561,7 +564,7 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 }
 .done-mail:hover { background: var(--accent); color: #fff; }
 
-.brief-aside { display: flex; flex-direction: column; gap: 56px; border-left: 1px solid var(--line); padding-left: 48px; }
+.brief-aside { display: flex; flex-direction: column; gap: 40px; border-left: 1px solid var(--line); padding-left: 48px; }
 /* the field runs right behind this column too — give it the same frosted
    sheet the mobile layout already uses below, so text stays readable */
 .aside-block {
@@ -573,12 +576,12 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   padding: 24px 28px;
 }
 .steps { display: flex; flex-direction: column; }
-.step { display: grid; grid-template-columns: 56px 92px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); align-items: baseline; }
+.step { display: grid; grid-template-columns: 56px 92px 1fr; gap: 16px; padding: 14px 0; border-top: 1px solid var(--line); align-items: baseline; }
 .step .st-index { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: var(--accent); }
 .step .st-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: var(--text); font-weight: 500; }
 .step p { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
 .timelines { border-top: 1px solid var(--line); }
-.timeline-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); align-items: center; }
+.timeline-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--line); align-items: center; }
 .timeline-row.thead { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--muted); }
 .timeline-row .t-product { font-size: 13.5px; min-width: 0; }
 .timeline-row .t-meta { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
@@ -918,7 +921,8 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
     border-top: none;
     padding-top: 8px;
   }
-  .brief-aside .aside-block {
+  .brief-aside .aside-block,
+  #checklistBlock {
     background: rgba(255, 255, 255, 0.82);
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);

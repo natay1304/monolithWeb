@@ -48,7 +48,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=39">
+  <link rel="stylesheet" href="styles.css?v=40">
 </head>
 <body>
 
@@ -210,39 +210,48 @@
 
         <div class="brief-layout">
 
-          <form class="brief-form" id="briefForm" novalidate data-animate>
-            <div class="field">
-              <label class="mono" for="fCompany" data-i18n="form.company">КОМПАНИЯ</label>
-              <input type="text" id="fCompany" name="company" required autocomplete="organization">
-            </div>
-            <div class="field">
-              <label class="mono" for="fIndustry" data-i18n="form.industry">СФЕРА</label>
-              <select id="fIndustry" name="industry"></select>
-            </div>
-            <div class="field">
-              <span class="mono field-legend" data-i18n="form.needs">ЧТО НУЖНО</span>
-              <div class="needs" id="fNeeds"></div>
-            </div>
-            <div class="field">
-              <span class="mono field-legend" data-i18n="form.stage">СТАДИЯ</span>
-              <div class="stages" id="fStages"></div>
-            </div>
-            <div class="field">
-              <label class="mono" for="fEmail" data-i18n="form.email">EMAIL</label>
-              <input type="email" id="fEmail" name="email" required autocomplete="email">
-            </div>
-            <div class="field">
-              <label class="mono" for="fMessage" data-i18n="form.message">СООБЩЕНИЕ</label>
-              <textarea id="fMessage" name="message" rows="5"></textarea>
-            </div>
-            <p class="form-error mono" id="formError" data-i18n="form.required" hidden></p>
-            <button type="submit" class="submit-btn" id="submitBtn" data-i18n="form.submit">Открыть в почте</button>
-          </form>
+          <div class="brief-col">
+            <form class="brief-form" id="briefForm" novalidate data-animate>
+              <div class="field">
+                <label class="mono" for="fCompany" data-i18n="form.company">КОМПАНИЯ</label>
+                <input type="text" id="fCompany" name="company" required autocomplete="organization">
+              </div>
+              <div class="field">
+                <label class="mono" for="fIndustry" data-i18n="form.industry">СФЕРА</label>
+                <select id="fIndustry" name="industry"></select>
+              </div>
+              <div class="field">
+                <span class="mono field-legend" data-i18n="form.needs">ЧТО НУЖНО</span>
+                <div class="needs" id="fNeeds"></div>
+              </div>
+              <div class="field">
+                <span class="mono field-legend" data-i18n="form.stage">СТАДИЯ</span>
+                <div class="stages" id="fStages"></div>
+              </div>
+              <div class="field">
+                <label class="mono" for="fEmail" data-i18n="form.email">EMAIL</label>
+                <input type="email" id="fEmail" name="email" required autocomplete="email">
+              </div>
+              <div class="field">
+                <label class="mono" for="fMessage" data-i18n="form.message">СООБЩЕНИЕ</label>
+                <textarea id="fMessage" name="message" rows="5"></textarea>
+              </div>
+              <p class="form-error mono" id="formError" data-i18n="form.required" hidden></p>
+              <button type="submit" class="submit-btn" id="submitBtn" data-i18n="form.submit">Открыть в почте</button>
+            </form>
 
-          <div class="brief-done" id="briefDone" hidden>
-            <p class="done-title" data-i18n="brief.doneTitle">БРИФ ОТПРАВЛЕН</p>
-            <p class="done-text" data-i18n="brief.doneText"></p>
-            <button class="ctl" id="briefAgain" type="button" data-i18n="brief.again">НОВЫЙ БРИФ</button>
+            <div class="brief-done" id="briefDone" hidden>
+              <p class="done-title" data-i18n="brief.doneTitle">БРИФ ОТПРАВЛЕН</p>
+              <p class="done-text" data-i18n="brief.doneText"></p>
+              <button class="ctl" id="briefAgain" type="button" data-i18n="brief.again">НОВЫЙ БРИФ</button>
+            </div>
+
+            <!-- lives under the form (not in the aside) so it always sits right
+                 under the submit button, regardless of how tall the aside column is -->
+            <div class="aside-block" id="checklistBlock">
+              <p class="label" data-i18n="check.title">ЧТО ПРИГОДИТСЯ</p>
+              <ul class="checklist" id="checklist"></ul>
+            </div>
           </div>
 
           <aside class="brief-aside" data-animate>
@@ -254,10 +263,6 @@
               <p class="label" data-i18n="time.title">СРОКИ И МАСШТАБ</p>
               <div class="timelines" id="timelines"></div>
               <p class="table-note" data-i18n="time.note"></p>
-            </div>
-            <div class="aside-block">
-              <p class="label" data-i18n="check.title">ЧТО ПРИГОДИТСЯ</p>
-              <ul class="checklist" id="checklist"></ul>
             </div>
           </aside>
 
