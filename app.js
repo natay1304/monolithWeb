@@ -831,23 +831,17 @@
     }
   }
 
-  /* ---------- brief form: validate → converge → confirmation + mailto ---------- */
-  function submitBrief(data) {
-    const subject = 'BRIEF — ' + data.company;
-    const body = [
-      'Company: ' + data.company,
-      'Industry: ' + data.industry,
-      'Needs: ' + data.needs.join(', '),
-      'Stage: ' + data.stage,
-      'Email: ' + data.email,
-      '', data.message
-    ].join('\n');
-    $('#mailtoLink').href = 'mailto:' + CONTACT_EMAIL +
-      '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    return $('#mailtoLink').href;
+  /* ---------- brief form: validate → POST /api/brief → confirmation ---------- */
+  async function submitBrief(data) {
+    const res = await fetch('/api/brief', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('brief_send_failed');
   }
 
-  $('#briefForm').addEventListener('submit', (e) => {
+  $('#briefForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const company = $('#fCompany').value.trim();
     const email   = $('#fEmail').value.trim();
@@ -855,25 +849,36 @@
     $('#fCompany').classList.toggle('invalid', !company); if (!company) valid = false;
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     $('#fEmail').classList.toggle('invalid', !emailOk); if (!emailOk) valid = false;
-    $('#formError').hidden = valid;
-    if (!valid) return;
+    if (!valid) { $('#formError').textContent = T(UI['form.required']); $('#formError').hidden = false; return; }
+    $('#formError').hidden = true;
 
-    const href = submitBrief({
-      company, email,
-      industry: $('#fIndustry').value,
-      needs: $$('#fNeeds input:checked').map((i) => i.value),
-      stage: ($('#fStages input:checked') || {}).value || '',
-      message: $('#fMessage').value.trim()
-    });
-    sessionStorage.removeItem('m_intent');
+    const submitBtn = $('#submitBtn');
+    const restoreLabel = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = T(UI['form.sending']);
 
-    const showDone = () => { $('#briefForm').hidden = true; $('#briefDone').hidden = false; };
-    window.location.href = href;
-    showDone();
-    if (!MOBILE && !REDUCED && !document.hidden) {
-      gsap.timeline()
-        .to(fx, { converge: 1, duration: 1.1, ease: 'power3.in' })
-        .to(fx, { converge: 0, duration: 1.8, ease: 'power3.out', delay: 0.25 });
+    try {
+      await submitBrief({
+        company, email,
+        industry: $('#fIndustry').value,
+        needs: $$('#fNeeds input:checked').map((i) => i.value),
+        stage: ($('#fStages input:checked') || {}).value || '',
+        message: $('#fMessage').value.trim()
+      });
+      sessionStorage.removeItem('m_intent');
+      $('#briefForm').hidden = true;
+      $('#briefDone').hidden = false;
+      if (!MOBILE && !REDUCED && !document.hidden) {
+        gsap.timeline()
+          .to(fx, { converge: 1, duration: 1.1, ease: 'power3.in' })
+          .to(fx, { converge: 0, duration: 1.8, ease: 'power3.out', delay: 0.25 });
+      }
+    } catch {
+      $('#formError').textContent = T(UI['form.sendError']) + ' ' + CONTACT_EMAIL;
+      $('#formError').hidden = false;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = restoreLabel;
     }
   });
 

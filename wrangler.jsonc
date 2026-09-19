@@ -1,0 +1,10 @@
+{
+  "name": "monolithweb",
+  "compatibility_date": "2026-09-18",
+  "main": "worker.js",
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page"
+  }
+}
