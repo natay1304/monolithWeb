@@ -866,8 +866,10 @@
         message: $('#fMessage').value.trim()
       });
       sessionStorage.removeItem('m_intent');
+      $('#briefForm').reset();
       $('#briefForm').hidden = true;
       $('#briefDone').hidden = false;
+      $('#briefDone').scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
       if (!MOBILE && !REDUCED && !document.hidden) {
         gsap.timeline()
           .to(fx, { converge: 1, duration: 1.1, ease: 'power3.in' })
