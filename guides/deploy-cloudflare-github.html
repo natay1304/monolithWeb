@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Деплой сайта на Cloudflare через GitHub — MONOLITH Гайды</title>
+  <meta name="description" content="Как настроить автообновление сайта на Cloudflare через GitHub">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link rel="stylesheet" href="guides.css">
+</head>
+<body>
+
+  <nav class="g-nav">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="g-burger" type="button" aria-label="Меню гайдов" aria-expanded="false" data-sidebar-toggle>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4h14M1 8h14M1 12h14"/></svg>
+      </button>
+      <a class="g-brand" href="index.html"><b>MONOLITH</b><span>// ГАЙДЫ</span></a>
+    </div>
+  </nav>
+
+  <div class="g-sidebar-scrim" data-sidebar-scrim></div>
+
+  <div class="g-shell">
+    <aside class="g-sidebar" data-sidebar>
+      <p class="g-side-label">Гайды MONOLITH</p>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Подготовка</p>
+        <ul>
+          <li><span class="g-side-soon">Регистрация в Cloudflare <span class="g-tiny">скоро</span></span></li>
+          <li><span class="g-side-soon">GitHub: аккаунт и заливка <span class="g-tiny">скоро</span></span></li>
+          <li><span class="g-side-soon">Покупка домена <span class="g-tiny">скоро</span></span></li>
+        </ul>
+      </div>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Сайт</p>
+        <ul>
+          <li><a href="deploy-cloudflare-github.html" class="is-active">Деплой через GitHub</a></li>
+          <li><span class="g-side-soon">Почта через Resend <span class="g-tiny">скоро</span></span></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="g-main">
+
+  <header class="g-article-head">
+    <a class="g-back mono" href="index.html">← Все гайды</a>
+    <p class="g-eyebrow mono">Польза // Хостинг</p>
+    <h1>Деплой сайта на Cloudflare через GitHub</h1>
+    <div class="g-article-meta">
+      <span>Анастасия Малютина</span>
+      <span>·</span>
+      <span>MONOLITH</span>
+      <span>·</span>
+      <span>~8 мин чтения</span>
+    </div>
+    <p class="g-lead">Зачем через GitHub? - чтобы сайт обновлялся сам каждый раз, когда сохраняешь изменения в код — без ручной загрузки файлов. Сейчас расскажу что там происходит.</p>
+    <p class="g-muted" style="font-size:14.5px; font-style:italic; margin-top:14px;">Скоро сделаю подробные видео по всему процессу публикации сайта — следите за обновлениями.</p>
+  </header>
+
+  <nav class="g-toc" aria-label="Содержание">
+    <p class="g-toc-label mono">Содержание</p>
+    <ol>
+      <li><a href="#zachem">Что такое деплой и зачем GitHub</a></li>
+      <li><a href="#podgotovka">Подготовка</a></li>
+      <li><a href="#shagi">Пошагово: от репозитория до сайта в интернетах</a></li>
+      <li><a href="#avtoobnovlenie">Как работает автообновление</a></li>
+      <li><a href="#faq">Частые вопросы новичка</a></li>
+      <li><a href="#vozmozhnosti">Что ещё умеет Cloudflare вокруг деплоя</a></li>
+    </ol>
+  </nav>
+
+  <article class="g-article">
+
+    <section id="zachem">
+      <h2><span class="g-h-n">01</span> Что такое деплой и зачем GitHub</h2>
+      <p>Деплой — это просто публикация: перенос кода с вашего компьютера туда, где его увидит весь интернет. Заливка в интренет происходит через сайт Cloudflare(или его аналоги). GitHub - это посредник: место, где лежит код и откуда Cloudflare сам его забирает при каждом изменении.</p>
+      <p>Смысл связки «GitHub → Cloudflare»: вы один раз настраиваете связь, а дальше просто сохраняете код — публикация происходит сама, без захода в панель и ручной загрузки файлов. Всё это может делать за вас нейронка, которую вы уже используете для написания сайта.</p>
+      <p>Этот гайд — для сайта без своего сервера: просто HTML/CSS/JS, никакого кода, который бы что-то обрабатывал (форму, API и т.п.). У Cloudflare это называется <strong>Pages</strong>. Если у сайта есть серверная часть — процесс будет немного отличаться, это уже отдельная тема.</p>
+      <div class="g-callout">
+        <span class="g-callout-label mono">Важно</span>
+        <p>Интерфейс Cloudflare меняется быстро. Если у вас что-то выглядит по-другому — просто поменялась расстановка кнопок, но логика скорее всего сохранилась (репозиторий → настройки → деплой → домен).</p>
+      </div>
+    </section>
+
+    <section id="podgotovka">
+      <h2><span class="g-h-n">02</span> Подготовка </h2>
+      <ul>
+        <li>Есть доступ к аккаунтам GitHub и Cloudflare - то есть зарегистрировались на обоих сервисах.</li>
+        <li>Код сайта уже лежит в репозитории (хранилище кода) на GitHub — публичном или приватном.</li>
+        <li><a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a> — регистрация в GitHub, если аккаунта ещё нет.</li>
+        <li><a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">dash.cloudflare.com/sign-up</a> — регистрация в Cloudflare, если аккаунта ещё нет.</li>
+      </ul>
+
+      <div class="g-prompt">
+        <span class="g-prompt-label mono">Промпт для нейронки — подготовить код к деплою</span>
+        <pre>Проверь, что весь код этого проекта закоммичен и запушен в GitHub (git status),
+и если нет — закоммить и запушь в ветку main.
+Если в проекте ещё нет .gitignore — добавь под этот тип проекта
+(исключи служебные файлы вроде node_modules, .env, .DS_Store).
+Покажи вывод каждой команды и останови меня, если увидишь в коде
+незакоммиченные ключи API или пароли.</pre>
+        <p class="g-prompt-note">Отдаёте нейронке (Claude Code, Cursor, Copilot и т.п.) с доступом к папке проекта и терминалу — это чисто подготовка кода, сами шаги в панели Cloudflare ниже всё равно делаете руками.</p>
+      </div>
+    </section>
+
+    <section id="shagi">
+      <h2><span class="g-h-n">03</span> Пошагово: от репозитория до сайта в интернетах</h2>
+      <ol class="g-steps">
+        <li>
+          <strong>Откройте раздел Workers & Pages.</strong> В панели <a href="https://dash.cloudflare.com/" target="_blank" rel="noopener">dash.cloudflare.com</a>, боковое меню → «Workers & Pages» — тут живут все проекты, которые публикуют код.
+          <figure class="g-shot">
+            <img src="screenshots/04.png" alt="Раздел Workers & Pages в панели Cloudflare" loading="lazy">
+            <figcaption>Build → Compute</figcaption>
+          </figure>
+          <figure class="g-shot">
+            <img src="screenshots/01-workers-and-pages.png" alt="Раздел Workers & Pages в панели Cloudflare с кнопкой Create application" loading="lazy">
+            <figcaption>Workers & Pages → кнопка Create application</figcaption>
+          </figure>
+        </li>
+        <li>
+          <strong>Создайте проект и подключите репозиторий.</strong> Жмёте Create application — открывается единый экран «Make something new»: карточки Continue with GitHub, Connect with GitLab, Start with Hello World!, Select a template, Upload your static files.
+          <figure class="g-shot">
+            <img src="screenshots/02-make-something-new.png" alt="Экран «Make something new» — выбор Continue with GitHub, Upload your static files и другие варианты" loading="lazy">
+            <figcaption>Create application → «Make something new»</figcaption>
+          </figure>
+          Жмёте <strong>Continue with GitHub</strong>: если GitHub ещё не подключён к аккаунту Cloudflare — запрос на OAuth-авторизацию (это разрешение даёте лично вы); если уже подключён — сразу открывается «Select a repository» — поиск, список репозиториев, ссылка «Clone a public repository via Git URL» для чужого публичного репозитория.
+          <figure class="g-shot">
+            <img src="screenshots/03-select-repository.png" alt="Экран выбора репозитория GitHub для деплоя" loading="lazy">
+            <figcaption>Continue with GitHub → «Select a repository»</figcaption>
+          </figure>
+          Выбираете репозиторий (галочка на карточке) → <code>Next</code>.
+        </li>
+        <li>
+          <strong>Настройки проекта.</strong> Открывается экран «Set up your application»: ссылка на выбранный репозиторий, поле <code>Project name</code> (по нему формируется технический адрес — оно подставляется по имени репозитория и может случайно совпасть с именем другого вашего проекта, проверьте) и <code>Build command</code> (помечено <em>Optional</em>).
+         
+          Дальнейшие поля зависят от того, что Cloudflare определит в репозитории: для чистой статики — что-то в духе <code>framework preset</code> / <code>build output directory</code>; если находит <code>wrangler.jsonc</code> — экран выглядит иначе (это уже не про статику, а про сайт с сервером).
+        </li>
+        <li><strong>Запустите первый деплой.</strong> Кнопка внизу экрана называется просто <code>Deploy</code> (либо просто пушите в подключённую ветку). Cloudflare сам скачивает код и публикует его — обычно минута-две. Появляется технический адрес <code>*.pages.dev</code> — черновой, для проверки.</li>
+        <li><strong>Привяжите домен.</strong> Если домен уже в том же аккаунте Cloudflare — <code>Custom Domains</code> → добавить, DNS (связь доменного имени с вашем сайтом) настраивается автоматически. Если домен куплен в другом месте — нужно переключить nameservers на Cloudflare.</li>
+      </ol>
+    </section>
+
+    <section id="avtoobnovlenie">
+      <h2><span class="g-h-n">04</span> Как работает автообновление</h2>
+      <p>С этого момента весь процесс публикации схлопывается в одну команду: <code>git push</code> — просто отправляете код в нужную ветку на GitHub. Технически при пуше происходит следующее:</p>
+      <ul>
+        <li>Коммит в <strong>продакшен-ветку</strong> (обычно <code>main</code>) — Cloudflare собирает новую версию и сама делает её активным деплоем на боевом сайте.</li>
+        <li>Коммит в <strong>любую другую ветку</strong> (или пул-реквест) — Cloudflare тоже собирает сборку, но публикует отдельно, на своём preview-адресе, не трогая боевой сайт. Ссылка появляется прямо комментарием в пул-реквесте на GitHub.</li>
+      </ul>
+      <p>Удобно даже для соло-разработки: можно запушить правку в отдельную ветку, посмотреть на живом preview, что ничего не сломалось, и только потом мержить в <code>main</code>.</p>
+    </section>
+
+    <section id="faq">
+      <h2><span class="g-h-n">05</span> Частые вопросы</h2>
+      <dl class="g-faq">
+        <dt>Надо ли уметь программировать, чтобы это сделать?</dt>
+        <dd>Нет — сама настройка деплоя это клики в интерфейсе, а не код. Код нужен только чтобы сайт сделать.</dd>
+        <dt>А если я не хочу связываться с Git?</dt>
+        <dd>У Cloudflare есть прямая загрузка файлов (Direct Upload) без GitHub вообще — но тогда каждое обновление придётся заливать руками.</dd>
+        <dt>Что если деплой упал с ошибкой?</dt>
+        <dd>
+          Deployments → View build history → конкретный деплой → Logs. Частые причины: опечатка в пути к файлу или неверный output directory.
+          <div class="g-prompt">
+            <span class="g-prompt-label mono">Промпт для нейронки — разобрать ошибку деплоя</span>
+            <pre>Деплой на Cloudflare упал с такой ошибкой в логах сборки (Deployments → Logs):
+
+[вставьте сюда текст ошибки]
+
+Проанализируй, в чём причина (опечатка в пути, неверный output directory,
+отсутствующая зависимость и т.д.), и предложи конкретное исправление
+в файлах этого репозитория.</pre>
+          </div>
+        </dd>
+        <dt>Можно откатиться, если новая версия сломала сайт?</dt>
+        <dd>Да — в истории деплоев можно выбрать предыдущий успешный и снова сделать его активным (rollback), без отмены коммита в GitHub.</dd>
+      </dl>
+    </section>
+
+    <section id="vozmozhnosti">
+      <h2><span class="g-h-n">06</span> Что ещё умеет Cloudflare вокруг деплоя</h2>
+
+      <h3>Workers & Pages — общее устройство</h3>
+      <p>Единый раздел панели Cloudflare, где живут все «проекты с кодом» — и классические статические сайты (Pages), и полноценные серверные функции (Workers). Для чистой статики нужна только часть Pages.</p>
+
+      <h3>Тарифы Pages — что бесплатно, и где реальный лимит</h3>
+      <p>Сама раздача статичных файлов посетителям — бесплатна и без ограничений по трафику/запросам, на любом плане. Платный тариф понадобится, только если на сайте появится серверный код.</p>
+      <p><strong>Но есть отдельный лимит — не на посетителей, а на сами деплои:</strong></p>
+      <ul>
+        <li><strong>Free:</strong> 500 билдов (деплоев) в месяц, 1 билд одновременно.</li>
+        <li><strong>Paid (Pages Pro):</strong> 5 000 билдов в месяц, 5 одновременно; на Business — 20 000 и 20 одновременно.</li>
+        <li>Билд, который идёт дольше 20 минут, обрывается по таймауту — на обоих планах.</li>
+      </ul>
+      <p class="g-muted">Каждый <code>git push</code> в подключённую ветку (продакшен или превью) — это один билд, так что считаются оба типа. 500 в месяц — это в среднем ~16 в день, для одного человека, который правит сайт не по 20 раз на дню, хватает с большим запасом.</p>
+
+      <h3>Preview-деплои</h3>
+      <p>Каждая ветка (и каждый пул-реквест) получает свой собственный живой адрес для проверки, отдельно от боевого сайта. Можно тестировать изменения на реальном адресе, не трогая боевой сайт.</p>
+
+      <h3>Rollback</h3>
+      <p>История деплоев хранит предыдущие успешные версии; активной можно сделать любую из них заново одним действием — без отмены коммитов в Git.</p>
+
+      <h3>Логи и отладка</h3>
+      <p><strong>Логи сборки</strong> (Deployments → Logs) показывают, почему упала публикация. <strong>Логи выполнения</strong> (real-time, в самом проекте) — что происходит, когда уже опубликованный код отрабатывает на живом трафике.</p>
+
+      <h3>Custom Domains и DNS</h3>
+      <p>Если домен уже в том же аккаунте Cloudflare — привязка автоматическая. Если домен в другом месте (reg.ru и т.п.) — нужно переключить nameservers на Cloudflare.</p>
+    </section>
+
+  </article>
+
+  <div class="g-sources">
+    <h3>Источники</h3>
+    <ul>
+      <li><a href="https://developers.cloudflare.com/pages/configuration/git-integration/" target="_blank" rel="noopener">Cloudflare Pages — Git integration</a></li>
+      <li><a href="https://developers.cloudflare.com/pages/platform/limits/" target="_blank" rel="noopener">Cloudflare Pages — Limits</a></li>
+    </ul>
+  </div>
+
+  <div class="g-footer-nav">
+    <a href="index.html">← Все гайды</a>
+  </div>
+
+    </div>
+  </div>
+
+  <script src="guides.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Гайды — MONOLITH</title>
+  <meta name="description" content="Практические гайды: как я собирала сайт и студию MONOLITH сама — домен, деплой, почта и что дальше.">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link rel="stylesheet" href="guides.css">
+</head>
+<body>
+
+  <nav class="g-nav">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="g-burger" type="button" aria-label="Меню гайдов" aria-expanded="false" data-sidebar-toggle>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4h14M1 8h14M1 12h14"/></svg>
+      </button>
+      <a class="g-brand" href="index.html"><b>MONOLITH</b><span>// ГАЙДЫ</span></a>
+    </div>
+  </nav>
+
+  <div class="g-sidebar-scrim" data-sidebar-scrim></div>
+
+  <div class="g-shell">
+    <aside class="g-sidebar" data-sidebar>
+      <p class="g-side-label">Гайды MONOLITH</p>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Подготовка</p>
+        <ul>
+          <li><span class="g-side-soon">Регистрация в Cloudflare <span class="g-tiny">скоро</span></span></li>
+          <li><span class="g-side-soon">GitHub: аккаунт и заливка <span class="g-tiny">скоро</span></span></li>
+          <li><span class="g-side-soon">Покупка домена <span class="g-tiny">скоро</span></span></li>
+        </ul>
+      </div>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Сайт</p>
+        <ul>
+          <li><a href="deploy-cloudflare-github.html" class="is-active">Деплой через GitHub</a></li>
+          <li><span class="g-side-soon">Почта через Resend <span class="g-tiny">скоро</span></span></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="g-main">
+
+      <header class="g-hero">
+        <p class="g-eyebrow mono">MONOLITH // ГАЙДЫ</p>
+        <h1>Как я это собирала — по шагам</h1>
+        <p>Практические инструкции без воды: то, что я реально делала сама, чтобы запустить сайт и студию MONOLITH. Домен, деплой, почта — и дальше буду добавлять сюда всё новое.</p>
+      </header>
+
+      <main class="g-list">
+
+        <a class="g-card" href="deploy-cloudflare-github.html">
+          <div class="g-card-top">
+            <span class="g-tag mono">Польза // Хостинг</span>
+            <span class="g-meta mono">~8 мин чтения</span>
+          </div>
+          <h2>Деплой сайта на Cloudflare через GitHub</h2>
+          <p>Как настроить автообновление сайта: пушишь код в GitHub — Cloudflare публикует его сама, без ручной загрузки файлов.</p>
+          <span class="g-card-arrow mono">→</span>
+        </a>
+
+        <div class="g-card is-soon">
+          <div class="g-card-top">
+            <span class="g-tag mono">Польза // Домен</span>
+            <span class="g-meta mono">скоро</span>
+          </div>
+          <h2>Как купить домен: Cloudflare и Reg.ru</h2>
+          <p>Зачем нужен домен, как выбрать, как купить на Cloudflare — и что делать, если оплатить можно только российской картой.</p>
+        </div>
+
+        <div class="g-card is-soon">
+          <div class="g-card-top">
+            <span class="g-tag mono">Польза // Почта</span>
+            <span class="g-meta mono">скоро</span>
+          </div>
+          <h2>Отправка писем с сайта через Resend</h2>
+          <p>Как форма на сайте стала реально доходить до почты — без mailto и без своего почтового сервера.</p>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <script src="guides.js"></script>
+</body>
+</html>
