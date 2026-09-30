@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Домен: как выбрать и купить (Cloudflare и Reg.ru) — MONOLITH Гайды</title>
+  <meta name="description" content="Зачем нужен свой домен, как его выбрать и купить на Cloudflare или Reg.ru — и можно ли платить российской картой">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link rel="stylesheet" href="guides.css">
+</head>
+<body>
+
+  <nav class="g-nav">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="g-burger" type="button" aria-label="Меню гайдов" aria-expanded="false" data-sidebar-toggle>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4h14M1 8h14M1 12h14"/></svg>
+      </button>
+      <a class="g-brand" href="index.html"><b>MONOLITH</b><span>// ГАЙДЫ // THIRD BRAIN</span></a>
+    </div>
+  </nav>
+
+  <div class="g-sidebar-scrim" data-sidebar-scrim></div>
+
+  <div class="g-shell">
+    <aside class="g-sidebar" data-sidebar>
+      <p class="g-side-label">Гайды MONOLITH</p>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Подготовка</p>
+        <ul>
+          <li><span class="g-side-soon">Регистрация в Cloudflare <span class="g-tiny">скоро</span></span></li>
+          <li><span class="g-side-soon">GitHub: аккаунт и заливка <span class="g-tiny">скоро</span></span></li>
+          <li><a href="domain-cloudflare-regru.html" class="is-active">Покупка домена</a></li>
+        </ul>
+      </div>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Сайт</p>
+        <ul>
+          <li><a href="deploy-cloudflare-github.html">Деплой через GitHub</a></li>
+          <li><span class="g-side-soon">Почта через Resend <span class="g-tiny">скоро</span></span></li>
+        </ul>
+      </div>
+      <div class="g-side-group">
+        <p class="g-side-group-title">Инструменты</p>
+        <ul>
+          <li><a href="skill-third-brain-web.html">Скилл для Claude Code</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="g-main">
+
+  <header class="g-article-head">
+    <a class="g-back mono" href="index.html">← Все гайды</a>
+    <p class="g-eyebrow mono">Польза // Домен</p>
+    <h1>Домен: как выбрать и купить (Cloudflare и Reg.ru)</h1>
+    <div class="g-article-meta">
+      <span>Анастасия Малютина</span>
+      <span>·</span>
+      <span>MONOLITH</span>
+      <span>·</span>
+      <span>~6 мин чтения</span>
+    </div>
+    <p class="g-lead">Зачем свой домен? - чтобы у сайта был нормальный адрес, который запоминается, а не набор букв от хостинга. Сейчас расскажу, как его выбрать и где купить.</p>
+  </header>
+
+  <nav class="g-toc" aria-label="Содержание">
+    <p class="g-toc-label mono">Содержание</p>
+    <ol>
+      <li><a href="#chto">Что такое домен и зачем он нужен</a></li>
+      <li><a href="#vybor">Как выбрать домен</a></li>
+      <li><a href="#gde">Где купить: Cloudflare или Reg.ru</a></li>
+      <li><a href="#cloudflare">Покупка на Cloudflare — пошагово</a></li>
+      <li><a href="#rossiya">Можно ли платить Cloudflare российской картой</a></li>
+      <li><a href="#regru">Покупка на Reg.ru</a></li>
+      <li><a href="#svyazka">Домен на Reg.ru, а сайт на Cloudflare</a></li>
+      <li><a href="#itog">Итог: что выбрать</a></li>
+    </ol>
+  </nav>
+
+  <article class="g-article">
+
+    <section id="chto">
+      <h2><span class="g-h-n">01</span> Что такое домен и зачем он нужен</h2>
+      <p>Домен — это адрес вашего сайта в интернете: то, что человек вводит в браузере. Без своего домена сайт тоже будет работать, но по техническому адресу от хостинга, например <code>project.pages.dev</code>. Свой домен нужен, если:</p>
+      <ul>
+        <li>хотите адрес, который легко запомнить и не стыдно показать клиентам;</li>
+        <li>нужна почта на своём домене (<code>hello@вашдомен.ru</code>);</li>
+        <li>хотите, чтобы адрес остался за вами — адрес от хостинга вам не принадлежит: сменили хостинг, и адрес пропал.</li>
+      </ul>
+      <div class="g-callout">
+        <span class="g-callout-label mono">Важно</span>
+        <p>Интерфейс Cloudflare и Reg.ru меняется быстро. Если у вас что-то выглядит по-другому — просто поменялась расстановка кнопок, но логика скорее всего сохранилась (выбрать имя → оплатить → домен появился в кабинете).</p>
+      </div>
+    </section>
+
+    <section id="vybor">
+      <h2><span class="g-h-n">02</span> Как выбрать домен</h2>
+      <ul>
+        <li>Короткий и легко произносимый — если приходится диктовать по буквам, это плохой знак.</li>
+        <li>Без дефисов и цифр, если можно обойтись.</li>
+        <li>Зона (окончание после точки, по-английски TLD): <code>.com</code> — универсальный вариант, <code>.ru</code> / <code>.рф</code> — для русскоязычной аудитории, <code>.io</code> / <code>.dev</code> / <code>.app</code> — привычны в IT, но дороже.</li>
+        <li>Проверьте, не занято ли такое имя в соцсетях и не чужой ли это товарный знак.</li>
+      </ul>
+    </section>
+
+    <section id="gde">
+      <h2><span class="g-h-n">03</span> Где купить: Cloudflare или Reg.ru</h2>
+      <p>Домены продаёт регистратор (компания, которая регистрирует домен на вас и потом его продлевает). Я расскажу про 2 сервиса:</p>
+      <ul>
+        <li><strong>Cloudflare</strong> — если есть карта, которой можно платить за границей. Дешевле и без сюрпризов при продлении. Зоны <code>.ru</code>, <code>.рф</code> и <code>.su</code> не продаёт.</li>
+        <li><strong>Reg.ru</strong> — если нужна зона <code>.ru</code> / <code>.рф</code> / <code>.su</code> или вы хотите платить российской картой.</li>
+      </ul>
+      <p>Домен можно купить в одном месте, а DNS (связь домена с вашим сайтом) держать в другом — ниже покажу, как это делается.</p>
+    </section>
+
+    <section id="cloudflare">
+      <h2><span class="g-h-n">04</span> Покупка на Cloudflare — пошагово</h2>
+      <ol class="g-steps">
+        <li><strong>Заведите аккаунт на Cloudflare</strong> (бесплатно): <a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">dash.cloudflare.com/sign-up</a>.</li>
+        <li>
+          <strong>Откройте раздел Domains</strong> в боковом меню. Внутри три пункта: Overview, Registrations и Transfers (перенос домена из другого места). Нужна регистрация нового домена — страница «Register domain».
+          <figure class="g-shot g-shot--half">
+            <img src="screenshots/domain-01-menu.png" alt="Боковое меню Cloudflare: раздел Domains с пунктами Overview, Registrations, Transfers" loading="lazy">
+            <figcaption>Domains → Overview / Registrations / Transfers</figcaption>
+          </figure>
+        </li>
+        <li>
+          <strong>Введите имя в поле поиска.</strong> Cloudflare покажет список зон с ценами. Крупная цена — за первый год, а под ней строка «Renews at» — сколько будет стоить продление. Смотрите именно на неё: у некоторых зон первый год со скидкой (старая цена зачёркнута), а дальше цена обычная. У части зон есть минимальный срок, например у <code>.ai</code> — «2-year minimum».
+          <figure class="g-shot">
+            <img src="screenshots/domain-02-search.webp" alt="Страница Register domain: поиск имени и список зон с ценами регистрации и продления" loading="lazy">
+            <figcaption>Register domain → поиск и цены (Renews at — цена продления)</figcaption>
+          </figure>
+        </li>
+        <li>
+          <strong>Выберите зону — откроется «Complete your registration».</strong> Cloudflare сам подставит свои nameservers (адреса серверов, которые отвечают, куда вести домен), ничего настраивать не нужно. Дальше заполните данные владельца (Registrant information: имя и контакты — они нужны для записи о владельце домена), проверьте срок регистрации (по умолчанию 1 год) и переключатель автопродления (Automatic renewal) — он включён сразу, рядом указана цена продления. Внизу итог (Subtotal) и оплата.
+          <figure class="g-shot">
+            <img src="screenshots/domain-03-checkout.webp" alt="Страница Complete your registration: домен, данные владельца, срок регистрации, автопродление и итоговая сумма" loading="lazy">
+            <figcaption>Complete your registration → срок, автопродление, итог</figcaption>
+          </figure>
+        </li>
+        <li><strong>Оплатите.</strong> Платёж вы вводите сами на странице Cloudflare. После оплаты домен появляется в вашем аккаунте — DNS и защита настраиваются там же.</li>
+      </ol>
+
+      <h3>Почему тут выгодно</h3>
+      <p>Cloudflare не накручивает наценку и продаёт домены по оптовой цене регистратуры. Обычные регистраторы (GoDaddy, Namecheap и т.д.) накидывают маржу, особенно на продлении после «завлекающего» первого года.</p>
+      <p>Ориентировочные цены в год (по данным на сентябрь 2026):</p>
+      <table class="g-table">
+        <thead><tr><th>Зона</th><th>Регистрация</th><th>Продление</th></tr></thead>
+        <tbody>
+          <tr><td>.com</td><td>$10.46</td><td>$10.46</td></tr>
+          <tr><td>.net</td><td>$11.86</td><td>$11.86</td></tr>
+          <tr><td>.org</td><td>$8.50</td><td>$11.20</td></tr>
+          <tr><td>.io</td><td>$32.00</td><td>$50.00</td></tr>
+          <tr><td>.dev</td><td>$8.20 (акция)</td><td>$12.20</td></tr>
+          <tr><td>.app</td><td>$8.20 (акция)</td><td>$14.20</td></tr>
+        </tbody>
+      </table>
+      <p class="g-muted">«Акция» — скидка на первый год, которая бывает у отдельных зон: на скриншоте выше у <code>.app</code> и <code>.dev</code> она есть. Регистратуры периодически поднимают цены — перед покупкой сверьтесь на <a href="https://domains.cloudflare.com/tlds" target="_blank" rel="noopener">domains.cloudflare.com/tlds</a>.</p>
+    </section>
+
+    <section id="rossiya">
+      <h2><span class="g-h-n">05</span> Можно ли платить Cloudflare российской картой</h2>
+      <p>Напрямую нельзя. Только иностранная карта (своя, если есть, или через человека за рубежом)</p>
+    </section>
+
+    <section id="regru">
+      <h2><span class="g-h-n">06</span> Покупка на Reg.ru</h2>
+      <p>Reg.ru — крупнейший российский регистратор и по сути единственный нормальный путь получить <code>.ru</code> / <code>.рф</code> / <code>.su</code>. Процесс тот же: поиск имени → выбор зоны → оплата → домен появился в личном кабинете.</p>
+      <p>Ориентировочные цены в год (первый год часто дешевле продления, сверьтесь на момент покупки):</p>
+      <table class="g-table">
+        <thead><tr><th>Зона</th><th>Цена</th></tr></thead>
+        <tbody>
+          <tr><td>.ru / .рф</td><td>от ~169 ₽</td></tr>
+          <tr><td>.com</td><td>~1 792 ₽</td></tr>
+          <tr><td>.su</td><td>~669 ₽</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Оплата</strong> — без проблем: карты любых российских банков, СБП, SberPay, ЮMoney, наличные через терминалы, рассрочка «Яндекс Сплит». Для ИП и юрлиц — оплата по счёту.</p>
+    </section>
+
+    <section id="svyazka">
+      <h2><span class="g-h-n">07</span> Домен куплен на Reg.ru, а сайт на Cloudflare</h2>
+      <p>Это нормально. Регистратор (где куплен и продлевается домен) и DNS (где настроено, куда ведёт домен) — разные вещи, они не обязаны совпадать. Типичная связка: домен на Reg.ru, а DNS и защита — на Cloudflare. Как переключить:</p>
+      <ol class="g-steps">
+        <li>
+          <strong>Добавьте домен в Cloudflare.</strong> Сейчас о домене знает только Reg.ru. Чтобы Cloudflare начал им управлять (показывать сайт, защищать его), домен нужно добавить в ваш аккаунт Cloudflare.
+          <ul>
+            <li>Откройте <code>Domains → Overview</code> и нажмите кнопку добавления домена — откроется страница «Add a site» с тремя карточками.</li>
+          </ul>
+          <figure class="g-shot">
+            <img src="screenshots/domain-04-add-a-site.png" alt="Страница Add a site: карточки Connect a domain, Transfer a domain и Buy a domain" loading="lazy">
+            <figcaption>Add a site → Connect a domain / Transfer a domain / Buy a domain</figcaption>
+          </figure>
+          <ul>
+            <li>Выберите <strong>Connect a domain</strong> («подключить домен»). Эта карточка нужна, когда домен остаётся у прежнего регистратора, а Cloudflare только управляет им. <strong>Buy a domain</strong> — покупка нового домена (о ней выше). <strong>Transfer a domain</strong> нам не нужен: это перенос самой регистрации домена в Cloudflare, вместе с продлением.</li>
+          </ul>
+          <figure class="g-shot g-shot--half">
+            <img src="screenshots/domain-05-transfer.png" alt="Страница Transfer your domain: для переноса сайт сначала должен быть подключён к Cloudflare, потом вводится код авторизации" loading="lazy">
+            <figcaption>Transfer a domain — не наш случай</figcaption>
+          </figure>
+          <ul>
+            <li>Если случайно откроете «Transfer your domain», страница сама скажет: чтобы перенести домен, сайт сначала нужно подключить к Cloudflare, и только потом вводится код авторизации для переноса. Зоны <code>.ru</code>, <code>.рф</code> и <code>.su</code> Cloudflare вообще не регистрирует, так что для них перенос не подходит. Закройте эту страницу и вернитесь к «Connect a domain».</li>
+            <li>Откроется страница «Connect your domain». В поле <strong>Domain name</strong> впишите свой домен без <code>https://</code> и без <code>www</code>, например <code>вашдомен.ru</code>.</li>
+          </ul>
+          <figure class="g-shot">
+            <img src="screenshots/domain-06-connect.png" alt="Страница Connect your domain: имя домена, настройки для ботов и импорт DNS-записей" loading="lazy">
+            <figcaption>Connect a domain → «Connect your domain»</figcaption>
+          </figure>
+          <ul>
+            <li>Ниже блок <strong>Additional configuration</strong> — настройки для роботов, которые заходят на сайт. Их можно оставить как есть: везде стоит «Allow (do not block)» («разрешить, не блокировать»). <em>Search</em> — поисковые роботы, их лучше не блокировать, иначе сайт хуже найдётся в поиске. <em>Agent</em> — роботы, которые берут данные с сайта, чтобы отвечать на вопросы пользователей. <em>Training</em> — сборщики текстов для обучения нейросетей: если не хотите, чтобы ваши тексты использовали для этого, здесь можно выбрать запрет. Галочка «I monetize pages that serve ads» нужна, только если на сайте показывается реклама. Переключатель Bot Preference Sync включён — он запишет эти настройки в robots.txt (файл-подсказку для роботов).</li>
+            <li><strong>Import DNS records</strong> — «Automatic»: Cloudflare сам скопирует текущие DNS-записи домена (DNS-запись — строчка в «адресной книге» домена: какое имя куда ведёт). <strong>Если на домене уже работает почта или старый сайт, проверьте, что их записи попали в список:</strong> иначе после переключения они перестанут работать. У нового домена без сайта список почти пустой — это нормально.</li>
+            <li>Нажмите <strong>Continue</strong>. Дальше Cloudflare предложит выбрать тариф — берите бесплатный <strong>Free</strong>, для сайта его хватает.</li>
+            <li>В конце Cloudflare покажет <strong>два адреса nameservers</strong> вида <code>имя.ns.cloudflare.com</code> (адреса серверов, которые будут отвечать, куда вести ваш домен). Скопируйте оба и не закрывайте эту страницу: они понадобятся на следующем шаге. У каждого домена свои адреса, чужие из интернета брать нельзя.</li>
+          </ul>
+        </li>
+        <li><strong>В личном кабинете Reg.ru</strong> → управление доменом → DNS-серверы → впишите адреса, которые дал Cloudflare, вместо адресов Reg.ru.</li>
+        <li><strong>Подождите обновления</strong> — обычно от пары часов до суток.</li>
+        <li><strong>Готово.</strong> Дальше все настройки DNS уже в Cloudflare, а оплата и продление домена остаются на Reg.ru, как и были.</li>
+      </ol>
+      <p>Что делать с доменом дальше — в гайде <a href="deploy-cloudflare-github.html">про деплой сайта через GitHub</a>.</p>
+    </section>
+
+    <section id="itog">
+      <h2><span class="g-h-n">08</span> Итог: что выбрать</h2>
+      <ul>
+        <li>Проект международный (<code>.com</code> / <code>.io</code> / <code>.dev</code> и т.п.) и есть способ оплаты — берите на Cloudflare: дешевле и без сюрпризов на продлении.</li>
+        <li>Нужна зона <code>.ru</code> / <code>.рф</code> / <code>.su</code>, или хочется платить российской картой без манипуляций — Reg.ru.</li>
+        <li>Домены можно держать на разных регистраторах, а DNS у всех перевести на Cloudflare.</li>
+      </ul>
+    </section>
+
+  </article>
+
+  <div class="g-sources">
+    <h3>Источники</h3>
+    <ul>
+      <li><a href="https://www.cloudflare.com/learning/domain-registration/buy-a-domain-name/" target="_blank" rel="noopener">Cloudflare — How to buy a domain name</a></li>
+      <li><a href="https://developers.cloudflare.com/registrar/top-level-domains/" target="_blank" rel="noopener">Cloudflare Registrar — Supported TLDs</a></li>
+      <li><a href="https://www.cloudflare.com/tld-policies/" target="_blank" rel="noopener">Cloudflare — TLD Policies</a></li>
+      <li><a href="https://vc.ru/services/3100678-oplata-cloudflare-iz-rossii" target="_blank" rel="noopener">Как оплатить Cloudflare из России в 2026 (vc.ru)</a></li>
+    </ul>
+  </div>
+
+  <div class="g-footer-nav">
+    <a href="index.html">← Все гайды</a>
+  </div>
+
+    </div>
+  </div>
+
+  <script src="guides.js"></script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Скилл для Claude Code: сайт от идеи до домена — MONOLITH Гайды</title>
+  <meta name="description" content="Готовый скилл для Claude Code: помогает написать сайт, выложить его в интернет через GitHub и Cloudflare и купить домен. Что это, как установить и как пользоваться">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link rel="stylesheet" href="guides.css">
+</head>
+<body>
+
+  <nav class="g-nav">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="g-burger" type="button" aria-label="Меню гайдов" aria-expanded="false" data-sidebar-toggle>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4h14M1 8h14M1 12h14"/></svg>
+      </button>
+      <a class="g-brand" href="index.html"><b>MONOLITH</b><span>// ГАЙДЫ // THIRD BRAIN</span></a>
+    </div>
+  </nav>
+
+  <div class="g-sidebar-scrim" data-sidebar-scrim></div>
+
+  <div class="g-shell">
+    <aside class="g-sidebar" data-sidebar>
+      <p class="g-side-label">Гайды MONOLITH</p>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Подготовка</p>
+        <ul>
+          <li><span class="g-side-soon">Регистрация в Cloudflare <span class="g-tiny">скоро</span></span></li>
+          <li><span class="g-side-soon">GitHub: аккаунт и заливка <span class="g-tiny">скоро</span></span></li>
+          <li><a href="domain-cloudflare-regru.html">Покупка домена</a></li>
+        </ul>
+      </div>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Сайт</p>
+        <ul>
+          <li><a href="deploy-cloudflare-github.html">Деплой через GitHub</a></li>
+          <li><span class="g-side-soon">Почта через Resend <span class="g-tiny">скоро</span></span></li>
+        </ul>
+      </div>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Инструменты</p>
+        <ul>
+          <li><a href="skill-third-brain-web.html" class="is-active">Скилл для Claude Code</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="g-main">
+
+  <header class="g-article-head">
+    <a class="g-back mono" href="index.html">← Все гайды</a>
+    <p class="g-eyebrow mono">Инструмент // Claude Code</p>
+    <h1>Скилл для Claude Code: сайт от идеи до домена</h1>
+    <div class="g-article-meta">
+      <span>Анастасия Малютина</span>
+      <span>·</span>
+      <span>MONOLITH</span>
+      <span>·</span>
+      <span>~5 мин чтения</span>
+    </div>
+    <p class="g-lead">Все гайды из этого раздела — про сайт, деплой и домен — собраны в один файл, который можно положить в Claude Code. Тогда он сам ведёт вас по шагам и не приходится каждый раз объяснять всё с нуля.</p>
+    <p><a class="g-btn" href="skills/third-brain-web.zip" download>Скачать скилл (zip)</a></p>
+  </header>
+
+  <nav class="g-toc" aria-label="Содержание">
+    <p class="g-toc-label mono">Содержание</p>
+    <ol>
+      <li><a href="#chto">Что такое скилл и зачем он нужен</a></li>
+      <li><a href="#umeet">Что умеет этот скилл</a></li>
+      <li><a href="#ustanovka">Как установить</a></li>
+      <li><a href="#polzovatsya">Как пользоваться</a></li>
+      <li><a href="#vazhno">Важно знать</a></li>
+      <li><a href="#faq">Частые вопросы</a></li>
+    </ol>
+  </nav>
+
+  <article class="g-article">
+
+    <section id="chto">
+      <h2><span class="g-h-n">01</span> Что такое скилл и зачем он нужен</h2>
+      <p>Скилл (по-английски skill, «навык») — это папка с инструкцией для Claude Code. Внутри главный файл <code>SKILL.md</code>: в начале короткое описание «когда меня использовать», ниже — пошаговая инструкция. Claude Code держит в памяти только описание, а всю инструкцию открывает, когда задача подходит. Поэтому скиллов можно поставить много, и они не мешают друг другу.</p>
+      <p>Зачем это нужно: вы один раз записываете проверенный путь — например, как выложить сайт на Cloudflare через GitHub, — и дальше Claude Code ведёт по нему любого человека. Без скилла каждому пришлось бы писать длинный промпт и самому вспоминать, что и в каком порядке делать.</p>
+    </section>
+
+    <section id="umeet">
+      <h2><span class="g-h-n">02</span> Что умеет этот скилл</h2>
+      <p>Скилл называется <code>third-brain-web</code> и состоит из трёх блоков — это те же гайды, что лежат на этом сайте:</p>
+      <ul>
+        <li><strong>Написать сайт.</strong> Какие вопросы задать себе в начале, как разложить файлы, как сделать сайт удобным на телефоне, что проверить перед публикацией.</li>
+        <li><strong>Выложить в интернет.</strong> Как отправить код на GitHub и опубликовать сайт на Cloudflare, чтобы он обновлялся сам.</li>
+        <li><strong>Купить домен.</strong> Как выбрать имя, где купить (Cloudflare или Reg.ru), как привязать домен к сайту.</li>
+      </ul>
+      <p>Скилл говорит с вами простыми словами, объясняет термины и ведёт по одному шагу, а не вываливает всё сразу. И у него есть жёсткие правила:</p>
+      <div class="g-callout">
+        <span class="g-callout-label mono">Чего скилл не делает</span>
+        <p>Не вводит данные банковской карты и не оплачивает покупки. Не создаёт аккаунты и не вводит пароли. Не принимает за вас решение о доступе Cloudflare к GitHub. Не просит присылать пароли и ключи. Не делает <code>git push</code> и не меняет настройки домена без вашего согласия. Всё это делаете вы сами, а скилл объясняет, куда нажать.</p>
+      </div>
+    </section>
+
+    <section id="ustanovka">
+      <h2><span class="g-h-n">03</span> Как установить</h2>
+      <p>Нужен сам Claude Code (приложение или версия для терминала). Дальше:</p>
+      <ol class="g-steps">
+        <li><strong>Скачайте архив</strong> по кнопке «Скачать скилл (zip)» выше.</li>
+        <li><strong>Распакуйте его</strong> — получится папка <code>third-brain-web</code>.</li>
+        <li><strong>Положите папку в <code>~/.claude/skills/</code></strong> — это папка скиллов Claude Code в вашем домашнем каталоге. На Windows это <code>C:\Users\ВашеИмя\.claude\skills\</code>. Если такой папки ещё нет, создайте её. Вложенность должна быть такой: <code>.claude/skills/third-brain-web/SKILL.md</code>.</li>
+        <li><strong>Перезапустите Claude Code.</strong> Новые скиллы он подхватывает при запуске.</li>
+      </ol>
+
+      <p>Если удобнее через терминал, одна команда делает то же самое (архив лежит в «Загрузках»):</p>
+      <div class="g-prompt">
+        <span class="g-prompt-label mono">Команда для терминала (macOS / Linux)</span>
+        <pre>mkdir -p ~/.claude/skills && unzip ~/Downloads/third-brain-web.zip -d ~/.claude/skills/</pre>
+      </div>
+
+      <p>Или попросите Claude Code сделать это за вас:</p>
+      <div class="g-prompt">
+        <span class="g-prompt-label mono">Промпт для нейронки — установить скилл</span>
+        <pre>Я скачала архив third-brain-web.zip в папку «Загрузки».
+Распакуй его в ~/.claude/skills/ так, чтобы получился файл
+~/.claude/skills/third-brain-web/SKILL.md, и проверь, что он на месте.
+Ничего другого в этой папке не меняй.</pre>
+      </div>
+
+      <p><strong>Как проверить, что скилл встал.</strong> Перезапустите Claude Code и начните вводить <code>/</code> — в списке должен появиться <code>third-brain-web</code>. Или спросите: «Какие у тебя есть скиллы?».</p>
+      <p>Если хотите, чтобы скилл работал только в одном проекте, положите папку в <code>.claude/skills/</code> внутри этого проекта.</p>
+    </section>
+
+    <section id="polzovatsya">
+      <h2><span class="g-h-n">04</span> Как пользоваться</h2>
+      <p>Специально вызывать скилл не нужно: просто говорите Claude Code, что хотите сделать, и он сам подключит инструкцию. Примеры того, что можно написать:</p>
+      <ul>
+        <li>«Помоги сделать простой сайт-визитку».</li>
+        <li>«Хочу выложить мой сайт в интернет через GitHub и Cloudflare».</li>
+        <li>«Помоги выбрать и купить домен для сайта».</li>
+        <li>«Я купила домен на Reg.ru, как привязать его к сайту на Cloudflare?»</li>
+      </ul>
+      <p>Можно и вызвать скилл напрямую, набрав <code>/third-brain-web</code>.</p>
+      <p>Дальше Claude Code сначала задаст пару вопросов (есть ли уже код, есть ли аккаунты), а потом пойдёт по шагам. На каждом шаге он будет просить вас сказать, что вы видите на экране, — так вы не потеряетесь, даже если кнопки в Cloudflare уже переставили. Всё, что связано с деньгами и доступами, вы делаете сами.</p>
+    </section>
+
+    <section id="vazhno">
+      <h2><span class="g-h-n">05</span> Важно знать</h2>
+      <ul>
+        <li><strong>Интерфейсы меняются.</strong> Названия кнопок в Cloudflare, GitHub и у регистраторов верны на конец сентября 2026. Если экран выглядит иначе, скилл попросит описать, что вы видите, и будет ориентироваться на это.</li>
+        <li><strong>Цены и лимиты — ориентировочные.</strong> Перед покупкой домена сверьте цену на сайте регистратора.</li>
+        <li><strong>Скилл только для статичных сайтов.</strong> Сайты с серверной частью (например, форма, которая сама шлёт письма) в него не входят.</li>
+        <li><strong>Шаги Reg.ru и экраны покупки доменов</strong> в скилле описаны без живой проверки в панели. Реальные экраны Cloudflare для покупки домена сняты на скриншотах в <a href="domain-cloudflare-regru.html">гайде про домен</a>.</li>
+        <li><strong>Обновления.</strong> Скилл не обновляется сам. Если я его поправлю, скачайте архив заново и замените папку.</li>
+      </ul>
+    </section>
+
+    <section id="faq">
+      <h2><span class="g-h-n">06</span> Частые вопросы</h2>
+      <dl class="g-faq">
+        <dt>Это платно?</dt>
+        <dd>Сам скилл бесплатный. Платным может быть только домен и сам Claude Code, если у вас нет доступа.</dd>
+        <dt>Можно ли его править под себя?</dt>
+        <dd>Да, это обычные текстовые файлы: откройте <code>SKILL.md</code> и файлы в папке <code>references</code> в любом редакторе. Главное — не удалять строки между тремя дефисами в самом начале <code>SKILL.md</code>: по ним Claude Code узнаёт скилл.</dd>
+        <dt>Я новичок, мне это подойдёт?</dt>
+        <dd>Да, скилл как раз для тех, кто делает это впервые. Но если что-то непонятно, сначала прочитайте соответствующий гайд на сайте: там те же шаги со скриншотами.</dd>
+        <dt>Где посмотреть, что внутри?</dt>
+        <dd>Главный файл можно открыть прямо в браузере: <a href="skills/third-brain-web/SKILL.md" target="_blank" rel="noopener">SKILL.md</a>.</dd>
+      </dl>
+    </section>
+
+  </article>
+
+  <div class="g-footer-nav">
+    <a href="index.html">← Все гайды</a>
+  </div>
+
+    </div>
+  </div>
+
+  <script src="guides.js"></script>
+</body>
+</html>

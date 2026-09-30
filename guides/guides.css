@@ -38,6 +38,50 @@ a { color: inherit; }
 .mono { font-family: 'IBM Plex Mono', monospace; }
 ::selection { background: var(--accent); color: #fff; }
 
+/* ---------- Fog background ---------- */
+html::before, body::before, body::after {
+  content: ""; position: fixed; inset: -30%; z-index: -1; pointer-events: none;
+  will-change: transform;
+}
+body::before {
+  background:
+    radial-gradient(42% 38% at 16% 20%, rgba(2, 132, 199, 0.38), transparent 70%),
+    radial-gradient(38% 42% at 84% 10%, rgba(255, 255, 255, 0.85), transparent 68%),
+    radial-gradient(48% 44% at 72% 72%, rgba(113, 137, 160, 0.50), transparent 70%),
+    radial-gradient(34% 34% at 8% 86%, rgba(255, 255, 255, 0.70), transparent 70%);
+  animation: g-fog-a 24s ease-in-out infinite alternate;
+}
+body::after {
+  background:
+    radial-gradient(40% 34% at 56% 38%, rgba(2, 109, 165, 0.32), transparent 70%),
+    radial-gradient(30% 40% at 28% 56%, rgba(255, 255, 255, 0.60), transparent 70%),
+    radial-gradient(36% 32% at 94% 56%, rgba(26, 34, 45, 0.24), transparent 70%),
+    radial-gradient(28% 32% at 46% 92%, rgba(2, 132, 199, 0.26), transparent 70%);
+  animation: g-fog-b 32s ease-in-out infinite alternate;
+}
+html::before {
+  background:
+    radial-gradient(34% 30% at 30% 12%, rgba(16, 60, 110, 0.22), transparent 70%),
+    radial-gradient(32% 34% at 78% 46%, rgba(26, 34, 45, 0.20), transparent 72%),
+    radial-gradient(30% 28% at 14% 64%, rgba(2, 109, 165, 0.24), transparent 70%);
+  animation: g-fog-c 18s ease-in-out infinite alternate;
+}
+@keyframes g-fog-a {
+  from { transform: translate3d(-7%, -5%, 0) scale(1) rotate(0deg); }
+  to   { transform: translate3d(8%, 6%, 0) scale(1.2) rotate(6deg); }
+}
+@keyframes g-fog-b {
+  from { transform: translate3d(6%, 5%, 0) scale(1.15) rotate(-4deg); }
+  to   { transform: translate3d(-8%, -6%, 0) scale(1) rotate(5deg); }
+}
+@keyframes g-fog-c {
+  from { transform: translate3d(-6%, 4%, 0) scale(1.1) rotate(0deg); }
+  to   { transform: translate3d(7%, -5%, 0) scale(1.25) rotate(-8deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html::before, body::before, body::after { animation: none; }
+}
+
 /* ---------- Nav ---------- */
 .g-nav {
   position: sticky; top: 0; z-index: 20;
@@ -130,13 +174,13 @@ a { color: inherit; }
 .g-hero p { font-size: 18px; color: var(--muted); max-width: 52ch; margin: 0; }
 
 /* ---------- Guide cards (index page) ---------- */
-.g-list { max-width: var(--maxw); margin: 0 auto; padding: 8px 24px 100px; display: flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 2px; overflow: hidden; }
+.g-list { max-width: var(--maxw); margin: 0 auto; padding: 8px 24px 100px; display: flex; flex-direction: column; gap: 12px; }
 .g-card {
-  display: block; background: var(--bg); padding: 28px 24px;
+  display: block; background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 4px; padding: 28px 24px;
   text-decoration: none; color: inherit; position: relative;
   transition: background .2s ease;
 }
-.g-card:not(.is-soon):hover { background: var(--surface); }
+.g-card:not(.is-soon):hover { background: color-mix(in srgb, var(--surface) 80%, transparent); }
 .g-card .g-card-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
 .g-card .g-tag {
   font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.06em;
@@ -242,6 +286,7 @@ pre code { background: none; padding: 0; color: inherit; }
   background: var(--surface);
 }
 .g-shot img { display: block; width: 100%; height: auto; }
+.g-shot--half { width: 50%; min-width: 240px; }
 .g-shot figcaption {
   padding: 9px 14px;
   font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.02em;
@@ -294,4 +339,27 @@ pre code { background: none; padding: 0; color: inherit; }
   .g-nav { padding: 16px 20px; }
   .g-nav .g-links { gap: 16px; }
   .g-hero, .g-list, .g-article-head, .g-toc, .g-article, .g-sources, .g-footer-nav { padding-left: 20px; padding-right: 20px; }
+}
+
+/* ---------- Download button ---------- */
+.g-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 20px; margin-top: 6px;
+  background: var(--accent); color: #fff; text-decoration: none;
+  font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; letter-spacing: 0.02em;
+  border-radius: 4px; transition: background .15s ease;
+}
+.g-btn:hover { background: var(--accent-2); }
+
+/* ---------- Mobile polish ---------- */
+@media (max-width: 640px) {
+  /* mono labels never smaller than 12px */
+  .g-sidebar .g-side-label, .g-sidebar .g-side-group-title, .g-sidebar .g-side-soon .g-tiny,
+  .g-toc .g-toc-label, .g-callout .g-callout-label, .g-prompt .g-prompt-label,
+  .g-card .g-tag, .g-card .g-meta, .g-table th, .g-shot figcaption { font-size: 12px; }
+  /* bigger tap target for the menu button */
+  .g-burger { width: 40px; height: 40px; }
+  /* screenshots inside numbered steps use the full column, not the indented one */
+  .g-steps .g-shot { margin-left: -40px; }
+  .g-steps .g-shot.g-shot--half { width: calc(50% + 20px); min-width: 240px; }
 }
