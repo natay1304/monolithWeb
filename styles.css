@@ -191,7 +191,8 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
    row-stretch then copied into the shorter column too, taller than the text needs */
 .hero-manifesto p { margin: 0; font-size: 17px; line-height: 1.65; color: var(--text); }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 36px; }
-.hero-cta .submit-btn { margin-top: 0; align-self: center; border: 1px solid transparent; }
+.hero-cta .submit-btn { margin-top: 0; align-self: center; border: 1px solid transparent; background: #2563eb; }
+.hero-cta .submit-btn:hover { background: #1e40af; }
 .cta-ghost {
   font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em;
   border: 1px solid var(--line); padding: 17px 28px; color: var(--text);
