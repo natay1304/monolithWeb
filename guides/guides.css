@@ -314,6 +314,8 @@ pre code { background: none; padding: 0; color: inherit; }
 .g-faq dd { margin: 0 0 20px; color: var(--muted); font-size: 15.5px; }
 
 /* ---------- Reference table ---------- */
+.g-table-wrap { overflow-x: auto; margin: 0 0 16px; }
+.g-table-wrap .g-table { margin: 0; }
 .g-table { width: 100%; border-collapse: collapse; margin: 0 0 16px; font-size: 15px; }
 .g-table th, .g-table td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); }
 .g-table th { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.05em; color: var(--muted-2); text-transform: uppercase; font-weight: 400; }
