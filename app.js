@@ -21,8 +21,8 @@
     transitioning: false
   };
 
-  const PAGES = ['main', 'lab', 'capabilities', 'brief'];
-  const PAGE_INDEX = { main: '01', lab: '02', capabilities: '03', brief: '04' };
+  const PAGES = ['main', 'lab', 'services', 'capabilities', 'brief'];
+  const PAGE_INDEX = { main: '01', lab: '02', services: '03', capabilities: '04', brief: '05' };
 
   if (MOBILE) document.body.classList.add('lite-gl');
 
@@ -32,11 +32,12 @@
   const STATE_WEIGHTS = {
     main:         { normal: 1,    wireframe: 0, metric: 0, exploded: 0 },
     lab:          { normal: 0.55, wireframe: 0.45, metric: 0, exploded: 0 },
+    services:     { normal: 0,    wireframe: 0, metric: 1, exploded: 0 },
     capabilities: { normal: 0,    wireframe: 0, metric: 1, exploded: 0 },
     brief:        { normal: 0.65, wireframe: 0, metric: 0, exploded: 0.35 }
   };
-  const FIELD_X = { main: 7, lab: 0, capabilities: 0, brief: 3 };
-  const FIELD_Y = { main: 2, lab: 0, capabilities: 0, brief: 7 };   // lifts the field in frame on the home page
+  const FIELD_X = { main: 7, lab: 0, services: 0, capabilities: 0, brief: 3 };
+  const FIELD_Y = { main: 2, lab: 0, services: 0, capabilities: 0, brief: 7 };   // lifts the field in frame on the home page
   const camPos  = { x: 0, y: 15, z: 36 };
   const camLook = { x: 0, y: 2, z: 0 };
   const camFov  = { fov: 45 };
@@ -133,6 +134,7 @@
   const CAMERA_STATES = {
     main:         { pos: { x: 0,   y: 15,  z: 36 }, look: { x: 0, y: 2, z: 0 },  fov: 45 },
     lab:          { pos: { x: 3.2, y: 4.3, z: 10.5 }, look: { x: -4, y: 1.6, z: -7 }, fov: 55 },
+    services:     { pos: { x: 0,   y: 48,  z: 12 }, look: { x: 0, y: 0, z: 0 },  fov: 20 },
     capabilities: { pos: { x: 0,   y: 48,  z: 12 }, look: { x: 0, y: 0, z: 0 },  fov: 20 },
     brief:        { pos: { x: -14, y: 3.5, z: 23 }, look: { x: 0, y: 5, z: -4 }, fov: 60 }
   };
@@ -552,6 +554,7 @@
     $('#faq').innerHTML = FAQ.map((f, i) =>
       `<div class="faq-item"><button class="faq-q" type="button"><span class="q-index">Q_0${i + 1} //</span><span>${esc(f.q[L])}</span><span class="q-plus">+</span></button><div class="faq-a"><p>${esc(f.a[L])}</p></div></div>`).join('');
 
+    renderServices();
     renderArchive();
     renderBriefAside();
     renderForm();
@@ -598,9 +601,7 @@
       </div>`;
     const metrics = `<div class="cap-metrics">` + item.metrics.map((m) =>
       `<div class="cm"><b>${esc(m.value)}</b><span>${esc(m.label[L])}</span></div>`).join('') + `</div>`;
-    const meta = item.kind === 'case'
-      ? `<span class="c-index">${esc([item.client, item.location, item.year].filter(Boolean).join(' · '))}</span>`
-      : `<span class="c-index">${item.index}</span>`;
+    const meta = `<span class="c-index">${esc([item.client, item.location, item.year].filter(Boolean).join(' · '))}</span>`;
     const quote = (item.kind === 'case' && item.quote)
       ? `<div class="cap-quote">«${esc(item.quote.text[L])}»<span class="q-author">— ${esc(item.quote.author[L])}</span></div>` : '';
     // 'open' = someone else's model under a licence, 'own' = geometry we generated
@@ -630,45 +631,73 @@
       </article>`;
   }
 
-  function renderArchive() {
-    const caps  = ARCHIVE_ITEMS.filter((i) => i.kind === 'capability' && !i.extra);
-    const extra = ARCHIVE_ITEMS.filter((i) => i.kind === 'capability' && i.extra);
-    // hide cases that don't have real media yet — a placeholder isn't a case study
-    const cases = ARCHIVE_ITEMS.filter((i) => i.kind === 'case' && hasRealMedia(i));
+  /* ---------- 03 SERVICES ---------- */
+  // a case proves a service only if its card is actually shown on the Work page
+  const visibleCases = () => ARCHIVE_ITEMS.filter((i) => i.kind === 'case' && hasRealMedia(i));
 
-    const sectors = [...new Map(ARCHIVE_ITEMS.map((i) => [i.sector.en, i.sector])).values()];
+  function serviceHTML(item) {
+    const L = state.lang;
+    const proof = visibleCases().filter((c) => (item.cases || []).includes(c.id));
+    const links = item.links || [];
+    const proofBlock = (proof.length || links.length)
+      ? `<div class="srv-proof"><span class="io-key">${T(UI['srv.proof'])}</span><div class="srv-proof-links">` +
+          proof.map((c) => `<a href="#/capabilities" data-case="${esc(c.id)}">${esc(c.title[L])}</a>`).join('') +
+          links.map((l) => `<a href="${esc(l.href)}">${esc(l.label[L])}</a>`).join('') +
+        `</div></div>`
+      : `<div class="srv-proof"><span class="case-demo mono">${esc(T(UI[item.group === 'build' ? 'srv.soonBuild' : 'srv.soon']))}</span></div>`;
+    const price = item.price
+      ? `<div class="srv-price"><span class="io-key">${T(UI['srv.from'])}</span><b>${esc(item.price[L])}</b></div>`
+      : `<div class="srv-price"><span class="io-key">${T(UI['srv.from'])}</span><b class="srv-price-na">${esc(T(UI['srv.afterBrief']))}</b></div>`;
+    const need = item.need ? ` data-need="${esc(item.need)}"` : '';
+    const media = item.model3d
+      ? `<div class="cap-media">${mediaHTML(item)}</div>` : '';
+    return `<article class="srv-card cap-card" data-id="${item.id}">
+        ${media}
+        <div class="cap-body">
+          <div class="cap-top"><span class="c-index">${item.index}</span></div>
+          <h3>${esc(item.title[L])}</h3>
+          <p class="c-desc">${esc(item.text[L])}</p>
+          <div class="cap-io">
+            <div class="io-row"><span class="io-key">${T(UI['cap.input'])}</span><span class="io-val">${esc(item.input[L])}</span></div>
+            <div class="io-row"><span class="io-key">${T(UI['cap.output'])}</span><span class="io-val">${esc(item.output[L])}</span></div>
+          </div>
+          <div class="srv-facts">
+            ${price}
+            <div class="srv-time"><span class="io-key">${T(UI['srv.time'])}</span><b>${esc(item.time[L])}</b></div>
+          </div>
+          ${item.priceNote ? `<p class="srv-note">${esc(item.priceNote[L])}</p>` : ''}
+          ${proofBlock}
+          <a class="submit-btn srv-request" href="#/brief"${need}>${T(UI['srv.request'])}</a>
+        </div>
+      </article>`;
+  }
+
+  function renderServices() {
+    [['#srvGrid', 'viz'], ['#srvBuildGrid', 'build'], ['#srvExtraGrid', 'also']].forEach(([sel, group]) => {
+      $(sel).innerHTML = SERVICES.filter((s) => s.group === group).map(serviceHTML).join('');
+    });
+  }
+
+  /* ---------- 04 WORK (cases) ---------- */
+  function renderArchive() {
+    const cases = visibleCases();
+
+    const sectors = [...new Map(cases.map((i) => [i.sector.en, i.sector])).values()];
+    if (capFilter !== 'ALL' && !sectors.some((s) => s.en === capFilter)) capFilter = 'ALL';
     $('#capFilters').innerHTML =
       `<button data-f="ALL" class="${capFilter === 'ALL' ? 'active' : ''}">${T(UI['cap.all'])}</button>` +
       sectors.map((s) =>
         `<button data-f="${esc(s.en)}" class="${capFilter === s.en ? 'active' : ''}">${esc(s[state.lang])}</button>`).join('');
 
-    // cases and capabilities are one grid, not two — a demo case is not a separate
-    // category from a service card, it's just a card with a demo badge and a story.
-    // Within that grid, anything with real media (photo, video, 3D model) floats to
-    // the top — a card with only a description isn't proof yet.
-    const mainItems = [...cases, ...caps]
-      .map((item, i) => ({ item, i }))
-      .sort((a, b) => (hasRealMedia(b.item) - hasRealMedia(a.item)) || (a.i - b.i))
-      .map((x) => x.item);
-    $('#capGrid').innerHTML = mainItems.map(cardHTML).join('');
-    // visibility of #extraSection itself is recomputed in applyCapFilter() below,
-    // since a filter — not just an empty data set — can also empty this tier
-    if (extra.length) $('#extraGrid').innerHTML = extra.map(cardHTML).join('');
-    $('#capBadge').style.display = cases.length ? 'none' : '';
+    $('#capGrid').innerHTML = cases.map(cardHTML).join('');
     applyCapFilter();
   }
 
   function applyCapFilter() {
-    $$('#capGrid .cap-card, #extraGrid .cap-card').forEach((card) => {
+    $$('#capGrid .cap-card').forEach((card) => {
       card.style.display = (capFilter === 'ALL' || card.dataset.sector === capFilter) ? '' : 'none';
     });
     $$('#capFilters button').forEach((b) => b.classList.toggle('active', b.dataset.f === capFilter));
-    // a filter can empty the "also" tier entirely — hide the whole section
-    // (title included) rather than leave a heading with nothing under it
-    const extraSection = $('#extraSection');
-    if (extraSection) {
-      extraSection.hidden = !$$('#extraGrid .cap-card').some((c) => c.style.display !== 'none');
-    }
   }
 
   /* ---------- 04 BRIEF ---------- */
@@ -694,8 +723,9 @@
       INDUSTRIES.map((i) => `<option value="${esc(i.en)}">${esc(i[L])}</option>`).join('') +
       `<option value="Other">${T(UI['form.other'])}</option>`;
 
+    const wantNeed = sessionStorage.getItem('m_need');
     $('#fNeeds').innerHTML = FORM_NEEDS.map((n, i) =>
-      `<label class="chip"><input type="checkbox" name="needs" value="${esc(n.en)}"${i === 0 && sessionStorage.getItem('m_intent') === 'trial' ? ' checked' : ''}><span>${esc(n[L])}</span></label>`).join('');
+      `<label class="chip"><input type="checkbox" name="needs" value="${esc(n.en)}"${(i === 0 && sessionStorage.getItem('m_intent') === 'trial') || n.en === wantNeed ? ' checked' : ''}><span>${esc(n[L])}</span></label>`).join('');
 
     $('#fStages').innerHTML = FORM_STAGES.map((s, i) =>
       `<label class="chip"><input type="radio" name="stage" value="${esc(s.en)}" ${i === 0 ? 'checked' : ''}><span>${esc(s[L])}</span></label>`).join('');
@@ -736,7 +766,7 @@
     });
 
     // capability cards: hover rebuilds the histogram from the card's metrics
-    $$('.cap-card').forEach((card) => {
+    $$('#capGrid .cap-card').forEach((card) => {
       card.addEventListener('mouseenter', () => {
         const item = ARCHIVE_ITEMS.find((i) => i.id === card.dataset.id);
         if (item) setHistogram(item.metrics.map((m) => m.num || 1));
@@ -866,6 +896,7 @@
         message: $('#fMessage').value.trim()
       });
       sessionStorage.removeItem('m_intent');
+      sessionStorage.removeItem('m_need');
       $('#briefForm').reset();
       $('#briefForm').hidden = true;
       $('#briefDone').hidden = false;
@@ -974,6 +1005,21 @@
   function showPage(route) {
     PAGES.forEach((p) => $('#page-' + p).classList.toggle('active', p === route));
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });   // bypass smooth scroll: new page always opens at the top
+    focusCase(route);
+  }
+
+  /* arriving from a service's "proof" link: scroll to that case and flash its border */
+  function focusCase(route) {
+    const id = sessionStorage.getItem('m_case');
+    if (!id || route !== 'capabilities') return;
+    sessionStorage.removeItem('m_case');
+    const card = $('#capGrid .cap-card[data-id="' + id + '"]');
+    if (!card) return;
+    requestAnimationFrame(() => {
+      card.scrollIntoView({ behavior: 'instant', block: 'start' });
+      card.classList.add('flash');
+      setTimeout(() => card.classList.remove('flash'), 1800);
+    });
   }
 
   function goTo(route, instant) {
@@ -1005,7 +1051,7 @@
     tweenCamera(route);
     tweenWeights(STATE_WEIGHTS[route]);
     gsap.to(fieldGroup.position, { x: FIELD_X[route], duration: 1.4, ease: 'power3.inOut', overwrite: 'auto' });
-    if (route === 'capabilities') setHistogram(null);
+    if (route === 'services' || route === 'capabilities') setHistogram(null);
 
     $('#ovTarget').textContent = PAGE_INDEX[route] + '/' + route.toUpperCase();
 
@@ -1074,7 +1120,21 @@
   });
   document.addEventListener('click', (e) => {
     const a = e.target.closest('[data-intent="trial"]');
-    if (a) sessionStorage.setItem('m_intent', 'trial');
+    if (a) {
+      sessionStorage.setItem('m_intent', 'trial');
+      sessionStorage.removeItem('m_need');
+      const first = $('#fNeeds input'); if (first) first.checked = true;
+    }
+    // "Request" on a service card: tick that need in the brief (the form is
+    // already rendered, so tick it in place and remember it for a language switch)
+    const n = e.target.closest('[data-need]');
+    if (n) {
+      sessionStorage.setItem('m_need', n.dataset.need);
+      $$('#fNeeds input').forEach((i) => { i.checked = i.value === n.dataset.need; });
+    }
+    // service → proof: remember which case card to bring into view on the Work page
+    const c = e.target.closest('[data-case]');
+    if (c) { sessionStorage.setItem('m_case', c.dataset.case); capFilter = 'ALL'; applyCapFilter(); }
   });
   $('#footerMail').href = 'mailto:' + CONTACT_EMAIL;
   $('#footerMail').textContent = CONTACT_EMAIL.toUpperCase();
