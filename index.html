@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>MONOLITH CONTACT — визуал продукта из чертежей и каталога</title>
-  <meta name="description" content="Фотореалистичный визуал из ваших CAD и каталога: герой-рендеры, среда применения, взрыв-схемы, 360° и интерактив. Первые кадры — за 24–48 часов после модели.">
+  <title>MONOLITH CONTACT — визуал продукта из чертежей и каталога, консультации и ИИ-пайплайны</title>
+  <meta name="description" content="Фотореалистичный визуал из ваших CAD и каталога: герой-рендеры, среда применения, рендеры и сцены применения — из данных каталога; разрезы, взрыв-схемы и 360° — если есть 3D-модели. Первые кадры — после получения исходников, срок согласуем в брифе. Также — консультации, аудит процессов, ИИ-пайплайны и внутренний софт.">
   <link rel="canonical" href="https://monolith.contact/">
   <meta name="robots" content="index, follow">
 
   <!-- OpenGraph -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="MONOLITH.CONTACT">
-  <meta property="og:title" content="MONOLITH CONTACT — визуал продукта из чертежей и каталога">
-  <meta property="og:description" content="Фотореалистичный визуал из ваших CAD и каталога: герой-рендеры, среда применения, взрыв-схемы, 360° и интерактив. Первые кадры — за 24–48 часов после модели.">
+  <meta property="og:title" content="MONOLITH CONTACT — визуал продукта из чертежей и каталога, консультации и ИИ-пайплайны">
+  <meta property="og:description" content="Фотореалистичный визуал из ваших CAD и каталога: герой-рендеры, среда применения, рендеры и сцены применения — из данных каталога; разрезы, взрыв-схемы и 360° — если есть 3D-модели. Первые кадры — после получения исходников, срок согласуем в брифе. Также — консультации, аудит процессов, ИИ-пайплайны и внутренний софт.">
   <meta property="og:url" content="https://monolith.contact/">
   <meta property="og:image" content="https://monolith.contact/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -23,8 +23,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="MONOLITH CONTACT — визуал продукта из чертежей и каталога">
-  <meta name="twitter:description" content="Фотореалистичный визуал из ваших CAD и каталога: герой-рендеры, среда применения, взрыв-схемы, 360° и интерактив. Первые кадры — за 24–48 часов после модели.">
+  <meta name="twitter:title" content="MONOLITH CONTACT — визуал продукта из чертежей и каталога, консультации и ИИ-пайплайны">
+  <meta name="twitter:description" content="Фотореалистичный визуал из ваших CAD и каталога: герой-рендеры, среда применения, рендеры и сцены применения — из данных каталога; разрезы, взрыв-схемы и 360° — если есть 3D-модели. Первые кадры — после получения исходников, срок согласуем в брифе. Также — консультации, аудит процессов, ИИ-пайплайны и внутренний софт.">
   <meta name="twitter:image" content="https://monolith.contact/assets/og-image.jpg">
 
   <meta name="theme-color" content="#c2410c">
@@ -48,7 +48,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=49">
+  <link rel="stylesheet" href="styles.css?v=18">
 </head>
 <body>
 
@@ -84,13 +84,15 @@
 
         <div class="hero" data-animate>
           <p class="label" data-i18n="hero.label">01 // ГЛАВНАЯ — ОФФЕР</p>
-          <h1 class="hero-title" data-i18n="hero.tagline">Визуал продукта из ваших чертежей и каталога. Точный, как модель. Готовый к тендеру и сайту.</h1>
+          <h1 class="hero-title" data-i18n="hero.tagline">Визуал продукта из чертежей и каталога. Консультации и ИИ-пайплайны для вашей команды.</h1>
           <div class="hero-manifesto">
             <p data-i18n="hero.p1"></p>
             <p data-i18n="hero.p2"></p>
+            <p class="hero-p3" data-i18n="hero.p3"></p>
           </div>
           <div class="hero-cta">
             <a class="submit-btn" href="#/brief" data-intent="trial" data-i18n="hero.ctaTrial">Получить тестовый рендер</a>
+            <a class="cta-ghost" href="#/brief" data-need="AI consulting" data-i18n="hero.ctaAi">Обсудить ИИ-задачу</a>
             <a class="cta-ghost" href="#/lab" data-i18n="hero.ctaLab">Как это устроено</a>
           </div>
         </div>
@@ -118,6 +120,17 @@
         <div class="block" data-animate>
           <p class="label" data-i18n="deliv.title">ЧТО ВЫ ПОЛУЧАЕТЕ</p>
           <div class="deliverables" id="deliverables"></div>
+        </div>
+
+        <div class="block" data-animate>
+          <p class="label" data-i18n="ai.label">ТАКЖЕ // ИИ В ПРОЦЕССАХ КОМПАНИИ</p>
+          <p class="lab-tech" data-i18n="ai.lead"></p>
+          <div class="principles" id="aiOffers"></div>
+          <p class="table-note" data-i18n="ai.pilot"></p>
+          <div class="ai-cta">
+            <a class="submit-btn" href="#/brief" data-need="AI consulting" data-i18n="ai.cta">Обсудить задачу</a>
+            <a class="cta-ghost" href="#/services" data-i18n="ai.all">Все услуги</a>
+          </div>
         </div>
 
         <div class="ticker-band accent-band" data-animate>
@@ -149,15 +162,25 @@
           <p class="lab-tech" data-i18n="lab.tech"></p>
         </div>
 
+        <div class="block block-panel lab-auto" data-animate>
+          <p class="label" data-i18n="lab.auto.label">АВТОМАТИЗАЦИЯ ПРОЦЕССОВ // ПОД ВАШУ КОМПАНИЮ</p>
+          <p class="lab-tech" data-i18n="lab.auto.lead"></p>
+          <div class="lab-steps" id="labAuto"></div>
+          <div class="ai-cta">
+            <a class="submit-btn" href="#/brief" data-need="AI consulting" data-i18n="lab.auto.cta">Обсудить задачу</a>
+            <a class="cta-ghost" href="#/services" data-i18n="ai.all">Все услуги</a>
+          </div>
+        </div>
+
         <div class="pipeline" id="pipeline" data-animate></div>
 
-        <div class="block" data-animate>
+        <div class="block block-panel" data-animate>
           <p class="label" data-i18n="matrix.title">ЧТО НУЖНО НА ВХОДЕ</p>
           <div id="matrix"></div>
           <p class="table-note" data-i18n="matrix.note"></p>
         </div>
 
-        <div class="block" data-animate>
+        <div class="block block-panel" data-animate>
           <p class="label" data-i18n="compare.title">ТРИ СПОСОБА ПОЛУЧИТЬ ВИЗУАЛ</p>
           <div id="compare"></div>
         </div>
@@ -171,6 +194,8 @@
         <div class="block" data-animate>
           <p class="label" data-i18n="faq.title">ВОПРОСЫ</p>
           <div class="faq" id="faq"></div>
+          <p class="table-note" data-i18n="lab.also"></p>
+          <a class="cta-ghost cap-to-services" href="#/services" data-i18n="lab.alsoLink">Услуги</a>
         </div>
 
       </div>
@@ -194,15 +219,38 @@
           <a class="submit-btn" href="#/brief" data-intent="trial" data-i18n="srv.trialCta">Получить тестовый рендер</a>
         </div>
 
-        <div class="cap-section srv-viz">
-          <p class="label" data-i18n="srv.vizTitle">ВИЗУАЛ ИЗ ВАШЕЙ МОДЕЛИ</p>
-          <div class="srv-grid" id="srvGrid" data-animate></div>
+        <div class="srv-plate" data-animate>
+          <p class="label" data-i18n="srv.pilotTitle">ПИЛОТ ЗА 2 НЕДЕЛИ</p>
+          <p class="lab-tech" data-i18n="srv.pilotText"></p>
+          <a class="submit-btn" href="#/brief" data-need="AI pipelines" data-i18n="srv.pilotCta">Предложить процесс для пилота</a>
+        </div>
+
+        <div class="cap-filters mono" id="srvFilters" data-animate role="group">
+          <button type="button" data-f="ALL" class="active" aria-pressed="true" data-i18n="srv.filter.all">ВСЕ</button>
+          <button type="button" data-f="VIZ" aria-pressed="false" data-i18n="srv.filter.viz">ВИЗУАЛ</button>
+          <button type="button" data-f="AUTO" aria-pressed="false" data-i18n="srv.filter.auto">АВТОМАТИЗАЦИЯ ПРОЦЕССОВ</button>
         </div>
 
         <div class="cap-section extra-section" id="srvBuildSection">
           <p class="label" data-i18n="srv.buildTitle">РАЗРАБОТКА И КОНСУЛЬТАЦИИ</p>
           <p class="srv-group-note" data-i18n="srv.buildNote"></p>
+          <div data-animate>
+            <p class="label srv-sublabel" data-i18n="srv.lossTitle">ГДЕ ТЕРЯЕТСЯ ВРЕМЯ</p>
+            <ul class="srv-loss" id="srvLoss"></ul>
+          </div>
           <div class="srv-grid" id="srvBuildGrid" data-animate></div>
+          <div class="srv-data" data-animate>
+            <p class="label" data-i18n="srv.dataTitle">ДАННЫЕ ОСТАЮТСЯ ВАШИМИ</p>
+            <ul class="srv-loss" id="srvData"></ul>
+          </div>
+          <div class="srv-discuss">
+            <a class="submit-btn" href="#/brief" data-need="AI consulting" data-i18n="ai.cta">Обсудить задачу</a>
+          </div>
+        </div>
+
+        <div class="cap-section srv-viz">
+          <p class="label" data-i18n="srv.vizTitle">ВИЗУАЛ ИЗ ВАШЕЙ МОДЕЛИ</p>
+          <div class="srv-grid" id="srvGrid" data-animate></div>
         </div>
 
         <div class="cap-section extra-section" id="srvExtraSection">
@@ -257,6 +305,7 @@
 
           <div class="brief-col">
             <form class="brief-form" id="briefForm" novalidate data-animate>
+              <input type="hidden" name="source" id="fSource" value="">
               <div class="field">
                 <label class="mono" for="fCompany" data-i18n="form.company">КОМПАНИЯ</label>
                 <input type="text" id="fCompany" name="company" required autocomplete="organization">
@@ -268,6 +317,20 @@
               <div class="field">
                 <span class="mono field-legend" data-i18n="form.needs">ЧТО НУЖНО</span>
                 <div class="needs" id="fNeeds"></div>
+              </div>
+              <div id="aiLine" hidden>
+                <div class="field">
+                  <label class="mono" for="fProcess" data-i18n="form.process">КАКОЙ ПРОЦЕСС ХОТИТЕ УЛУЧШИТЬ</label>
+                  <textarea id="fProcess" name="process" rows="4" maxlength="2000"></textarea>
+                </div>
+                <div class="field">
+                  <label class="mono" for="fTried" data-i18n="form.tried">ЧТО УЖЕ ПРОБОВАЛИ</label>
+                  <textarea id="fTried" name="tried" rows="3" maxlength="2000"></textarea>
+                </div>
+                <div class="field">
+                  <span class="mono field-legend" data-i18n="form.teamSize">РАЗМЕР КОМАНДЫ</span>
+                  <div class="needs" id="fTeam"></div>
+                </div>
               </div>
               <div class="field">
                 <span class="mono field-legend" data-i18n="form.stage">СТАДИЯ</span>
@@ -288,6 +351,7 @@
             <div class="brief-done" id="briefDone" hidden>
               <p class="done-title" data-i18n="brief.doneTitle">БРИФ ОТПРАВЛЕН</p>
               <p class="done-text" data-i18n="brief.doneText"></p>
+              <p class="done-text" id="briefDoneAi" data-i18n="brief.doneAi" hidden></p>
               <button class="ctl" id="briefAgain" type="button" data-i18n="brief.again">НОВЫЙ БРИФ</button>
             </div>
 
@@ -324,6 +388,7 @@
   <footer id="footer">
     <div class="footer-main">
       <a class="footer-mail mono" id="footerMail" href="mailto:mail@monolith.contact">MAIL@MONOLITH.CONTACT</a>
+      <a class="footer-mail mono footer-ai" href="#/services" data-scroll="srvBuildSection" data-i18n="footer.ai">ИИ-аудит и софт</a>
       <p class="footer-rights mono" data-i18n="footer.rights"></p>
     </div>
     <div class="statusbar mono">
@@ -347,7 +412,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
-  <script src="content.js?v=33"></script>
-  <script src="app.js?v=34"></script>
+  <script src="content.js?v=18"></script>
+  <script src="app.js?v=18"></script>
 </body>
 </html>

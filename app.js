@@ -438,13 +438,17 @@
 
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-  const TICKER_ANIMATED = !MOBILE && !REDUCED && !COARSE;
+  // Same query as the CSS that sets .ticker-band { display: block }.
+  // MOBILE is only innerWidth < 768, so 769–1024 would still animate; the marquee
+  // is desktop-only (above the 1024px card breakpoint, hover, fine pointer, motion on).
+  const TICKER_ANIMATED = window.matchMedia(
+    '(min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)'
+  ).matches;
 
   function renderTicker(el, items, sep) {
     const one = items.map((it) => `<span>${esc(it)}<i>${sep}</i></span>`).join('');
-    // duplicated only when the marquee actually animates (-50% loop); static tickers
-    // (mobile / coarse pointer / reduced motion match the CSS that turns the animation off)
-    // must not repeat the list, or the same text visibly appears twice.
+    // duplicated only when that query matches — otherwise the band is display:none
+    // and a second copy would show if the query and the CSS ever drifted.
     el.innerHTML = TICKER_ANIMATED ? one + one : one;
   }
 
@@ -452,7 +456,7 @@
     const L = state.lang;
 
     $('#heroMetrics').innerHTML = HERO_METRICS.map((m) =>
-      `<div class="metric"><div class="metric-value">${esc(m.value)}</div><div class="metric-label">${esc(m.label[L])}</div></div>`).join('');
+      `<div class="metric"><div class="metric-value">${esc(typeof m.value === 'object' ? m.value[L] : m.value)}</div><div class="metric-label">${esc(m.label[L])}</div></div>`).join('');
 
     renderTicker($('#inputTicker'), ['INPUT:', ...INPUT_TICKER[L]], ' /');
     renderTicker($('#scenarioTicker'), SCENARIO_TICKER[L], ' //');
@@ -491,6 +495,9 @@
     $('#deliverables').innerHTML = DELIVERABLES.map((d) =>
       `<div class="deliverable"><span class="d-index">${d.index} //</span><h3>${esc(d.title[L])}</h3><p>${esc(d.text[L])}</p></div>`).join('');
 
+    $('#aiOffers').innerHTML = AI_OFFERS.map((a) =>
+      `<div class="principle"><span class="p-index">${a.index} //</span><h3>${esc(a.title[L])}</h3><p>${esc(a.text[L])}</p><span class="ai-price">${esc(a.price[L])}</span></div>`).join('');
+
     $('#industries').innerHTML = INDUSTRIES.map((i) =>
       `<li class="ind-item"><div class="ind-body">
         <button class="ind-q" type="button"><span>${esc(i[L])}</span><span class="q-plus">+</span></button>
@@ -502,6 +509,9 @@
 
     $('#pipeline').innerHTML = PIPELINE.map((s) =>
       `<div class="stage" data-stage="${s.id}"><span class="s-id">${s.id} //</span><h3>${esc(s.name[L] || s.name)}</h3><p>${esc(s.text[L])}</p></div>`).join('');
+
+    $('#labAuto').innerHTML = LAB_AUTO_STEPS.map((s) =>
+      `<div class="stage"><span class="s-id">${esc(s.index)} //</span><h3>${esc(s.name[L])}</h3><p>${esc(s.text[L])}</p></div>`).join('');
 
     const mh = ['matrix.h0', 'matrix.h1', 'matrix.h2', 'matrix.h3'].map((k) => T(UI[k]));
     $('#matrix').innerHTML =
@@ -562,6 +572,7 @@
 
   /* ---------- 03 CAPABILITIES / CASES ---------- */
   let capFilter = 'ALL';
+  let srvFilter = 'ALL';
 
   function hasRealMedia(item) {
     return !!((item.gallery && item.gallery.length > 1) || item.model3d ||
@@ -573,7 +584,9 @@
       const alt = esc(item.title[state.lang]);
       return `<div class="cap-carousel">
           <div class="cap-track">` +
-            item.gallery.map((src) => `<div class="cap-slide"><img src="${esc(src)}" alt="${alt}" loading="lazy"></div>`).join('') +
+            item.gallery.map((src) => /\.(mp4|webm)$/i.test(src)
+              ? `<div class="cap-slide"><video src="${esc(src)}" aria-label="${alt}" autoplay muted loop playsinline preload="metadata"></video></div>`
+              : `<div class="cap-slide"><img src="${esc(src)}" alt="${alt}" loading="lazy"></div>`).join('') +
           `</div>
           <button type="button" class="cap-arrow cap-arrow-prev" data-dir="-1" aria-label="Prev">‹</button>
           <button type="button" class="cap-arrow cap-arrow-next" data-dir="1" aria-label="Next">›</button>
@@ -586,8 +599,10 @@
       return `<model-viewer class="cap-model" src="${esc(item.model3d)}"
           alt="${esc(item.title[state.lang])}" camera-controls touch-action="pan-y" auto-rotate
           shadow-intensity="0.7" exposure="1"></model-viewer>`;
-    if (item.media && item.media.type === 'image' && item.media.src)
-      return `<img src="${esc(item.media.src)}" alt="${esc(item.title[state.lang])}" loading="lazy">`;
+    if (item.media && item.media.type === 'image' && item.media.src) {
+      const src = state.lang === 'en' && item.media.srcEn ? item.media.srcEn : item.media.src;
+      return `<img src="${esc(src)}" alt="${esc(item.title[state.lang])}" loading="lazy">`;
+    }
     if (item.media && item.media.type === 'video' && item.media.src)
       return `<video src="${esc(item.media.src)}" autoplay muted loop playsinline></video>`;
     return '';
@@ -600,11 +615,12 @@
         <div class="io-row"><span class="io-key">${T(UI['cap.output'])}</span><span class="io-val">${esc(item.output[L])}</span></div>
       </div>`;
     const metrics = `<div class="cap-metrics">` + item.metrics.map((m) =>
-      `<div class="cm"><b>${esc(m.value)}</b><span>${esc(m.label[L])}</span></div>`).join('') + `</div>`;
+      `<div class="cm"><b>${esc(m.value && typeof m.value === 'object' ? m.value[L] : m.value)}</b><span>${esc(m.label[L])}</span></div>`).join('') + `</div>`;
     const meta = `<span class="c-index">${esc([item.client, item.location, item.year].filter(Boolean).join(' · '))}</span>`;
     const quote = (item.kind === 'case' && item.quote)
       ? `<div class="cap-quote">«${esc(item.quote.text[L])}»<span class="q-author">— ${esc(item.quote.author[L])}</span></div>` : '';
-    // 'open' = someone else's model under a licence, 'own' = geometry we generated
+    // 'open' = someone else's model under a licence, 'own' = geometry we generated,
+    // 'sample' / 'model' = the same label slot (UI['case.demo_' + demo])
     const demo = item.demo ? `<span class="case-demo mono">${esc(T(UI['case.demo_' + item.demo]))}</span>` : '';
     const story = item.story ? `<details class="case-story">
         <summary>${esc(T(UI['case.open']))}</summary>
@@ -613,12 +629,22 @@
           <p>${esc(item.story[k][L])}</p>
         </div>`).join('')}
       </details>` : '';
+    const cta = item.href
+      ? `<a class="case-cta" href="${esc(item.href)}">${esc(item.cta ? item.cta[L] : '')}</a>`
+      : '';
+    const note = item.note
+      ? `<p class="case-note"><a href="#/brief" data-need="Internal software / bots">${esc(item.note[L])}</a></p>`
+      : '';
     // CC BY models oblige us to credit the author; it also backs the demo label
     const source = item.source ? `<p class="case-source">${esc(T(UI['case.source']))}:
         <a href="${esc(item.source.url)}" target="_blank" rel="noopener noreferrer">${esc(item.source.model)}</a>, ${esc(item.source.license)}</p>` : '';
     // no real media yet — skip the media block entirely rather than show an empty tile
     const mediaBlock = mediaHTML(item);
-    const media = mediaBlock ? `<div class="cap-media">${mediaBlock}</div>` : '';
+    const natural = !!(mediaBlock && item.media && item.media.fit === 'natural' &&
+      !(item.gallery && item.gallery.length > 1) && !item.model3d);
+    const media = mediaBlock
+      ? `<div class="cap-media"${natural ? ' data-fit="natural"' : ''}>${mediaBlock}</div>`
+      : '';
     return `<article class="cap-card" data-id="${item.id}" data-sector="${esc(item.sector.en)}">
         ${media}
         <div class="cap-body">
@@ -626,7 +652,7 @@
           ${demo}
           <h3>${esc(item.title[L])}</h3>
           <p class="c-desc">${esc(item.description[L])}</p>
-          ${io}${metrics}${story}${source}${quote}
+          ${io}${metrics}${story}${cta}${note}${source}${quote}
         </div>
       </article>`;
   }
@@ -635,9 +661,34 @@
   // a case proves a service only if its card is actually shown on the Work page
   const visibleCases = () => ARCHIVE_ITEMS.filter((i) => i.kind === 'case' && hasRealMedia(i));
 
+  // first still for a service card: gallery frame, else image (srcEn in EN), else video.
+  // model3d-only cases are skipped so the next case can supply the picture.
+  function casePreview(item) {
+    if (item.gallery && item.gallery.length) {
+      const src = item.gallery[0];
+      if (!src) return null;
+      return { kind: /\.(mp4|webm)$/i.test(src) ? 'video' : 'image', src };
+    }
+    if (item.media && item.media.type === 'image' && item.media.src) {
+      const src = state.lang === 'en' && item.media.srcEn ? item.media.srcEn : item.media.src;
+      return { kind: 'image', src };
+    }
+    if (item.media && item.media.type === 'video' && item.media.src)
+      return { kind: 'video', src: item.media.src };
+    return null;
+  }
+
   function serviceHTML(item) {
     const L = state.lang;
-    const proof = visibleCases().filter((c) => (item.cases || []).includes(c.id));
+    const shown = visibleCases();
+    const proof = shown.filter((c) => (item.cases || []).includes(c.id));
+    const linked = (item.cases || []).map((id) => shown.find((c) => c.id === id)).filter(Boolean);
+    let shot = null, shotCase = null;
+    for (const c of linked) {
+      const found = casePreview(c);
+      if (found) { shot = found; shotCase = c; break; }
+    }
+    const target = shotCase || linked[0] || null;
     const links = item.links || [];
     const proofBlock = (proof.length || links.length)
       ? `<div class="srv-proof"><span class="io-key">${T(UI['srv.proof'])}</span><div class="srv-proof-links">` +
@@ -649,13 +700,23 @@
       ? `<div class="srv-price"><span class="io-key">${T(UI['srv.from'])}</span><b>${esc(item.price[L])}</b></div>`
       : `<div class="srv-price"><span class="io-key">${T(UI['srv.from'])}</span><b class="srv-price-na">${esc(T(UI['srv.afterBrief']))}</b></div>`;
     const need = item.need ? ` data-need="${esc(item.need)}"` : '';
-    const media = item.model3d
-      ? `<div class="cap-media">${mediaHTML(item)}</div>` : '';
+    const heading = target
+      ? `<a href="#/capabilities" data-case="${esc(target.id)}">${esc(item.title[L])}</a>`
+      : `<a href="#/capabilities">${esc(item.title[L])}</a>`;
+    let media = '';
+    if (shot) {
+      const inner = shot.kind === 'video'
+        ? `<video src="${esc(shot.src)}" muted playsinline preload="metadata" loop></video>`
+        : `<img src="${esc(shot.src)}" alt="${esc(item.title[L])}" loading="lazy">`;
+      media = `<a class="srv-media" href="#/capabilities" data-case="${esc(shotCase.id)}" aria-label="${esc(shotCase.title[L])}">${inner}</a>`;
+    } else if (item.model3d) {
+      media = `<div class="cap-media">${mediaHTML(item)}</div>`;
+    }
     return `<article class="srv-card cap-card" data-id="${item.id}">
         ${media}
         <div class="cap-body">
           <div class="cap-top"><span class="c-index">${item.index}</span></div>
-          <h3>${esc(item.title[L])}</h3>
+          <h3>${heading}</h3>
           <p class="c-desc">${esc(item.text[L])}</p>
           <div class="cap-io">
             <div class="io-row"><span class="io-key">${T(UI['cap.input'])}</span><span class="io-val">${esc(item.input[L])}</span></div>
@@ -673,6 +734,10 @@
   }
 
   function renderServices() {
+    const L = state.lang;
+    const lines = (items) => items.map((p) => `<li>${esc(p[L])}</li>`).join('');
+    if ($('#srvLoss')) $('#srvLoss').innerHTML = lines(LOSS_POINTS);
+    if ($('#srvData')) $('#srvData').innerHTML = lines(DATA_POINTS);
     [['#srvGrid', 'viz'], ['#srvBuildGrid', 'build'], ['#srvExtraGrid', 'also']].forEach(([sel, group]) => {
       $(sel).innerHTML = SERVICES.filter((s) => s.group === group).map(serviceHTML).join('');
     });
@@ -700,6 +765,29 @@
     $$('#capFilters button').forEach((b) => b.classList.toggle('active', b.dataset.f === capFilter));
   }
 
+  function applySrvFilter() {
+    const vizOn = srvFilter === 'ALL' || srvFilter === 'VIZ';
+    const autoOn = srvFilter === 'ALL' || srvFilter === 'AUTO';
+    const page = $('#page-services');
+    if (!page) return;
+    const touch = (el, hidden) => {
+      if (!el || el.hidden === hidden) return false;
+      el.hidden = hidden;
+      return true;
+    };
+    const changed = [
+      touch($('.srv-viz', page), !vizOn),
+      touch($('#srvExtraSection'), !vizOn),
+      touch($('#srvBuildSection'), !autoOn)
+    ].some(Boolean);
+    $$('#srvFilters button').forEach((b) => {
+      const on = b.dataset.f === srvFilter;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    if (changed && typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+  }
+
   /* ---------- 04 BRIEF ---------- */
   function renderBriefAside() {
     const L = state.lang;
@@ -724,11 +812,49 @@
       `<option value="Other">${T(UI['form.other'])}</option>`;
 
     const wantNeed = sessionStorage.getItem('m_need');
+    const keptNeeds = new Set($$('#fNeeds input:checked').map((i) => i.value));
     $('#fNeeds').innerHTML = FORM_NEEDS.map((n, i) =>
-      `<label class="chip"><input type="checkbox" name="needs" value="${esc(n.en)}"${(i === 0 && sessionStorage.getItem('m_intent') === 'trial') || n.en === wantNeed ? ' checked' : ''}><span>${esc(n[L])}</span></label>`).join('');
+      `<label class="chip"><input type="checkbox" name="needs" value="${esc(n.en)}"${keptNeeds.has(n.en) || (i === 0 && sessionStorage.getItem('m_intent') === 'trial') || n.en === wantNeed ? ' checked' : ''}><span>${esc(n[L])}</span></label>`).join('');
 
     $('#fStages').innerHTML = FORM_STAGES.map((s, i) =>
       `<label class="chip"><input type="radio" name="stage" value="${esc(s.en)}" ${i === 0 ? 'checked' : ''}><span>${esc(s[L])}</span></label>`).join('');
+
+    const teamNow = ($('#fTeam input:checked') || {}).value || '';
+    if ($('#fTeam')) {
+      $('#fTeam').innerHTML = FORM_TEAM.map((t) =>
+        `<label class="chip"><input type="radio" name="teamSize" value="${esc(t.value)}"${t.value === teamNow ? ' checked' : ''}><span>${esc(t[L])}</span></label>`).join('');
+    }
+    syncAiLine();
+  }
+
+  const AI_LINE_NEEDS = ['AI consulting', 'AI pipelines', 'Internal software / bots'];
+
+  function aiLineOn() {
+    return $$('#fNeeds input:checked').some((i) => AI_LINE_NEEDS.includes(i.value));
+  }
+
+  function syncAiLine() {
+    const box = $('#aiLine');
+    if (!box) return;
+    const on = aiLineOn();
+    box.hidden = !on;
+    $$('input, textarea', box).forEach((el) => { el.disabled = !on; });
+  }
+
+  function briefSource() {
+    const src = sessionStorage.getItem('m_source') || '';
+    return /^[a-zA-Z0-9_.-]{1,64}$/.test(src) ? src : '';
+  }
+
+  function captureSource() {
+    const raw = new URLSearchParams(location.search).get('src');
+    if (raw != null) {
+      const src = raw.trim();
+      if (/^[a-zA-Z0-9_.-]{1,64}$/.test(src)) sessionStorage.setItem('m_source', src);
+    }
+    const kept = briefSource();
+    const input = $('#fSource');
+    if (input) input.value = kept;
   }
 
   function setLang(lang) {
@@ -756,8 +882,9 @@
       });
     });
 
-    // LAB stages: hover/click blends in the wireframe state
-    $$('.stage').forEach((st) => {
+    // Pipeline stages only: the automation list reuses .stage for layout
+    // and must not retune the scene.
+    $$('#pipeline .stage').forEach((st) => {
       const on  = () => { if (state.route === 'lab') tweenWeights({ ...STATE_WEIGHTS.lab, normal: 0.08, wireframe: 0.92 }, 0.8); };
       const off = () => { if (state.route === 'lab') tweenWeights(STATE_WEIGHTS.lab, 0.8); };
       st.addEventListener('mouseenter', on);
@@ -836,29 +963,23 @@
       b.addEventListener('click', () => { capFilter = b.dataset.f; applyCapFilter(); });
     });
 
-    $$('#briefForm input, #briefForm select, #briefForm textarea').forEach((el) => {
-      el.addEventListener('focus', pulse);
-    });
-
-    const track = $('#compareTrack');
-    const dotsWrap = $('#compareDots');
-    if (track && dotsWrap) {
-      const cards = $$('.compare-spec', track);
-      dotsWrap.innerHTML = cards.map((_, i) => `<button type="button" class="compare-dot${i === 0 ? ' active' : ''}" data-i="${i}" aria-label="${i + 1}"></button>`).join('');
-      const setDot = (i) => {
-        $$('.compare-dot', dotsWrap).forEach((d, di) => d.classList.toggle('active', di === i));
-      };
-      track.addEventListener('scroll', () => {
-        const w = track.clientWidth || 1;
-        setDot(Math.round(track.scrollLeft / w));
-      }, { passive: true });
-      $$('.compare-dot', dotsWrap).forEach((d) => {
-        d.addEventListener('click', () => {
-          const i = parseInt(d.dataset.i, 10);
-          track.scrollTo({ left: i * track.clientWidth, behavior: REDUCED ? 'auto' : 'smooth' });
+    if (FINE && !REDUCED) {
+      $$('.srv-media video').forEach((v) => {
+        const card = v.closest('.srv-card');
+        if (!card) return;
+        card.addEventListener('mouseenter', () => { v.play().catch(() => {}); });
+        card.addEventListener('mouseleave', () => {
+          v.pause();
+          if (v.readyState >= 1) v.currentTime = 0;
         });
       });
     }
+
+    $$('#fNeeds input').forEach((input) => input.addEventListener('change', syncAiLine));
+
+    $$('#briefForm input, #briefForm select, #briefForm textarea').forEach((el) => {
+      el.addEventListener('focus', pulse);
+    });
   }
 
   /* ---------- brief form: validate → POST /api/brief → confirmation ---------- */
@@ -887,18 +1008,34 @@
     submitBtn.disabled = true;
     submitBtn.textContent = T(UI['form.sending']);
 
+    const needs = $$('#fNeeds input:checked').map((i) => i.value);
+    const payload = {
+      company, email,
+      industry: $('#fIndustry').value,
+      needs,
+      stage: ($('#fStages input:checked') || {}).value || '',
+      message: $('#fMessage').value.trim()
+    };
+    if (aiLineOn()) {
+      const process = $('#fProcess').value.trim().slice(0, 2000);
+      const tried = $('#fTried').value.trim().slice(0, 2000);
+      const teamSize = ($('#fTeam input:checked') || {}).value || '';
+      if (process) payload.process = process;
+      if (tried) payload.tried = tried;
+      if (teamSize) payload.teamSize = teamSize;
+    }
+    const source = briefSource();
+    if (source) payload.source = source;
+
     try {
-      await submitBrief({
-        company, email,
-        industry: $('#fIndustry').value,
-        needs: $$('#fNeeds input:checked').map((i) => i.value),
-        stage: ($('#fStages input:checked') || {}).value || '',
-        message: $('#fMessage').value.trim()
-      });
+      await submitBrief(payload);
       sessionStorage.removeItem('m_intent');
       sessionStorage.removeItem('m_need');
+      $$('#aiLine input, #aiLine textarea').forEach((el) => { el.disabled = false; });
       $('#briefForm').reset();
       $('#briefForm').hidden = true;
+      const aiDone = $('#briefDoneAi');
+      if (aiDone) aiDone.hidden = !needs.some((n) => AI_LINE_NEEDS.includes(n));
       $('#briefDone').hidden = false;
       $('#briefDone').scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
       if (!MOBILE && !REDUCED && !document.hidden) {
@@ -916,9 +1053,14 @@
   });
 
   $('#briefAgain').addEventListener('click', () => {
+    $$('#aiLine input, #aiLine textarea').forEach((el) => { el.disabled = false; });
     $('#briefForm').reset();
     $('#briefForm').hidden = false;
     $('#briefDone').hidden = true;
+    const aiDone = $('#briefDoneAi');
+    if (aiDone) aiDone.hidden = true;
+    captureSource();
+    syncAiLine();
   });
 
   /* ==========================================================
@@ -1004,8 +1146,26 @@
 
   function showPage(route) {
     PAGES.forEach((p) => $('#page-' + p).classList.toggle('active', p === route));
+    if (route === 'services') { srvFilter = 'ALL'; applySrvFilter(); }
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });   // bypass smooth scroll: new page always opens at the top
     focusCase(route);
+    focusSrv(route);
+  }
+
+  /* footer "AI audit" link: same idea as m_case, scroll to the build group after the route lands */
+  function focusSrv(route) {
+    const id = sessionStorage.getItem('m_srv');
+    if (!id || route !== 'services') return;
+    sessionStorage.removeItem('m_srv');
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.hidden || el.closest('[hidden]')) {
+      srvFilter = 'ALL';
+      applySrvFilter();
+    }
+    setTimeout(() => {
+      el.scrollIntoView({ behavior: 'instant', block: 'start' });
+    }, 0);
   }
 
   /* arriving from a service's "proof" link: scroll to that case and flash its border */
@@ -1015,11 +1175,12 @@
     sessionStorage.removeItem('m_case');
     const card = $('#capGrid .cap-card[data-id="' + id + '"]');
     if (!card) return;
-    requestAnimationFrame(() => {
+    // scrollIntoView flushes layout itself; a timer (not rAF) also fires in a background tab
+    setTimeout(() => {
       card.scrollIntoView({ behavior: 'instant', block: 'start' });
       card.classList.add('flash');
       setTimeout(() => card.classList.remove('flash'), 1800);
-    });
+    }, 0);
   }
 
   function goTo(route, instant) {
@@ -1132,9 +1293,33 @@
       sessionStorage.setItem('m_need', n.dataset.need);
       $$('#fNeeds input').forEach((i) => { i.checked = i.value === n.dataset.need; });
     }
+    if (a || n) syncAiLine();
+    const scroll = e.target.closest('[data-scroll]');
+    if (scroll) {
+      sessionStorage.setItem('m_srv', scroll.dataset.scroll);
+      if (state.route === 'services') focusSrv('services');
+    }
     // service → proof: remember which case card to bring into view on the Work page
     const c = e.target.closest('[data-case]');
     if (c) { sessionStorage.setItem('m_case', c.dataset.case); capFilter = 'ALL'; applyCapFilter(); }
+    const allSrv = e.target.closest('a[href="#/services"]');
+    if (allSrv && !allSrv.hasAttribute('data-scroll')) {
+      srvFilter = 'ALL';
+      applySrvFilter();
+    }
+    const srvCard = e.target.closest('.srv-card');
+    if (srvCard && !e.target.closest('a, button, .srv-request, model-viewer')) {
+      const go = $('h3 a', srvCard);
+      if (go) go.click();
+    }
+    const plainCap = e.target.closest('.srv-card a[href="#/capabilities"]');
+    if (plainCap && !plainCap.dataset.case) { capFilter = 'ALL'; applyCapFilter(); }
+  });
+  $$('#srvFilters button').forEach((b) => {
+    b.addEventListener('click', () => {
+      srvFilter = b.dataset.f || 'ALL';
+      applySrvFilter();
+    });
   });
   $('#footerMail').href = 'mailto:' + CONTACT_EMAIL;
   $('#footerMail').textContent = CONTACT_EMAIL.toUpperCase();
@@ -1150,6 +1335,7 @@
   applyStatic();
   renderDynamic();
   bindDynamic();
+  captureSource();
   goTo(routeFromHash(), true);
 
   if (REDUCED) {

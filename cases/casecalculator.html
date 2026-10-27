@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ru" data-palette="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>try{document.documentElement.setAttribute('data-palette',localStorage.getItem('m_palette')||'3')}catch(e){}</script>
+<title>Калькулятор панелей — кейс MONOLITH</title>
+<meta name="description" content="Демонстрационный кейс: клиент вводит размеры здания и сразу видит панели, доборные элементы, ориентир цены и 3D-модель, менеджер получает готовую заявку.">
+<meta property="og:title" content="Калькулятор склада из сэндвич-панелей — кейс MONOLITH">
+<meta property="og:description" content="Размеры на входе, заявка на выходе. Живое демо на условных данных.">
+<meta property="og:image" content="../assets/cases/panel-calculator-ru.png">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+<link rel="stylesheet" href="case.css">
+</head>
+<body>
+
+<header id="header">
+  <a class="brand" href="../index.html#/main">MONOLITH<span class="brand-ai">.CONTACT</span></a>
+  <nav id="nav">
+    <a href="../index.html#/main" data-ru="01 // ГЛАВНАЯ" data-en="01 // MAIN">01 // ГЛАВНАЯ</a>
+    <a href="../index.html#/lab" data-ru="02 // КАК ЭТО УСТРОЕНО" data-en="02 // HOW IT WORKS">02 // КАК ЭТО УСТРОЕНО</a>
+    <a href="../index.html#/services" data-ru="03 // УСЛУГИ" data-en="03 // SERVICES">03 // УСЛУГИ</a>
+    <a href="../index.html#/capabilities" data-ru="04 // РАБОТЫ" data-en="04 // WORK">04 // РАБОТЫ</a>
+    <a href="../index.html#/brief" data-ru="05 // БРИФ" data-en="05 // BRIEF">05 // БРИФ</a>
+  </nav>
+  <div class="header-controls">
+    <button id="langBtn" class="ctl" type="button" aria-label="Switch language">EN</button>
+    <button id="burger" class="ctl burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
+  </div>
+</header>
+<div id="navScrim" class="nav-scrim" hidden></div>
+
+<main class="wrap">
+  <a class="crumb" href="../index.html#/capabilities" data-ru="← MONOLITH // Услуги и кейсы" data-en="← MONOLITH // Services and cases">← MONOLITH // Услуги и кейсы</a>
+
+  <header class="hero">
+    <p class="label" data-ru="CASE // S_07 · Калькулятор и конфигуратор" data-en="CASE // S_07 · Calculator and configurator">CASE // S_07 · Калькулятор и конфигуратор</p>
+    <h1 class="hero-title" data-ru="Размеры на входе — заявка на выходе" data-en="Dimensions in, a ready request out">Размеры на входе — заявка на выходе</h1>
+    <div class="hero-card">
+      <p class="lead" data-ru="Клиент вводит размеры здания и сразу видит панели, доборные элементы, ориентир цены и 3D-модель. Менеджер получает готовую заявку, а не вопрос «сколько стоит склад»." data-en="The client enters building dimensions and instantly sees panels, trims, a price estimate and a 3D model. The manager gets a ready request instead of the question “how much is a warehouse”.">Клиент вводит размеры здания и сразу видит панели, доборные элементы, ориентир цены и 3D-модель. Менеджер получает готовую заявку, а не вопрос «сколько стоит склад».</p>
+      <dl class="meta">
+        <div><dt data-ru="Тип работы" data-en="Type">Тип работы</dt><dd data-ru="Софт для продаж" data-en="Sales software">Софт для продаж</dd></div>
+        <div><dt data-ru="Отрасль" data-en="Industry">Отрасль</dt><dd data-ru="Сэндвич-панели" data-en="Sandwich panels">Сэндвич-панели</dd></div>
+        <div><dt data-ru="Прототип" data-en="Prototype">Прототип</dt><dd data-ru="5 дней, от 800 $" data-en="5 days, from $800">5 дней, от 800 $</dd></div>
+        <div><dt data-ru="Рабочая версия" data-en="Working version">Рабочая версия</dt><dd data-ru="3 недели, от 6 000 $" data-en="3 weeks, from $6,000">3 недели, от 6 000 $</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="stage-wrap">
+    <div class="stage" id="stage">
+      <img id="poster" src="../assets/cases/panel-calculator-ru.png" width="1200" height="760" alt="Калькулятор склада из сэндвич-панелей: 3D-модель здания и расчёт" data-alt-en="Sandwich panel building calculator: 3D model and quote">
+      <button class="launch" id="launch" type="button"><span class="submit-btn" data-ru="Посмотреть вживую" data-en="Open live demo">Посмотреть вживую</span></button>
+    </div>
+    <div class="cap">
+      <span data-ru="Демонстрация на условных данных. Цены условные, в $." data-en="Demonstration on sample data. Prices are sample values, in $.">Демонстрация на условных данных. Цены условные, в $.</span>
+      <a id="openfull" href="casecalculator/demo.html" data-ru="Открыть на отдельной странице ↗" data-en="Open as a separate page ↗">Открыть на отдельной странице ↗</a>
+    </div>
+  </div>
+
+  <article>
+    <section class="block" id="problem">
+      <h2><span class="label">01 // <span data-ru="Задача" data-en="Problem">Задача</span></span><span class="case-h" data-ru="Каждый заказ считают вручную" data-en="Every order is quoted by hand">Каждый заказ считают вручную</span></h2>
+      <p data-ru="У производителей панелей и металлоконструкций типичная картина: запрос приходит в мессенджер, менеджер считает количество и цену в таблице, клиент ждёт. Покупатель склада или цеха хочет сразу увидеть, сколько нужно и как это будет выглядеть." data-en="A typical picture at panel and steel-structure manufacturers: a request arrives in a messenger, a manager works out quantity and price in a spreadsheet, the client waits. A buyer of a warehouse or workshop wants to see at once how much is needed and how it will look.">У производителей панелей и металлоконструкций типичная картина: запрос приходит в мессенджер, менеджер считает количество и цену в таблице, клиент ждёт. Покупатель склада или цеха хочет сразу увидеть, сколько нужно и как это будет выглядеть.</p>
+      <p class="note" data-ru="Это демонстрационный кейс на условных данных, а не работа для конкретного клиента." data-en="This is a demonstration case on sample data, not work for a specific client.">Это демонстрационный кейс на условных данных, а не работа для конкретного клиента.</p>
+    </section>
+
+    <section class="block" id="features">
+      <h2><span class="label">02 // <span data-ru="Что умеет" data-en="What it does">Что умеет</span></span><span class="case-h" data-ru="От размеров до заявки за минуту" data-en="From dimensions to a request in a minute">От размеров до заявки за минуту</span></h2>
+      <ul class="case-list">
+        <li data-ru="Четыре типа зданий — склад, цех, спортзал, АБК — со своим стартовым набором: утеплитель, толщины, ворота, окна." data-en="Four building types — warehouse, workshop, sports hall, office block — each with its own starting set: insulation, thickness, gates, windows.">Четыре типа зданий — склад, цех, спортзал, АБК — со своим стартовым набором: утеплитель, толщины, ворота, окна.</li>
+        <li data-ru="Расчёт стеновых и кровельных панелей, доборных элементов, метизов, массы и ориентира цены." data-en="Wall and roof panels, trims, fasteners, weight and a price estimate.">Расчёт стеновых и кровельных панелей, доборных элементов, метизов, массы и ориентира цены.</li>
+        <li data-ru="3D-модель здания: цвет стен и кровли, окружение, вращение мышью или пальцем." data-en="3D building model: wall and roof colour, environment, rotation by mouse or touch.">3D-модель здания: цвет стен и кровли, окружение, вращение мышью или пальцем.</li>
+        <li data-ru="Готовый текст заявки менеджеру: размеры, состав, ориентир, контакт клиента." data-en="A ready request text for the manager: dimensions, specification, estimate, client contact.">Готовый текст заявки менеджеру: размеры, состав, ориентир, контакт клиента.</li>
+      </ul>
+    </section>
+
+    <section class="block" id="compare">
+      <h2><span class="label">03 // <span data-ru="Демо и рабочая версия" data-en="Demo vs working version">Демо и рабочая версия</span></span><span class="case-h" data-ru="Что в демо, а что появится на ваших данных" data-en="What the demo has and what appears on your data">Что в демо, а что появится на ваших данных</span></h2>
+      <div class="table-wrap"><table class="table">
+        <thead><tr><th data-ru="В демо" data-en="In the demo">В демо</th><th data-ru="В рабочей версии" data-en="In the working version">В рабочей версии</th></tr></thead>
+        <tbody>
+          <tr><td data-ru="Условные цены в долларах, ширина панели 1 м" data-en="Sample prices in dollars, 1 m panel width">Условные цены в долларах, ширина панели 1 м</td><td data-ru="Ваш прайс, ваши правила раскроя, остатки и доборные элементы" data-en="Your price list, your cutting rules, remnants and trims">Ваш прайс, ваши правила раскроя, остатки и доборные элементы</td></tr>
+          <tr><td data-ru="Текст заявки на экране" data-en="Request text on screen">Текст заявки на экране</td><td data-ru="Заявка менеджеру в Telegram и в таблицу со статусами, PDF-расчёт клиенту" data-en="A request to the manager in Telegram and a status spreadsheet, a PDF quote for the client">Заявка менеджеру в Telegram и в таблицу со статусами, PDF-расчёт клиенту</td></tr>
+          <tr><td data-ru="Упрощённая 3D-коробка здания" data-en="A simplified 3D building box">Упрощённая 3D-коробка здания</td><td data-ru="Ваши профили и цвета; точная 3D-модель — если есть модели" data-en="Your profiles and colours; an exact 3D model if models are available">Ваши профили и цвета; точная 3D-модель — если есть модели</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="block" id="price">
+      <h2><span class="label">04 // <span data-ru="Сроки и цена" data-en="Timeline and price">Сроки и цена</span></span><span class="case-h" data-ru="Прототип за 5 дней, дальше по этапам" data-en="A prototype in 5 days, then in stages">Прототип за 5 дней, дальше по этапам</span></h2>
+      <div class="table-wrap"><table class="table">
+        <thead><tr><th data-ru="Этап" data-en="Stage">Этап</th><th data-ru="Срок" data-en="Time">Срок</th><th data-ru="Цена" data-en="Price">Цена</th></tr></thead>
+        <tbody>
+          <tr><td data-ru="Прототип на ваших размерах и общих правилах" data-en="Prototype on your dimensions and general rules">Прототип на ваших размерах и общих правилах</td><td class="n" data-ru="5 дней" data-en="5 days">5 дней</td><td class="n" data-ru="от 800 $, засчитывается в проект" data-en="from $800, credited to the project">от 800 $, засчитывается в проект</td></tr>
+          <tr><td data-ru="Рабочая версия: ваш прайс, заявка в Telegram, админка цен" data-en="Working version: your price list, Telegram requests, price admin">Рабочая версия: ваш прайс, заявка в Telegram, админка цен</td><td class="n" data-ru="3 недели" data-en="3 weeks">3 недели</td><td class="n" data-ru="от 6 000 $" data-en="from $6,000">от 6 000 $</td></tr>
+          <tr><td data-ru="Поддержка: обновление цен и правил" data-en="Support: price and rule updates">Поддержка: обновление цен и правил</td><td class="n" data-ru="ежемесячно" data-en="monthly">ежемесячно</td><td class="n" data-ru="от 500 $ / мес" data-en="from $500 / mo">от 500 $ / мес</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note" data-ru="Срок считается от получения прайса и правил расчёта. Точная цена зависит от числа типов продукции и правил." data-en="Time counts from receiving the price list and calculation rules. The exact price depends on the number of product types and rules.">Срок считается от получения прайса и правил расчёта. Точная цена зависит от числа типов продукции и правил.</p>
+    </section>
+
+    <section class="block" id="need">
+      <h2><span class="label">05 // <span data-ru="Что нужно от вас" data-en="What we need from you">Что нужно от вас</span></span><span class="case-h" data-ru="Прайс, правила и один человек на сверку" data-en="A price list, the rules and one person to verify">Прайс, правила и один человек на сверку</span></h2>
+      <ul class="case-list">
+        <li data-ru="Прайс по толщинам, наполнителям и цветам в таблице." data-en="A price list by thickness, filler and colour, in a table.">Прайс по толщинам, наполнителям и цветам в таблице.</li>
+        <li data-ru="Правила расчёта: доборные элементы, раскрой, остатки." data-en="Calculation rules: trims, cutting, remnants.">Правила расчёта: доборные элементы, раскрой, остатки.</li>
+        <li data-ru="Менеджер, который проверит расчёт на десяти прошлых заказах: приёмка — совпадение с его расчётом." data-en="A manager who checks the quote on ten past orders: acceptance means it matches their own calculation.">Менеджер, который проверит расчёт на десяти прошлых заказах: приёмка — совпадение с его расчётом.</li>
+      </ul>
+    </section>
+  </article>
+
+  <section class="cta">
+    <div class="label" data-ru="Следующий шаг" data-en="Next step">Следующий шаг</div>
+    <h2 data-ru="Хотите такой расчёт для своего продукта?" data-en="Want a calculator like this for your product?">Хотите такой расчёт для своего продукта?</h2>
+    <p data-ru="Пришлите прайс и пример заказа — соберём прототип на ваших данных за 5 дней." data-en="Send a price list and a sample order — we will build a prototype on your data in 5 days.">Пришлите прайс и пример заказа — соберём прототип на ваших данных за 5 дней.</p>
+    <a class="submit-btn" href="../index.html?src=casepanelcalculator#/brief" data-ru="Отправить бриф →" data-en="Send a brief →">Отправить бриф →</a>
+    <a class="cta-quiet" href="../index.html#/services" data-ru="Все услуги по софту" data-en="All software services">Все услуги по софту</a>
+  </section>
+</main>
+
+<footer id="footer">
+  <div class="footer-main">
+    <a class="footer-mail" href="mailto:mail@monolith.contact">MAIL@MONOLITH.CONTACT</a>
+    <span class="footer-note">MONOLITH // CASES</span>
+    <span class="footer-note" data-ru="Демонстрация на условных данных" data-en="Demonstration on sample data">Демонстрация на условных данных</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var CALC='casecalculator/demo.html';
+  var POSTER={ru:'../assets/cases/panel-calculator-ru.png',en:'../assets/cases/panel-calculator-en.png'};
+  var LANG='ru',frame=null;
+  var $=function(id){return document.getElementById(id)};
+  function setLang(l,save){
+    LANG=l;document.documentElement.lang=l;
+    document.querySelectorAll('[data-en]').forEach(function(el){
+      if(el.dataset.ru===undefined)return;
+      el.textContent=l==='en'?el.dataset.en:el.dataset.ru;
+    });
+    var btn=$('langBtn');
+    if(btn)btn.textContent=l==='en'?'RU':'EN';
+    var p=$('poster');
+    if(p){p.src=POSTER[l];p.alt=l==='en'?p.dataset.altEn:p.dataset.altRu;}
+    var open=$('openfull');
+    if(open)open.href=CALC+'?lang='+l;
+    if(frame)frame.src=CALC+'?embed=1&lang='+l;
+    document.title=l==='en'?'Panel calculator — MONOLITH case':'Калькулятор панелей — кейс MONOLITH';
+    if(save){try{localStorage.setItem('m_lang',l)}catch(e){}}
+  }
+  var poster=$('poster');
+  if(poster)poster.dataset.altRu=poster.alt;
+  document.querySelectorAll('[data-en]').forEach(function(el){
+    if(el.id==='poster'||el.tagName==='IMG')return;
+    el.dataset.ru=el.textContent;
+  });
+  $('langBtn').onclick=function(){setLang(LANG==='en'?'ru':'en',true)};
+  var burger=$('burger'),scrim=$('navScrim');
+  function closeNav(){document.body.classList.remove('nav-open');if(burger)burger.setAttribute('aria-expanded','false')}
+  if(burger)burger.onclick=function(){
+    var open=document.body.classList.toggle('nav-open');
+    burger.setAttribute('aria-expanded',open?'true':'false');
+  };
+  if(scrim)scrim.onclick=closeNav;
+  document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',closeNav)});
+  $('launch').onclick=function(){
+    frame=document.createElement('iframe');
+    frame.title=LANG==='en'?'Sandwich panel building calculator':'Калькулятор склада из сэндвич-панелей';
+    frame.src=CALC+'?embed=1&lang='+LANG;frame.loading='lazy';
+    var st=$('stage');st.innerHTML='';st.appendChild(frame);
+  };
+  window.addEventListener('message',function(e){
+    if(!frame||e.source!==frame.contentWindow)return;
+    if(e.data&&e.data.type==='monolith-calc-height'&&e.data.h>200)frame.style.height=e.data.h+'px';
+  });
+  var q=(location.search.match(/[?&]lang=(ru|en)/)||[])[1],sv=null;
+  try{sv=localStorage.getItem('m_lang')}catch(e){}
+  if(sv!=='ru'&&sv!=='en')sv=null;
+  setLang(q||sv||'ru',false);
+})();
+</script>
+</body>
+</html>

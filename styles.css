@@ -177,7 +177,7 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   max-width: 24ch; margin-bottom: 40px; overflow-wrap: break-word;
 }
 .hero-manifesto {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
+  display: grid; grid-template-columns: 1fr 1fr; column-gap: 48px; row-gap: 22px; align-items: start;
   max-width: 980px; margin-top: 32px;
   background: rgba(255, 255, 255, 0.86);
   -webkit-backdrop-filter: blur(16px);
@@ -190,10 +190,14 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 /* kill the browser's default p margin — it was adding blank space the grid's
    row-stretch then copied into the shorter column too, taller than the text needs */
 .hero-manifesto p { margin: 0; font-size: 17px; line-height: 1.65; color: var(--text); }
+.hero-manifesto .hero-p3 {
+  grid-column: 1 / -1; min-width: 0;
+  border-top: 1px solid var(--line); padding-top: 18px;
+}
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 36px; }
-.hero-cta .submit-btn { margin-top: 0; align-self: center; border: 1px solid transparent; background: #2563eb; }
-.hero-cta .submit-btn:hover { background: #1e40af; }
+.hero-cta .submit-btn { margin-top: 0; align-self: center; border: 1px solid transparent; }
 .cta-ghost {
+  display: inline-flex; align-items: center; justify-content: center; text-align: center;
   font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em;
   border: 1px solid var(--line); padding: 17px 28px; color: var(--text);
   background: var(--surface);
@@ -214,6 +218,17 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .economy .trow.ours > div { background: color-mix(in srgb, var(--accent) 6%, transparent); }
 
 .block { margin-top: 72px; }
+/* Same frosted sheet the ≤1024px card rule gives every .block.
+   One rule for every width; the later media queries keep the tighter padding. */
+.block-panel {
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(38, 32, 27, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 10px 28px rgba(38, 32, 27, 0.05);
+  padding: 28px 32px;
+}
 
 /* ---------- Metrics ---------- */
 .metrics {
@@ -231,6 +246,7 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 
 /* ---------- Tickers ---------- */
 .ticker-band {
+  display: none;
   margin-top: 96px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
   overflow: hidden; padding: 14px 0; white-space: nowrap;
 }
@@ -242,6 +258,11 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .ticker span i { font-style: normal; color: var(--accent); padding-left: 16px; }
 .accent-band .ticker span { color: var(--text); font-size: 13px; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+/* Same query as TICKER_ANIMATED in app.js. 769–1024 is not MOBILE there, but it is
+   inside the card layout below, so the band stays hidden on tablet too. */
+@media (min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .ticker-band { display: block; }
+}
 
 /* ---------- Old way / Monolith way ---------- */
 .oldway {
@@ -321,6 +342,15 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .principle h3 { font-size: 18px; font-weight: 600; margin: 14px 0 10px; letter-spacing: 0.01em; }
 .principle p { font-size: 14.5px; color: var(--muted); line-height: 1.65; }
 .principles-line { margin-top: 28px; font-size: 11px; letter-spacing: 0.16em; color: var(--muted); }
+.ai-price {
+  display: block; margin-top: 14px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.08em;
+  color: var(--accent);
+}
+.ai-cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 28px; }
+.ai-cta .submit-btn, .ai-cta .cta-ghost {
+  margin-top: 0; align-self: center; max-width: 100%; min-width: 0; white-space: normal;
+}
 
 /* ---------- Pipeline (LAB) ---------- */
 .pipeline { border-top: 1px solid var(--line); margin-top: 64px; }
@@ -403,6 +433,11 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 }
 .cap-filters button:hover { color: var(--text); border-color: var(--text); }
 .cap-filters button.active { color: var(--accent); border-color: var(--accent); }
+#srvFilters { max-width: 100%; min-width: 0; }
+#srvFilters button {
+  box-sizing: border-box; max-width: 100%; min-width: 0;
+  white-space: normal; overflow-wrap: break-word;
+}
 .extra-section { margin-top: 64px; }
 .nav-scrim { display: none; }
 .cap-grid, .srv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -429,6 +464,9 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 }
 .cap-media .m-cross { position: absolute; left: 18px; top: 14px; color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
 .cap-media img, .cap-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cap-media[data-fit="natural"] { aspect-ratio: auto; height: auto; }
+.cap-media[data-fit="natural"] img,
+.cap-media[data-fit="natural"] video { width: 100%; height: auto; object-fit: contain; }
 .cap-carousel { width: 100%; height: 100%; position: relative; }
 .cap-track {
   display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory;
@@ -439,7 +477,7 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .cap-track.dragging { scroll-snap-type: none; }
 .cap-track::-webkit-scrollbar { display: none; }
 .cap-slide { flex: 0 0 100%; scroll-snap-align: start; height: 100%; }
-.cap-slide img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.cap-slide img, .cap-slide video { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
 .cap-dots {
   position: absolute; left: 0; right: 0; bottom: 12px; z-index: 2;
   display: flex; gap: 6px; justify-content: center; pointer-events: none;
@@ -493,12 +531,35 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .srv-trial {
   display: flex; justify-content: space-between; align-items: center; gap: 24px;
   border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 5%, var(--surface));
-  padding: 24px 28px; margin: 40px 0 32px;
+  padding: 24px 28px; margin: 48px 0 0;
 }
 .srv-trial-title { font-size: 20px; font-weight: 600; line-height: 1.25; }
 .srv-trial-text { font-size: 14px; color: var(--muted); line-height: 1.55; margin-top: 6px; max-width: 56ch; }
 .srv-trial .submit-btn, .srv-unsure .submit-btn { margin-top: 0; align-self: center; white-space: nowrap; }
 .srv-card .cap-media { aspect-ratio: 16 / 9; }
+.srv-card { cursor: pointer; }
+body.fine .srv-card { cursor: none; }
+.srv-media {
+  display: block; width: 100%; aspect-ratio: 16 / 10; position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--line); min-width: 0;
+  background:
+    repeating-linear-gradient(90deg, var(--grid) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(0deg, var(--grid) 0 1px, transparent 1px 24px),
+    var(--bg);
+}
+.srv-media img, .srv-media video {
+  width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;
+}
+.srv-media:focus-visible,
+.srv-card h3 a:focus-visible,
+#srvFilters button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+#page-services .srv-trial[hidden],
+#page-services .srv-viz[hidden],
+#page-services #srvBuildSection[hidden],
+#page-services #srvExtraSection[hidden] { display: none; }
 .srv-facts { display: grid; grid-template-columns: 1.3fr 1fr; gap: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
 .srv-price, .srv-time { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .srv-price b { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; color: var(--accent); }
@@ -515,6 +576,39 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .srv-card .srv-request { margin-top: auto; align-self: flex-start; }
 .srv-how .lab-tech { margin-bottom: 20px; }
 .srv-group-note { font-size: 14px; line-height: 1.6; color: var(--muted); max-width: 68ch; margin: 8px 0 24px; }
+.srv-sublabel { margin-top: 4px; margin-bottom: 14px; }
+.srv-loss {
+  list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 28px;
+  margin: 0 0 28px; padding: 0; min-width: 0;
+}
+.srv-loss li {
+  position: relative; padding-left: 18px; min-width: 0;
+  font-size: 14px; line-height: 1.45; color: var(--text); overflow-wrap: break-word;
+}
+.srv-loss li::before {
+  content: '—'; position: absolute; left: 0;
+  font-family: 'IBM Plex Mono', monospace; color: var(--accent);
+}
+#srvBuildSection { scroll-margin-top: 88px; }
+.srv-plate {
+  margin: 48px 0 0; min-width: 0;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+  padding: 24px 28px;
+}
+.srv-plate .label { margin: 0 0 12px; }
+.srv-plate .lab-tech { margin: 0; }
+.srv-data { margin-top: 36px; min-width: 0; }
+.srv-data .label { margin-bottom: 14px; }
+.srv-data .srv-loss { margin-bottom: 0; }
+.srv-discuss { margin-top: 20px; }
+.srv-plate .submit-btn, .srv-discuss .submit-btn {
+  max-width: 100%; box-sizing: border-box; white-space: normal; text-align: center;
+}
+#aiLine { display: flex; flex-direction: column; gap: 20px; }
+#aiLine[hidden] { display: none !important; }
+.brief-done .done-text + .done-text { margin-top: -12px; }
+.srv-viz { margin-top: 64px; }
 .srv-viz .label { margin-bottom: 24px; }
 .srv-unsure { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
 .cap-to-services { display: inline-block; margin-top: 32px; }
@@ -541,6 +635,9 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .case-source { margin-top: 12px; font-size: 11px; line-height: 1.5; color: var(--muted); }
 .case-source a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
 .case-source a:hover { color: var(--accent); }
+.case-note { margin-top: 12px; font-size: 11px; line-height: 1.5; color: var(--muted); max-width: 42ch; }
+.case-note a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+.case-note a:hover { color: var(--accent); }
 
 /* ---------- Brief ---------- */
 .brief-layout { display: grid; grid-template-columns: 1.15fr 0.85fr; align-items: start; gap: 64px; margin-top: 32px; position: relative; }
@@ -575,6 +672,7 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .chip input:checked + span { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
 .submit-btn {
   margin-top: 10px; align-self: flex-start;
+  display: inline-flex; align-items: center; justify-content: center; text-align: center;
   font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em;
   background: var(--accent); color: #fff; padding: 17px 42px;
   border-radius: 999px;
@@ -638,6 +736,7 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 }
 .footer-mail { font-size: 13px; letter-spacing: 0.1em; color: var(--text); transition: color 0.3s ease; }
 .footer-mail:hover { color: var(--accent); }
+.footer-ai { margin-right: auto; min-width: 0; }
 .footer-links { display: flex; gap: 24px; }
 .footer-links a { font-size: 10px; letter-spacing: 0.12em; color: var(--muted); transition: color 0.3s ease; }
 .footer-links a:hover { color: var(--accent); }
@@ -681,12 +780,12 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 
   .block,
   .metrics,
-  .ticker-band,
   .pipeline,
   .cap-filters,
   .cap-section,
   #capGrid,
   .srv-trial,
+  .srv-plate,
   .brief-form,
   .brief-done {
     background: rgba(255, 255, 255, 0.86);
@@ -702,11 +801,11 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   }
   .block,
   .pipeline,
-  .ticker-band,
   .cap-filters,
   .cap-section,
   #capGrid,
   .srv-trial,
+  .srv-plate,
   .brief-form,
   .brief-done,
   .metrics {
@@ -803,10 +902,12 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   }
   .hero-cta .submit-btn,
   .hero-cta .cta-ghost {
+    display: inline-flex; align-items: center; justify-content: center; text-align: center;
     width: auto;
     max-width: 92%;
+    min-width: 0;
     align-self: center;
-    text-align: center;
+    white-space: normal;
     min-height: 0;
     padding: 8px 14px;
     font-size: 15px;
@@ -874,15 +975,15 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   .matrix-item .plus .mx-k::before { content: '+  '; }
   .matrix-item .skip { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
   .compare-track {
-    display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch; gap: 12px;
-    margin: 0; padding: 0 0 8px;
+    display: block; overflow: visible;
+    margin: 0; padding: 0;
   }
   .compare-spec {
-    flex: 0 0 min(88%, 320px); scroll-snap-align: start;
+    width: 100%; max-width: 100%; box-sizing: border-box;
     border: 1px solid var(--line); background: var(--surface); padding: 22px 20px 26px;
     min-width: 0;
   }
+  .compare-spec:not(.is-ours) { display: none; }
   .compare-spec.is-ours { border-color: var(--accent); }
   .compare-badge {
     display: inline-block; font-size: 9px; letter-spacing: 0.14em; color: var(--accent);
@@ -892,8 +993,10 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   .spec-row { display: grid; gap: 4px; padding: 12px 0; border-top: 1px solid var(--line); }
   .spec-row dt { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--muted); }
   .spec-row dd { font-size: 15px; }
+  /* UA stylesheet indents dd by 40px; inside this one-column grid that reads as a stray left offset */
+  .compare-spec .spec-row dd { margin: 0; }
   .compare-spec.is-ours .spec-row dd { color: var(--text); font-weight: 500; }
-  .compare-dots { display: flex; gap: 8px; justify-content: center; margin-top: 14px; }
+  .compare-dots { display: none; }
   .compare-dot {
     width: 8px; height: 8px; border-radius: 50%; background: var(--line); padding: 0;
     min-height: 8px;
@@ -937,16 +1040,40 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   .cap-filters button { min-height: 44px; padding: 12px 14px; }
   /* services: stacked trial / CTA rows, readable card text, 44px tap targets */
   .srv-trial, .srv-unsure { flex-direction: column; align-items: stretch; gap: 16px; }
-  .srv-trial .submit-btn, .srv-unsure .submit-btn,
-  .srv-card .srv-request { width: 100%; min-height: 44px; text-align: center; align-self: stretch; justify-content: center; }
-  .srv-trial .submit-btn, .srv-unsure .submit-btn, .srv-card .srv-request {
+  .srv-plate { display: flex; flex-direction: column; align-items: stretch; }
+  .srv-trial .submit-btn, .srv-unsure .submit-btn, .srv-plate .submit-btn,
+  .srv-card .srv-request {
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    width: 100%; min-width: 0; min-height: 44px; align-self: stretch;
+  }
+  .srv-trial .submit-btn, .srv-unsure .submit-btn, .srv-plate .submit-btn, .srv-card .srv-request {
     white-space: normal; padding: 12px 16px; font-size: 15px; letter-spacing: 0.04em; line-height: 1.25;
   }
+  /* the stretched button overflowed its card on the right (width 100% + side padding in content-box):
+     border-box fixes that; trial / "not sure" / pilot buttons are half the card wide and centred */
+  .srv-trial .submit-btn, .srv-unsure .submit-btn, .srv-plate .submit-btn, .srv-card .srv-request { box-sizing: border-box; }
+  .srv-trial .submit-btn, .srv-unsure .submit-btn, .srv-plate .submit-btn {
+    width: 50%; min-width: 168px; max-width: 100%; min-height: 40px;
+    align-self: center; margin-inline: auto; padding: 10px 14px; font-size: 13px;
+  }
   .srv-card .cap-body { padding: 18px 16px 20px; }
-  .srv-card .c-index, .srv-card .io-key, .srv-card .case-demo { font-size: 12px; }
+  /* case and service cards: nothing under 12px on a phone */
+  .cap-card .c-index, .cap-card .c-sector, .cap-card .io-key, .cap-card .case-demo,
+  .cap-card .cm span, .case-story summary, .case-story .cs-key, .case-source, .case-note { font-size: 12px; }
+  .cap-card .cap-io .io-row { grid-template-columns: 64px 1fr; }
+  .cap-filters button { font-size: 12px; }
+  /* carousel: swipe is the main gesture, but the dots and arrows should still be hittable */
+  .cap-dots { gap: 12px; }
+  .cap-dot { width: 8px; height: 8px; min-height: 8px; position: relative; }
+  .cap-dot::after { content: ''; position: absolute; inset: -9px; }
+  .cap-arrow { width: 36px; height: 36px; min-height: 36px; }
   .srv-card .cap-io .io-row, .srv-proof { grid-template-columns: 64px 1fr; }
   .srv-trial-title { font-size: 18px; }
-  .srv-trial-text, .srv-note, .srv-proof-links a, .srv-group-note { font-size: 14px; }
+  .srv-trial-text, .srv-note, .srv-proof-links a, .srv-group-note, .srv-loss li { font-size: 14px; }
+  .srv-loss { grid-template-columns: 1fr; }
+  .srv-discuss .submit-btn {
+    padding: 12px 16px; font-size: 13px; letter-spacing: 0.04em; line-height: 1.25;
+  }
   .srv-trial-text { max-width: none; }
   .srv-price b { font-size: 22px; }
   .srv-proof-links a { min-height: 32px; display: inline-flex; align-items: center; }
@@ -954,8 +1081,11 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   #page-brief .submit-btn,
   #page-brief .done-mail,
   #page-brief .ctl {
+    display: inline-flex; align-items: center; justify-content: center; text-align: center;
     width: auto;
     max-width: 100%;
+    min-width: 0;
+    white-space: normal;
     min-height: 0;
     padding: 10px 16px;
     font-size: 15px;
@@ -1013,8 +1143,6 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   .footer-main { padding: 24px 20px calc(48px + env(safe-area-inset-bottom)); }
   .statusbar { display: none; }
   .page { padding-bottom: calc(120px + env(safe-area-inset-bottom)); }
-  .ticker { animation: none; white-space: normal; display: block; }
-  .ticker-band { white-space: normal; }
 }
 
 .sticky-cta, .cta-scrim {
@@ -1022,7 +1150,8 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 }
 @media (max-width: 768px) {
   .sticky-cta {
-    display: flex; align-items: center; justify-content: center;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    white-space: normal;
     position: fixed; left: 20px; right: 20px; bottom: calc(16px + env(safe-area-inset-bottom));
     z-index: 41;
     font-family: 'IBM Plex Mono', monospace; font-size: 16px; letter-spacing: 0.1em;
@@ -1047,7 +1176,6 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 body.no-gl #gl, body.no-gl #fog { display: none !important; }
 
 @media (pointer: coarse) {
-  .ticker { animation: none; }
   .chip span, .cap-filters button, .ctl { min-height: 44px; }
 }
 @media (pointer: coarse) and (max-width: 768px) {
@@ -1064,6 +1192,81 @@ body.no-gl #gl, body.no-gl #fog { display: none !important; }
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .ticker { animation: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; }
+}
+
+/* Case card link. Same pill as .submit-btn; colour follows the active palette
+   (all four are light pages, so the label stays white on --accent). */
+.case-cta {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: normal;
+  max-width: 100%;
+  margin-top: 2px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  background: var(--accent);
+  color: #fff;
+  padding: 17px 42px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+.case-cta:hover { background: var(--accent-2); color: #fff; transform: translateY(-1px); }
+.case-cta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* industries accordion on very narrow phones: the index column and gaps left the label less
+   room than the word «Строительство», which pushed the page wider than the screen */
+@media (max-width: 400px) {
+  .industries li { gap: 12px; font-size: 1.05rem; }
+  .industries li::before { flex-basis: 36px; }
+  .ind-q { gap: 12px; }
+  .ind-q > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+}
+
+/* Lab automation: same stage row as the pipeline, quieter type so five
+   steps stay a list. The panel behind them already frosts the field,
+   so the desktop sheet on .stage p is turned off here only. */
+.lab-auto .lab-steps { border-top: 1px solid var(--line); margin-top: 28px; }
+.lab-auto .stage { min-width: 0; }
+.lab-auto .stage .s-id,
+.lab-auto .stage p { min-width: 0; overflow-wrap: break-word; }
+.lab-auto .stage h3 {
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+.lab-auto .stage p {
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-radius: 0;
+  padding: 0;
+}
+.lab-auto .ai-cta .submit-btn,
+.lab-auto .ai-cta .cta-ghost {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  text-align: center;
+}
+@media (min-width: 1025px) {
+  .lab-auto .stage {
+    grid-template-columns: 88px minmax(168px, 220px) 1fr;
+    gap: 16px 28px;
+    align-items: baseline;
+  }
+  .lab-auto .stage p { font-size: 16px; }
+}
+@media (max-width: 768px) {
+  .lab-auto .ai-cta { justify-content: center; }
 }

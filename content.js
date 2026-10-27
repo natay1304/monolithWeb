@@ -16,13 +16,16 @@ const UI = {
   'nav.brief':         { en: '05 // BRIEF',         ru: '05 // БРИФ' },
 
   'hero.label':        { en: '01 // MAIN', ru: '01 // ГЛАВНАЯ' },
-  'hero.tagline':      { en: 'Product visuals from your drawings and catalogue. Exact as the model. Ready for the tender and the website.',
-                         ru: 'Визуал продукта из ваших чертежей и каталога. Точный, как модель. Готовый к тендеру и сайту.' },
-  'hero.p1':           { en: 'Hero shots, usage environments, exploded views, 360° and an interactive viewer on the product page. Nobody on site. First frames — 24–48 hours after the model.',
-                         ru: 'Герой-рендеры, среда применения, взрыв-схемы, 360° и интерактив на страницу товара. Никого на площадке. Первые кадры — за 24–48 часов после модели.' },
+  'hero.tagline':      { en: 'Product visuals from your drawings and catalogue. Consulting and AI pipelines for your team.',
+                         ru: 'Визуал продукта из чертежей и каталога. Консультации и ИИ-пайплайны для вашей команды.' },
+  'hero.p1':           { en: 'Hero shots, usage environments and renders from your catalogue data; sections, exploded views and 360° if you have 3D models. Nobody on site. First frames — after we receive your source files, timing agreed in the brief.',
+                         ru: 'Герой-рендеры, среда применения, рендеры и сцены применения — из данных каталога; разрезы, взрыв-схемы и 360° — если есть 3D-модели. Никого на площадке. Первые кадры — после получения исходников, срок согласуем в брифе.' },
   'hero.p2':           { en: 'Geometry comes from your CAD, BIM or catalogue model and does not drift. We build light, setting and the format pack.',
                          ru: 'Геометрия берётся из вашей CAD, BIM или каталожной модели и не дрейфует. Мы собираем свет, среду и пакет форматов.' },
+  'hero.p3':           { en: 'Consulting and AI pipelines: we find where the team loses hours and close the gap with an audit, agents and small software. We start with a pilot on one process: 2 weeks, price fixed before the start.',
+                         ru: 'Консультации и ИИ-пайплайны: находим, где команда теряет часы, и закрываем это аудитом, агентами и небольшим софтом. Начинаем с пилота на одном процессе: 2 недели, цена фиксирована до старта.' },
   'hero.ctaTrial':     { en: 'Get a test render', ru: 'Получить тестовый рендер' },
+  'hero.ctaAi':        { en: 'Discuss an AI task', ru: 'Обсудить ИИ-задачу' },
   'hero.ctaLab':       { en: 'How it works',      ru: 'Как это устроено' },
   'cta.sticky':        { en: 'Send brief',        ru: 'Отправить бриф' },
 
@@ -47,13 +50,26 @@ const UI = {
                          ru: 'Список открыт. Если вашей индустрии здесь нет — тем интереснее задача.' },
   'principles.title':  { en: 'PRINCIPLES', ru: 'ПРИНЦИПЫ' },
   'principles.line':   { en: 'REMOTE-FIRST',
-                         ru: 'REMOTE-FIRST' },
+                         ru: 'РАБОТАЕМ УДАЛЁННО' },
 
-  'lab.label':         { en: '02 // HOW IT WORKS — PIPELINE', ru: '02 // КАК ЭТО УСТРОЕНО — ПАЙПЛАЙН' },
+  'ai.label':          { en: 'ALSO // AI IN COMPANY PROCESSES', ru: 'ТАКЖЕ // ИИ В ПРОЦЕССАХ КОМПАНИИ' },
+  'ai.lead':           { en: 'Besides visuals, we help teams put AI to work: we find where the hours go and close the gap with automation or small custom software. We start with one process and a measurement, not with buying subscriptions.',
+                         ru: 'Кроме визуала мы помогаем командам внедрять ИИ в работу: находим, где уходят часы, и закрываем это автоматизацией или небольшим софтом. Начинаем с одного процесса и замера, а не с покупки подписок.' },
+  'ai.pilot':          { en: 'Pilot: 2 weeks, one process, price fixed before the start, measured before and after. Code, data and access stay with you.',
+                         ru: 'Пилот: 2 недели, один процесс, цена фиксирована до старта, замер до и после. Код, данные и доступы остаются у вас.' },
+  'ai.cta':            { en: 'Discuss a task', ru: 'Обсудить задачу' },
+  'ai.all':            { en: 'All services', ru: 'Все услуги' },
+
+  'lab.label':         { en: '02 // HOW IT WORKS — PIPELINE', ru: '02 // КАК ЭТО УСТРОЕНО — ПРОЦЕСС' },
   'lab.title':         { en: 'Four stages between your files and the final frame.',
                          ru: 'Четыре этапа между вашими файлами и финальным кадром.' },
   'lab.tech':          { en: 'Generative models are used for environment, light and finish. The product is not invented. If a frame is synthetic and will run as advertising, we mark it to the transparency rules in force (EU AI Act, Art. 50, since 2 August 2026).',
                          ru: 'Генеративные модели используем для среды, света и финиша. Изделие не «придумывается». Если кадр синтетический и идёт в рекламу — маркируем его по действующим требованиям к прозрачности (EU AI Act, ст. 50, с 2 августа 2026).' },
+  'lab.auto.label':    { en: 'PROCESS AUTOMATION // TAILORED TO YOUR COMPANY',
+                         ru: 'АВТОМАТИЗАЦИЯ ПРОЦЕССОВ // ПОД ВАШУ КОМПАНИЮ' },
+  'lab.auto.lead':     { en: 'Besides visuals, we set up a process around your company. We take one process — enquiries, reports, quotes, answers from a knowledge base — measure it, automate it around your spreadsheets, mail, CRM and rules, and hand it over with access, documentation and team training. Not a boxed product, but a setup for the way you work.',
+                         ru: 'Кроме визуала мы настраиваем процесс под вашу компанию. Берём один процесс — заявки, отчёты, КП, ответы по базе знаний, — замеряем, автоматизируем под ваши таблицы, почту, CRM и правила и передаём вам: с доступами, документацией и обучением команды. Не коробка, а настройка под вашу работу.' },
+  'lab.auto.cta':      { en: 'Discuss a task', ru: 'Обсудить задачу' },
   'matrix.title':      { en: 'WHAT WE NEED FROM YOU', ru: 'ЧТО НУЖНО НА ВХОДЕ' },
   'matrix.note':       { en: 'Not sure your materials are enough? Send what you have — in 90% of cases it is.',
                          ru: 'Не уверены, что вашего хватит? Пришлите что есть — в 90% случаев этого достаточно.' },
@@ -70,16 +86,25 @@ const UI = {
   'iter.note':         { en: 'Two revision rounds are included in every project. A full cinematic still takes weeks — the 24–48h figure is the first stills after we have the model.',
                          ru: 'Два раунда правок включены в каждый проект. Полный синематик по-прежнему занимает недели — 24–48 часов это первые кадры после получения модели.' },
   'faq.title':         { en: 'FAQ', ru: 'ВОПРОСЫ' },
+  'lab.also':          { en: 'Need process automation rather than a picture?',
+                         ru: 'Нужна не картинка, а автоматизация процесса?' },
+  'lab.alsoLink':      { en: 'Services', ru: 'Услуги' },
 
   'srv.label':         { en: '03 // SERVICES', ru: '03 // УСЛУГИ' },
   'srv.title':         { en: 'What we make — and what it costs.',
                          ru: 'Что мы делаем — и сколько это стоит.' },
-  'srv.lead':          { en: 'Visuals from your CAD model, websites, software and AI pipelines. Prices are lower bounds: the final figure depends on source files and scope. First frames of a visual — 24–48 hours after the model.',
-                         ru: 'Визуал из вашей CAD-модели, сайты, софт и ИИ-пайплайны. Цены — нижние границы: итог зависит от исходников и объёма работ. Первые кадры визуала — за 24–48 часов после модели.' },
+  'srv.lead':          { en: 'Visuals from your CAD model, websites, software, AI pipelines and training apps. Prices are lower bounds: the final figure depends on source files and scope.',
+                         ru: 'Визуал из вашей CAD-модели, сайты, софт, ИИ-пайплайны и обучающие приложения. Цены — нижние границы: итог зависит от исходников и объёма работ.' },
   'srv.vizTitle':      { en: 'VISUALS FROM YOUR MODEL', ru: 'ВИЗУАЛ ИЗ ВАШЕЙ МОДЕЛИ' },
-  'srv.buildTitle':    { en: 'DEVELOPMENT & CONSULTING', ru: 'РАЗРАБОТКА И КОНСУЛЬТАЦИИ' },
-  'srv.buildNote':     { en: 'The same tools this site is built with. Code, domain and access stay with you. A prototype and production are different modes — we agree which one before the start.',
-                         ru: 'Те же инструменты, на которых собран этот сайт. Код, домен и доступы остаются у вас. Прототип и продакшн — разные режимы, договариваемся о нужном до старта.' },
+  'srv.buildTitle':    { en: 'AI IN PROCESSES, SOFTWARE & SITES', ru: 'ИИ В ПРОЦЕССАХ, СОФТ И САЙТЫ' },
+  'srv.buildNote':     { en: 'We find where the team loses hours and close the gap with automation or small software. We start with one process and a measurement. Code, data and access stay with you. A prototype and production are different modes — we agree which one before the start.',
+                         ru: 'Находим, где команда теряет часы, и закрываем это автоматизацией или небольшим софтом. Начинаем с одного процесса и замера. Код, данные и доступы остаются у вас. Прототип и продакшн — разные режимы, договариваемся о нужном до старта.' },
+  'srv.lossTitle':     { en: 'WHERE THE TIME GOES', ru: 'ГДЕ ТЕРЯЕТСЯ ВРЕМЯ' },
+  'srv.pilotTitle':    { en: 'A 2-WEEK PILOT', ru: 'ПИЛОТ ЗА 2 НЕДЕЛИ' },
+  'srv.pilotText':     { en: 'We take one process — say, enquiry sorting or report preparation. We measure how long it takes now, automate it and measure again. The price is fixed before the start. If the result falls short, we stop there.',
+                         ru: 'Берём один процесс — например, разбор заявок или подготовку отчёта. Замеряем, сколько времени он занимает сейчас, автоматизируем и замеряем снова. Цена фиксирована до старта. Если результат не устроит — дальше не идём.' },
+  'srv.pilotCta':      { en: 'Propose a process for a pilot', ru: 'Предложить процесс для пилота' },
+  'srv.dataTitle':     { en: 'YOUR DATA STAYS YOURS', ru: 'ДАННЫЕ ОСТАЮТСЯ ВАШИМИ' },
   'srv.soonBuild':     { en: 'CASES IN PREPARATION', ru: 'КЕЙСЫ В ПОДГОТОВКЕ' },
   'srv.trialTitle':    { en: 'Trial render of one product — free',
                          ru: 'Пробный рендер одного изделия — бесплатно' },
@@ -99,19 +124,24 @@ const UI = {
   'srv.howLink':       { en: 'How it works', ru: 'Как это устроено' },
   'srv.unsureTitle':   { en: 'Not sure what to choose?', ru: 'Не знаете, что выбрать?' },
   'srv.unsureCta':     { en: 'Ask us', ru: 'Спросить у нас' },
+  'srv.filter.all':    { en: 'ALL', ru: 'ВСЕ' },
+  'srv.filter.viz':    { en: 'VISUALS', ru: 'ВИЗУАЛ' },
+  'srv.filter.auto':   { en: 'PROCESS AUTOMATION', ru: 'АВТОМАТИЗАЦИЯ ПРОЦЕССОВ' },
 
   'cap.label':         { en: '04 // WORK', ru: '04 // РАБОТЫ' },
-  'cap.title':         { en: 'Demo projects on open and our own models.',
-                         ru: 'Демо-проекты на открытых и наших моделях.' },
+  'cap.title':         { en: 'Demo projects: visuals on open and our own models, software on sample data.',
+                         ru: 'Демо-проекты: визуал на открытых и наших моделях, софт на условных данных.' },
   'cap.all':           { en: 'ALL',   ru: 'ВСЕ' },
   'cap.input':         { en: 'INPUT',  ru: 'ВХОД' },
   'cap.output':        { en: 'OUTPUT', ru: 'ВЫХОД' },
-  'cap.footnote':      { en: 'The number of deliverables, source files and timeline — I discuss those individually for each project.',
-                         ru: 'Количество материалов, исходники и сроки обсуждаю индивидуально для каждого проекта.' },
+  'cap.footnote':      { en: 'The number of deliverables, source files and timeline — we discuss those individually for each project.',
+                         ru: 'Количество материалов, исходники и сроки обсуждаем индивидуально для каждого проекта.' },
   'cap.toServices':    { en: 'Services and prices', ru: 'Услуги и цены' },
 
   'case.demo_open':    { en: 'DEMO PROJECT ON AN OPEN MODEL', ru: 'ДЕМОНСТРАЦИОННЫЙ ПРОЕКТ НА ОТКРЫТОЙ МОДЕЛИ' },
   'case.demo_own':     { en: 'OUR OWN PARAMETRIC MODEL', ru: 'СОБСТВЕННАЯ ПАРАМЕТРИЧЕСКАЯ МОДЕЛЬ' },
+  'case.demo_sample':  { en: 'DEMONSTRATION ON SAMPLE DATA', ru: 'ДЕМОНСТРАЦИЯ НА УСЛОВНЫХ ДАННЫХ' },
+  'case.demo_model':   { en: 'DEMONSTRATION ON A CONDITIONAL MODEL', ru: 'ДЕМОНСТРАЦИЯ НА УСЛОВНОЙ МОДЕЛИ' },
   'case.source':       { en: 'Source model', ru: 'Исходная модель' },
   'case.open':         { en: 'How it was done', ru: 'Как это делалось' },
   'case.task':         { en: 'TASK', ru: 'ЗАДАЧА' },
@@ -120,12 +150,15 @@ const UI = {
   'case.result':       { en: 'RESULT', ru: 'РЕЗУЛЬТАТ' },
 
   'brief.label':       { en: '05 // BRIEF', ru: '05 // БРИФ' },
-  'brief.title':       { en: 'Tell us what you build. We’ll show how it should look.',
-                         ru: 'Расскажите, что вы создаёте. Мы покажем, как это должно выглядеть.' },
+  'brief.title':       { en: 'Tell us what you build or what you want to speed up. We’ll show how it should look or work.',
+                         ru: 'Расскажите, что вы создаёте или что хотите ускорить. Мы покажем, как это должно выглядеть или работать.' },
   'form.company':      { en: 'COMPANY',  ru: 'КОМПАНИЯ' },
   'form.industry':     { en: 'INDUSTRY', ru: 'СФЕРА' },
   'form.other':        { en: 'Other',    ru: 'Другое' },
   'form.needs':        { en: 'WHAT DO YOU NEED', ru: 'ЧТО НУЖНО' },
+  'form.process':      { en: 'WHAT PROCESS DO YOU WANT TO IMPROVE', ru: 'КАКОЙ ПРОЦЕСС ХОТИТЕ УЛУЧШИТЬ' },
+  'form.tried':        { en: 'WHAT YOU HAVE ALREADY TRIED', ru: 'ЧТО УЖЕ ПРОБОВАЛИ' },
+  'form.teamSize':     { en: 'TEAM SIZE', ru: 'РАЗМЕР КОМАНДЫ' },
   'form.stage':        { en: 'PROJECT STAGE', ru: 'СТАДИЯ' },
   'form.email':        { en: 'EMAIL', ru: 'EMAIL' },
   'form.message':      { en: 'MESSAGE', ru: 'СООБЩЕНИЕ' },
@@ -137,6 +170,8 @@ const UI = {
   'brief.doneTitle':   { en: 'BRIEF SENT', ru: 'БРИФ ОТПРАВЛЕН' },
   'brief.doneText':    { en: 'It went straight to us — no mail client needed. We reply within 24 hours after the message arrives.',
                          ru: 'Ушёл прямо к нам — почтовый клиент не нужен. Ответим в течение 24 часов после получения.' },
+  'brief.doneAi':      { en: 'If your question is about processes or software, we’ll offer a 30-minute call.',
+                         ru: 'Если вопрос про процессы или софт — предложим созвон на 30 минут.' },
   'brief.again':       { en: 'NEW BRIEF', ru: 'НОВЫЙ БРИФ' },
   'steps.title':       { en: 'AFTER YOU HIT SEND', ru: 'ЧТО ПРОИСХОДИТ ПОСЛЕ ОТПРАВКИ' },
   'time.title':        { en: 'TIMELINES', ru: 'СРОКИ И МАСШТАБ' },
@@ -149,13 +184,14 @@ const UI = {
 
   'footer.rights':     { en: 'MONOLITH.CONTACT — PRODUCT VISUALS FROM YOUR DRAWINGS AND CATALOGUE',
                          ru: 'MONOLITH.CONTACT — ВИЗУАЛ ПРОДУКТА ИЗ ЧЕРТЕЖЕЙ И КАТАЛОГА' },
+  'footer.ai':         { en: 'AI audit & software', ru: 'ИИ-аудит и софт' },
   'status.sys':        { en: 'SYS_STATUS: ACTIVE', ru: 'SYS_STATUS: ACTIVE' },
   'overlay.reroute':   { en: 'REROUTE', ru: 'REROUTE' }
 };
 
 /* ---------- Hero metrics ---------- */
 const HERO_METRICS = [
-  { value: '24–48ч', label: { en: 'TO FIRST FRAMES',        ru: 'ДО ПЕРВЫХ КАДРОВ' } },
+  { value: { en: 'BRIEF', ru: 'БРИФ' }, label: { en: 'FIRST FRAMES — AFTER WE RECEIVE YOUR SOURCE FILES, TIMING AGREED IN THE BRIEF', ru: 'ПЕРВЫЕ КАДРЫ — ПОСЛЕ ПОЛУЧЕНИЯ ИСХОДНИКОВ, СРОК СОГЛАСУЕМ В БРИФЕ' } },
   { value: '0',      label: { en: 'DAYS ON SITE',            ru: 'ДНЕЙ НА ПЛОЩАДКЕ' } },
   { value: 'CAD',    label: { en: 'GEOMETRY FROM YOUR MODEL', ru: 'ГЕОМЕТРИЯ ИЗ ВАШЕЙ МОДЕЛИ' } },
   { value: '2',      label: { en: 'REVISION ROUNDS INCLUDED', ru: 'РАУНДА ПРАВОК ВКЛЮЧЕНЫ' } }
@@ -295,6 +331,34 @@ const PRINCIPLES = [
              ru: 'Один артикул или пятьсот. Меняется бюджет, не меняется стандарт качества и изолированный контур ваших файлов.' } }
 ];
 
+/* ---------- AI in company processes — home block after deliverables.
+   Amounts match the services page: audit is the SRV_11 price (1,000 $),
+   the agents pilot is SRV_10 (1,500 $), internal software is SRV_09 (400 $),
+   a workshop day (1,500 $) is in the SRV_11 note.
+   The brief chip is SRV_11 need, "AI consulting". ---------- */
+const AI_OFFERS = [
+  { index: 'A_01',
+    title: { en: 'PROCESS AUDIT', ru: 'АУДИТ ПРОЦЕССОВ' },
+    text:  { en: 'We study how the team works and show where AI saves time and where it adds risk. You get a plan with priorities, timing and cost.',
+             ru: 'Разбираем, как работает команда, и показываем, где ИИ сэкономит время, а где создаст риск. На выходе — план с приоритетами, сроками и стоимостью.' },
+    price: { en: 'from 1,000 $', ru: 'от 1 000 $' } },
+  { index: 'A_02',
+    title: { en: 'AGENTS & AUTOMATION', ru: 'АГЕНТЫ И АВТОМАТИЗАЦИЯ' },
+    text:  { en: 'Enquiries, reports, answers from a knowledge base, quotes: we take one repeating process, measure it, automate it and measure again.',
+             ru: 'Заявки, отчёты, ответы по базе знаний, КП: берём один повторяющийся процесс, замеряем, автоматизируем и замеряем снова.' },
+    price: { en: 'pilot from 1,500 $', ru: 'пилот от 1 500 $' } },
+  { index: 'A_03',
+    title: { en: 'INTERNAL SOFTWARE & BOTS', ru: 'ВНУТРЕННИЙ СОФТ И БОТЫ' },
+    text:  { en: 'Admin panels, reports, links between services, Telegram bots. A prototype in 3–5 days; production is a separate mode with review and tests.',
+             ru: 'Админки, отчёты, связки между сервисами, Telegram-боты. Прототип за 3–5 дней, продакшн — отдельным режимом с ревью и тестами.' },
+    price: { en: 'from 400 $', ru: 'от 400 $' } },
+  { index: 'A_04',
+    title: { en: 'TEAM WORKSHOP', ru: 'ОБУЧЕНИЕ КОМАНДЫ' },
+    text:  { en: 'A workshop on your real tasks plus a short policy: which tools, for what, and what data they may touch.',
+             ru: 'Воркшоп на ваших реальных задачах и регламент: какие инструменты, для чего и с какими данными можно работать.' },
+    price: { en: 'from 1,500 $ per day', ru: 'от 1 500 $ за день' } }
+];
+
 /* ---------- LAB: pipeline ---------- */
 const PIPELINE = [
   { id: '01', name: { en: 'INTAKE', ru: 'ПРИЁМ' },
@@ -309,6 +373,25 @@ const PIPELINE = [
   { id: '04', name: { en: 'OUTPUT', ru: 'ФИНАЛ' },
     text: { en: 'Final formats: stills, video, 360°, print layouts, a 3D viewer for the product page.',
             ru: 'Финальные форматы: стиллы, видео, 360°, макеты для печати, 3D-просмотрщик на страницу товара.' } }
+];
+
+/* ---------- LAB: automation steps ---------- */
+const LAB_AUTO_STEPS = [
+  { index: '01', name: { en: 'CALL', ru: 'СОЗВОН' },
+    text: { en: '30 minutes. Which process hurts and how to measure it.',
+            ru: '30 минут. Какой процесс болит и как его измерить.' } },
+  { index: '02', name: { en: 'AUDIT', ru: 'АУДИТ' },
+    text: { en: '1–2 weeks. A process map and a plan with priorities, timing and cost.',
+            ru: '1–2 недели. Карта процессов и план с приоритетами, сроками и стоимостью.' } },
+  { index: '03', name: { en: 'PILOT', ru: 'ПИЛОТ' },
+    text: { en: '2 weeks. One process around your tools and rules, price fixed before the start, measured before and after.',
+            ru: '2 недели. Один процесс под ваши инструменты и правила, цена фиксирована до старта, замер до и после.' } },
+  { index: '04', name: { en: 'ROLL-OUT', ru: 'ВНЕДРЕНИЕ' },
+    text: { en: 'We scale what worked in the pilot.',
+            ru: 'Масштабируем то, что сработало на пилоте.' } },
+  { index: '05', name: { en: 'HAND-OVER', ru: 'ПЕРЕДАЧА' },
+    text: { en: 'Team training, documentation, access stays with you.',
+            ru: 'Обучение команды, документация, доступы у вас.' } }
 ];
 
 /* ---------- LAB: input matrix ---------- */
@@ -389,7 +472,28 @@ const FAQ = [
   { q: { en: 'How are you different from a freelancer with a neural network?',
          ru: 'Чем вы отличаетесь от фрилансера с нейросетью?' },
     a: { en: 'The way a print house differs from a printer. Models are available to everyone; the result is defined by pipeline, locked geometry, art direction and accountability for deadlines. We deliver coordinated production: verified geometry, one style across all materials, files ready for print, the website and the tender.',
-         ru: 'Тем же, чем типография отличается от принтера. Модели доступны всем; результат определяют пайплайн, зафиксированная геометрия, постановка и ответственность за сроки. Мы отдаём согласованный продакшн: выверенную геометрию, единый стиль всех материалов и файлы, готовые к печати, сайту и тендеру.' } }
+         ru: 'Тем же, чем типография отличается от принтера. Модели доступны всем; результат определяют пайплайн, зафиксированная геометрия, постановка и ответственность за сроки. Мы отдаём согласованный продакшн: выверенную геометрию, единый стиль всех материалов и файлы, готовые к печати, сайту и тендеру.' } },
+  { q: { en: 'Do you only do visuals?',
+         ru: 'Вы делаете только визуал?' },
+    a: { en: 'No. We also do process audits, AI agents and small software: we start with a pilot on one process, with the price fixed before the start.',
+         ru: 'Нет. Ещё аудит процессов, ИИ-агенты и небольшой софт: начинаем с пилота на одном процессе, цена фиксируется до старта.' } }
+];
+
+/* ---------- Services: where the hours go, and how the data is handled ---------- */
+const LOSS_POINTS = [
+  { en: 'Enquiries and emails are sorted by hand', ru: 'Заявки и письма разбирают вручную' },
+  { en: 'Reports are stitched from five spreadsheets every week', ru: 'Отчёты собирают из пяти таблиц каждую неделю' },
+  { en: 'Quotes, product descriptions and client replies are written from scratch', ru: 'КП, описания товаров и ответы клиентам пишут с нуля' },
+  { en: 'Knowledge lives in heads and chats, a newcomer needs a month', ru: 'Знания живут в головах и в чатах, новичок входит месяц' },
+  { en: 'The team uses ChatGPT each in their own way, with no rules', ru: 'Команда пользуется ChatGPT кто как, без правил' },
+  { en: 'An internal tool has been needed for ages, but development has no time', ru: 'Внутренний инструмент нужен давно, но у разработки нет времени' }
+];
+
+const DATA_POINTS = [
+  { en: 'We sign an NDA before getting access to data', ru: 'Подписываем NDA до доступа к данным' },
+  { en: 'We take minimal access: only what the task needs', ru: 'Берём минимальные доступы: только то, что нужно для задачи' },
+  { en: 'Everything is deployed on your accounts and handed over to you', ru: 'Всё разворачивается на ваших аккаунтах и передаётся вам' },
+  { en: 'We choose tools and plans that fit your data rules', ru: 'Выбираем инструменты и тарифы с учётом ваших правил по данным' }
 ];
 
 /* ---------- 03 SERVICES.
@@ -423,7 +527,7 @@ const SERVICES = [
     priceNote: { en: 'For 6 scenes.', ru: 'За 6 сцен.' },
     time:   { en: '1–2 weeks', ru: '1–2 недели' } },
 
-  { id: 'srv-tech', index: 'SRV_03', group: 'viz', cases: ['case-cylinder', 'case-grinder'],
+  { id: 'srv-tech', index: 'SRV_03', group: 'viz', cases: ['case-roller', 'case-cylinder', 'case-grinder'],
     need: 'Exploded views / cutaways',
     title:  { en: 'EXPLODED VIEWS & CUTAWAYS', ru: 'ВЗРЫВ-СХЕМЫ И РАЗРЕЗЫ' },
     text:   { en: 'Service and technical-sales graphics: what photography cannot do without destroying the unit. Geometry stays the geometry of your file.',
@@ -434,7 +538,7 @@ const SERVICES = [
     priceNote: { en: 'Exploded view + 2 cutaways.', ru: 'Взрыв-схема + 2 разреза.' },
     time:   { en: '5–10 days', ru: '5–10 дней' } },
 
-  { id: 'srv-video', index: 'SRV_04', group: 'viz', cases: ['case-cylinder'],
+  { id: 'srv-video', index: 'SRV_04', group: 'viz', cases: ['case-conveyor-360', 'case-cylinder'],
     need: 'Video / 360°',
     title:  { en: 'VIDEO & 360°', ru: 'ВИДЕО И 360°' },
     text:   { en: 'Turntable, a short function demo, a principle-of-operation animation. The turntable and the stills come from one scene, so they cannot disagree.',
@@ -458,7 +562,7 @@ const SERVICES = [
     priceNote: { en: 'Viewer. AR at real scale — from 3,000 $, configurator — from 6,000 $.', ru: 'Просмотрщик. AR в реальном масштабе — от 3 000 $, конфигуратор — от 6 000 $.' },
     time:   { en: '1–3 weeks', ru: '1–3 недели' } },
 
-  { id: 'srv-show', index: 'SRV_06', group: 'viz', cases: [],
+  { id: 'srv-show', index: 'SRV_06', group: 'viz', cases: ['case-booth'],
     need: 'Trade show',
     title:  { en: 'TRADE SHOW PACK', ru: 'ВЫСТАВОЧНЫЙ ПАКЕТ' },
     text:   { en: 'Materials for the booth before the unit exists: key frames, a screen loop and print layouts in one visual system. Up to 12 formats.',
@@ -483,7 +587,40 @@ const SERVICES = [
 
   /* ---- group 'build': development and consulting. Prices and formats come from the vault notes
           "Консультации и софт — план направления" (hypotheses, to be revised after the first 3 deals);
-          3D worlds and AI pipelines have no price there, so they show "after the brief". ---- */
+          3D worlds have no price there, so they show "after the brief".
+          Display order: audit, pilot, software, sites, worlds, training. Indexes stay on the objects. ---- */
+  { id: 'srv-consulting', index: 'SRV_11', group: 'build', cases: [], need: 'AI consulting',
+    title:  { en: 'PROCESS AUDIT & CONSULTING', ru: 'АУДИТ ПРОЦЕССОВ И КОНСУЛЬТАЦИИ' },
+    text:   { en: 'We look at how the team works and show where AI saves time and where it creates risk: a plan with priorities, timing and cost. From a one-hour review with a written plan to a full team setup: project rules, skills, connectors, subagents, a knowledge base. We also run a workshop on your real tasks.',
+              ru: 'Разбираем, как работает команда, и показываем, где ИИ сэкономит время, а где создаст риск: план с приоритетами, сроками и стоимостью. От разбора на час с письменным планом до настройки контура для команды: правила проекта, skills, коннекторы, субагенты, база знаний. Проводим и воркшоп на ваших реальных задачах.' },
+    input:  { en: 'Your task or process, the tools you use now', ru: 'Ваша задача или процесс, какими инструментами пользуетесь сейчас' },
+    output: { en: 'A written plan of steps, or a configured setup handed over with training', ru: 'Письменный план шагов или настроенный контур с передачей и обучением' },
+    price:  { en: '1,000 $', ru: '1 000 $' },
+    priceNote: { en: 'Audit and plan — from 1,000 $. A 60–90 min review with a written plan — from 100 $ (entry). Full setup — from 1,500 $, team workshop (a day) — from 1,500 $, support — from 500 $ / month.',
+                 ru: 'Аудит и план — от 1 000 $. Разбор на 60–90 минут с письменным планом — от 100 $ (вход). Настройка под ключ — от 1 500 $, воркшоп для команды (день) — от 1 500 $, сопровождение — от 500 $ / мес.' },
+    time:   { en: '1–2 weeks (audit)', ru: '1–2 недели (аудит)' } },
+
+  { id: 'srv-pipelines', index: 'SRV_10', group: 'build', cases: [], need: 'AI pipelines',
+    title:  { en: 'AI PIPELINES & AGENTS', ru: 'ИИ-ПАЙПЛАЙНЫ И АГЕНТЫ' },
+    text:   { en: 'We take one repeating process — sorting enquiries, a content line, answers from a knowledge base, a weekly report — measure it, automate it and measure again. The price is fixed before the start.',
+              ru: 'Берём один повторяющийся процесс — разбор заявок, контент-конвейер, ответы по базе знаний, еженедельный отчёт — замеряем, автоматизируем и замеряем снова. Цена фиксируется до старта.' },
+    input:  { en: 'One process that eats the most time, access to the data it uses', ru: 'Один процесс, который съедает больше всего времени, доступ к его данным' },
+    output: { en: 'A working pipeline or agent, before/after measurement, documentation, access on your side', ru: 'Работающий пайплайн или агент, замер до и после, документация, доступы у вас' },
+    price:  { en: '1,500 $', ru: '1 500 $' },
+    priceNote: { en: 'Pilot on one process, fixed price. Roll-out of what worked — from 3,000 $.', ru: 'Пилот на одном процессе, фиксированная цена. Внедрение того, что сработало, — от 3 000 $.' },
+    time:   { en: '2 weeks (pilot)', ru: '2 недели (пилот)' } },
+
+  { id: 'srv-software', index: 'SRV_09', group: 'build', cases: ['case-panel-calculator'], need: 'Internal software / bots',
+    title:  { en: 'INTERNAL SOFTWARE & BOTS', ru: 'ВНУТРЕННИЙ СОФТ И БОТЫ' },
+    text:   { en: 'Admin panels, reports, links between your services, Telegram bots and Mini Apps. A prototype checks the idea in days; production is a separate mode with review, tests and security — we agree which one you need before the start.',
+              ru: 'Админки, отчёты, связки между сервисами, Telegram-боты и Mini App. Прототип проверяет идею за дни; продакшн — отдельный режим с ревью, тестами и безопасностью. Какой нужен вам, договариваемся до старта.' },
+    input:  { en: 'The task in two sentences, who uses it, the deadline', ru: 'Задача в двух предложениях, кто пользуется, срок' },
+    output: { en: 'Working tool in your account, repository, security checklist, instructions', ru: 'Работающий инструмент на вашем аккаунте, репозиторий, чек-лист безопасности, инструкция' },
+    price:  { en: '400 $', ru: '400 $' },
+    priceNote: { en: 'Telegram bot. Internal tool — from 1,000 $, Mini App — from 1,500 $, MVP with payments — from 3,000 $. Prototype in 3–5 days — from 800 $.',
+                 ru: 'Telegram-бот. Внутренний инструмент — от 1 000 $, Mini App — от 1 500 $, MVP с оплатой — от 3 000 $. Прототип за 3–5 дней — от 800 $.' },
+    time:   { en: '3 days – 4 weeks', ru: 'от 3 дней до 4 недель' } },
+
   { id: 'srv-web', index: 'SRV_08', group: 'build', cases: [], need: 'Website development',
     links: [{ href: 'guides/deploy-cloudflare-github.html',
               label: { en: 'Guide: deploying a site with a server on Cloudflare', ru: 'Гайд: деплой сайта с сервером на Cloudflare' } }],
@@ -496,44 +633,21 @@ const SERVICES = [
     priceNote: { en: 'Landing page with a server. 14 days of free fixes after hand-over.', ru: 'Лендинг с сервером. 14 дней бесплатных исправлений после сдачи.' },
     time:   { en: '1–2 weeks', ru: '1–2 недели' } },
 
-  { id: 'srv-software', index: 'SRV_09', group: 'build', cases: [], need: 'Internal software / bots',
-    title:  { en: 'INTERNAL SOFTWARE & BOTS', ru: 'ВНУТРЕННИЙ СОФТ И БОТЫ' },
-    text:   { en: 'Admin panels, reports, links between your services, Telegram bots and Mini Apps. A prototype checks the idea in days; production is a separate mode with review, tests and security — we agree which one you need before the start.',
-              ru: 'Админки, отчёты, связки между сервисами, Telegram-боты и Mini App. Прототип проверяет идею за дни; продакшн — отдельный режим с ревью, тестами и безопасностью. Какой нужен вам, договариваемся до старта.' },
-    input:  { en: 'The task in two sentences, who uses it, the deadline', ru: 'Задача в двух предложениях, кто пользуется, срок' },
-    output: { en: 'Working tool in your account, repository, security checklist, instructions', ru: 'Работающий инструмент на вашем аккаунте, репозиторий, чек-лист безопасности, инструкция' },
-    price:  { en: '400 $', ru: '400 $' },
-    priceNote: { en: 'Telegram bot. Internal tool — from 1,000 $, Mini App — from 1,500 $, MVP with payments — from 3,000 $. Prototype in 3–5 days — from 800 $.',
-                 ru: 'Telegram-бот. Внутренний инструмент — от 1 000 $, Mini App — от 1 500 $, MVP с оплатой — от 3 000 $. Прототип за 3–5 дней — от 800 $.' },
-    time:   { en: '3 days – 4 weeks', ru: 'от 3 дней до 4 недель' } },
-
-  { id: 'srv-pipelines', index: 'SRV_10', group: 'build', cases: [], need: 'AI pipelines',
-    title:  { en: 'AI PIPELINES & AGENTS', ru: 'ИИ-ПАЙПЛАЙНЫ И АГЕНТЫ' },
-    text:   { en: 'We take one repeating process — sorting enquiries, a content line, answers from a knowledge base, a weekly report — measure it, automate it and measure again. The price is fixed before the start.',
-              ru: 'Берём один повторяющийся процесс — разбор заявок, контент-конвейер, ответы по базе знаний, еженедельный отчёт — замеряем, автоматизируем и замеряем снова. Цена фиксируется до старта.' },
-    input:  { en: 'One process that eats the most time, access to the data it uses', ru: 'Один процесс, который съедает больше всего времени, доступ к его данным' },
-    output: { en: 'A working pipeline or agent, before/after measurement, documentation, access on your side', ru: 'Работающий пайплайн или агент, замер до и после, документация, доступы у вас' },
-    price:  { en: '1,500 $', ru: '1 500 $' },
-    priceNote: { en: 'Pilot on one process, fixed price. Roll-out of what worked — from 3,000 $.', ru: 'Пилот на одном процессе, фиксированная цена. Внедрение того, что сработало, — от 3 000 $.' },
-    time:   { en: '2 weeks (pilot)', ru: '2 недели (пилот)' } },
-
-  { id: 'srv-consulting', index: 'SRV_11', group: 'build', cases: [], need: 'AI consulting',
-    title:  { en: 'AI & AGENT CONSULTING', ru: 'КОНСУЛЬТАЦИИ ПО ИИ И АГЕНТАМ' },
-    text:   { en: 'From a one-hour review with a written plan to a full team setup: project rules, skills, connectors, subagents, a knowledge base. We also run a workshop on your real tasks.',
-              ru: 'От разбора на час с письменным планом до настройки контура для команды: правила проекта, skills, коннекторы, субагенты, база знаний. Проводим и воркшоп на ваших реальных задачах.' },
-    input:  { en: 'Your task or process, the tools you use now', ru: 'Ваша задача или процесс, какими инструментами пользуетесь сейчас' },
-    output: { en: 'A written plan of steps, or a configured setup handed over with training', ru: 'Письменный план шагов или настроенный контур с передачей и обучением' },
-    price:  { en: '100 $', ru: '100 $' },
-    priceNote: { en: 'Review, 60–90 min. Audit and plan — from 600 $, full setup — from 1,500 $, team workshop (a day) — from 1,500 $, support — from 400 $ / month.',
-                 ru: 'Разбор, 60–90 минут. Аудит и план — от 600 $, настройка под ключ — от 1 500 $, воркшоп для команды (день) — от 1 500 $, сопровождение — от 400 $ / мес.' },
-    time:   { en: '60–90 min (review)', ru: '60–90 мин (разбор)' } },
-
-  { id: 'srv-world', index: 'SRV_12', group: 'build', cases: [], need: '3D world',
+  { id: 'srv-world', index: 'SRV_12', group: 'build', cases: ['case-ball-valve', 'case-conveyor-3d'], need: '3D world',
     title:  { en: '3D WORLDS', ru: '3D-МИРЫ' },
     text:   { en: 'A browser 3D world around your equipment or site: the buyer walks in, turns the machine, looks at the units. Built from the same model as the catalogue renders, so nothing drifts between them.',
               ru: '3D-мир в браузере вокруг вашей техники или объекта: покупатель заходит, крутит машину, смотрит узлы. Собирается из той же модели, что и каталожные рендеры, поэтому ничего не расходится.' },
     input:  { en: 'A 3D model of the product or site, the scenario to show', ru: '3D-модель изделия или объекта, сценарий, который нужно показать' },
     output: { en: 'An interactive world that opens in a link, no app or plugin', ru: 'Интерактивный мир, который открывается по ссылке, без приложения и плагина' },
+    price:  null,
+    time:   { en: 'after the brief', ru: 'после брифа' } },
+
+  { id: 'srv-learning', index: 'SRV_16', group: 'build', cases: [], need: 'Training apps / sites / 3D',
+    title:  { en: 'TRAINING APPS, SITES & 3D WORLDS', ru: 'ОБУЧАЮЩИЕ ПРИЛОЖЕНИЯ, САЙТЫ И 3D-МИРЫ' },
+    text:   { en: 'Training that opens from a link: a mini-course of video lessons and guides, tests, and a platform where everything is gathered. We pick the format for the task: an interactive site, an app or a 3D world where an employee, a dealer or a customer takes a product apart by units. Built from your 3D models, documentation and instructions.',
+              ru: 'Обучение, которое открывается по ссылке: мини-курс из видеоуроков и гайдов, проверочные тесты и площадка, на которой всё собрано. Формат выбираем под задачу: интерактивный сайт, приложение или 3D-мир, где сотрудник, дилер или клиент разбирает изделие по узлам. Собираем из ваших 3D-моделей, документации и инструкций.' },
+    input:  { en: 'Your materials — instructions, procedures, a 3D model or drawings, any video — and who is taught what', ru: 'Ваши материалы — инструкции, регламенты, 3D-модель или чертежи, видео, если есть — и кого и чему учим' },
+    output: { en: 'A mini-course (video lessons, guides, tests) on a platform, or a training site, app or 3D world; no install, sources stay with you', ru: 'Мини-курс (видеоуроки, гайды, тесты) на площадке или обучающий сайт, приложение, 3D-мир; без установки, исходники у вас' },
     price:  null,
     time:   { en: 'after the brief', ru: 'после брифа' } },
 
@@ -567,6 +681,59 @@ const SERVICES = [
 
 /* ---------- 04 WORK — demo cases. Services live in SERVICES (03). ---------- */
 const ARCHIVE_ITEMS = [
+  /* CASE_10 — calculator. Card shows 4 building types, 6 environments, and an estimate of the total cost.
+     `num` is only the hover histogram weight (same split as CASE_01, where 48ч has num 2). */
+  { id: 'case-panel-calculator', index: 'CASE_10', kind: 'case', demo: 'sample',
+    sector: { en: 'SOFTWARE', ru: 'СОФТ' },
+    year: '2026',
+    title:  { en: 'SANDWICH PANEL BUILDING CALCULATOR', ru: 'КАЛЬКУЛЯТОР СКЛАДА ИЗ ПАНЕЛЕЙ' },
+    input:  { en: 'Building dimensions', ru: 'Размеры здания' },
+    output: { en: 'Panels, trims, a price estimate and a ready request', ru: 'Панели, доборные, ориентир цены и готовая заявка' },
+    media: { type: 'image', src: 'assets/cases/panel-calculator-ru.png', srcEn: 'assets/cases/panel-calculator-en.png', fit: 'natural' },
+    href: 'cases/casecalculator.html',
+    cta: { ru: 'Посмотреть', en: 'View' },
+    note: { ru: 'Хотите такой расчёт? Прототип за 5 дней — в бриф.',
+            en: 'Want a calculator like this? A prototype in 5 days — send a brief.' },
+    metrics: [
+      { label: { en: 'BUILDING TYPES', ru: 'ТИПОВ ЗДАНИЙ' }, value: '4', num: 4 },
+      { label: { en: 'ENVIRONMENTS', ru: 'ОКРУЖЕНИЙ' }, value: '6', num: 6 },
+      { label: { en: 'OF THE TOTAL COST', ru: 'ИТОГОВОЙ СТОИМОСТИ' }, value: { en: 'Estimate', ru: 'Расчёт' }, num: 1 } ],
+    description: { en: 'Dimensions in, a ready request out. Different building types and environments, and a calculation of the total cost. Prices are sample values, in $.',
+                   ru: 'Размеры на входе, заявка на выходе. Разные типы зданий и окружения, расчёт итоговой стоимости. Цены условные, в $.' },
+    story: {
+      task:     { en: 'Let a buyer of a warehouse or a workshop see panel quantities, trims and a price estimate at once, and hand the manager a ready request instead of the question “how much is a warehouse”.',
+                  ru: 'Дать покупателю склада или цеха сразу увидеть количество панелей, доборные и ориентир цены, а менеджеру — готовую заявку вместо вопроса «сколько стоит склад».' },
+      limits:   { en: 'Demonstration on sample data, not a quote for a real client. Prices are sample values in dollars, panel width is 1 m, and the 3D view is a simplified building box.',
+                  ru: 'Демонстрация на условных данных, а не расчёт для конкретного клиента. Цены условные, в долларах, ширина панели 1 м, а 3D — упрощённая коробка здания.' },
+      approach: { en: 'One HTML file, three.js r128 stored locally, a RU/EN dictionary. Four building presets and six environments. The case page loads the calculator in an iframe and sizes it from a postMessage.',
+                  ru: 'Один HTML-файл, three.js r128 локально, словарь RU/EN. Четыре пресета зданий и шесть окружений. Страница кейса открывает калькулятор в iframe и подстраивает высоту по postMessage.' },
+      result:   { en: 'The default warehouse, 48×24×8 m on EPS panels, comes out near 46 558 $. The buyer leaves with a specification and a request text.',
+                  ru: 'Склад по умолчанию, 48×24×8 м на ППС, даёт ориентир около 46 558 $. На выходе — состав и текст заявки.' } } },
+
+  { kind: 'case', id: 'case-conveyor-3d', index: 'CASE_06', demo: 'own',
+    sector: { en: 'DIGITAL', ru: 'DIGITAL' },
+    year: '2026',
+    title:  { en: 'MODULAR CONVEYOR — 3D VIEWER', ru: 'МОДУЛЬНЫЙ КОНВЕЙЕР — 3D-ПРОСМОТРЩИК' },
+    input:  { en: 'Same parametric module as the stills', ru: 'Тот же параметрический модуль, что и в рендерах' },
+    output: { en: 'Drag-to-orbit 3D model embedded on the page', ru: '3D-модель на странице, вращение перетаскиванием' },
+    // geometry only, no studio/lights — exported straight from build_conveyor() so it can't drift from the stills
+    model3d: 'assets/cases/case-conveyor-3d.glb',
+    metrics: [
+      { label: { en: 'FILE SIZE', ru: 'ВЕС ФАЙЛА' }, value: '<400 КБ', num: 400 },
+      { label: { en: 'FORMAT', ru: 'ФОРМАТ' }, value: 'glTF/GLB', num: 1 },
+      { label: { en: 'VIEW ANGLES', ru: 'УГЛОВ ОБЗОРА' }, value: '360°', num: 360 } ],
+    description: { en: 'The same geometry the catalogue renders came from, dropped straight onto the page — no separate 3D pipeline, nothing that can drift from the stills.',
+                   ru: 'Та же геометрия, из которой собраны каталожные рендеры, — прямо на странице: без отдельного 3D-пайплайна и без риска разойтись со стиллами.' },
+    story: {
+      task:     { en: 'Give the product page something a photo cannot: let the buyer turn the module themselves.',
+                  ru: 'Дать странице товара то, чего не может фотография: покупатель сам вращает модуль.' },
+      limits:   { en: 'Has to load fast on a phone, in the browser — no app, no plugin.',
+                  ru: 'Должно быстро грузиться на телефоне, в браузере — без приложения и без плагина.' },
+      approach: { en: 'The same build script exports geometry-only glTF alongside the stills; a standard web component handles the viewer, so there is no custom WebGL to maintain.',
+                  ru: 'Тот же скрипт сборки экспортирует geometry-only glTF рядом со стиллами; вьюер — стандартный веб-компонент, без своего WebGL на поддержке.' },
+      result:   { en: 'One extra export step, and the product page gets an interactive model already in sync with the catalogue renders.',
+                  ru: 'Один дополнительный шаг экспорта — и страница товара получает интерактивную модель, уже синхронную с каталожными рендерами.' } } },
+
   /* ---------- Demo cases on open models ----------
      demo: true prints the honest "open model" label and the attribution line.
      Replace media.src with real files once the frames are rendered; nothing
@@ -706,29 +873,109 @@ const ARCHIVE_ITEMS = [
       result:   { en: 'Twenty positions and a line-up frame that reads as one conveyor range, not a set of unrelated parts.',
                   ru: 'Двадцать позиций и сводный кадр, который читается как один ряд конвейера, а не набор случайных деталей.' } } },
 
-  { kind: 'case', id: 'case-conveyor-3d', index: 'CASE_06', demo: 'own',
-    sector: { en: 'DIGITAL', ru: 'DIGITAL' },
+  { id: 'case-roller', index: 'CASE_07', kind: 'case', demo: 'own',
+    sector: { en: 'PRODUCT', ru: 'ПРОДУКТ' },
     year: '2026',
-    title:  { en: 'MODULAR CONVEYOR — 3D VIEWER', ru: 'МОДУЛЬНЫЙ КОНВЕЙЕР — 3D-ПРОСМОТРЩИК' },
-    input:  { en: 'Same parametric module as the stills', ru: 'Тот же параметрический модуль, что и в рендерах' },
-    output: { en: 'Drag-to-orbit 3D model embedded on the page', ru: '3D-модель на странице, вращение перетаскиванием' },
-    // geometry only, no studio/lights — exported straight from build_conveyor() so it can't drift from the stills
-    model3d: 'assets/cases/case-conveyor-3d.glb',
+    title:  { en: 'CONVEYOR ROLLER — EXPLODED VIEW & SECTION', ru: 'РОЛИК КОНВЕЙЕРА — ВЗРЫВ-СХЕМА И РАЗРЕЗ' },
+    input:  { en: 'A parametric model of a Ø60 mm roller with its internals', ru: 'Параметрическая модель ролика Ø60 мм с внутренним устройством' },
+    output: { en: 'Exploded view of 8 parts, longitudinal section, end-support detail', ru: 'Взрыв-схема из 8 деталей, продольный разрез, узел опоры' },
+    media: { type: 'image', src: 'assets/cases/case-roller-01.jpg' },
+    gallery: ['assets/cases/case-roller-01.jpg',
+              'assets/cases/case-roller-02.jpg',
+              'assets/cases/case-roller-03.jpg'],
     metrics: [
-      { label: { en: 'FILE SIZE', ru: 'ВЕС ФАЙЛА' }, value: '<400 КБ', num: 400 },
-      { label: { en: 'FORMAT', ru: 'ФОРМАТ' }, value: 'glTF/GLB', num: 1 },
-      { label: { en: 'VIEW ANGLES', ru: 'УГЛОВ ОБЗОРА' }, value: '360°', num: 360 } ],
-    description: { en: 'The same geometry the catalogue renders came from, dropped straight onto the page — no separate 3D pipeline, nothing that can drift from the stills.',
-                   ru: 'Та же геометрия, из которой собраны каталожные рендеры, — прямо на странице: без отдельного 3D-пайплайна и без риска разойтись со стиллами.' },
+      { label: { en: 'PARTS', ru: 'ДЕТАЛЕЙ' }, value: '8', num: 8 },
+      { label: { en: 'BOM POSITIONS', ru: 'ПОЗИЦИЙ В СПЕЦИФИКАЦИИ' }, value: '5', num: 5 },
+      { label: { en: 'SECTIONS', ru: 'РАЗРЕЗОВ' }, value: '1', num: 1 } ],
+    description: { en: 'The technical-graphics case: the section is cut in the model, so it cannot disagree with the exploded view or with the numbers on it.',
+                   ru: 'Кейс про техническую графику: разрез режется в модели, поэтому не может разойтись ни со взрыв-схемой, ни с номерами на ней.' },
     story: {
-      task:     { en: 'Give the product page something a photo cannot: let the buyer turn the module themselves.',
-                  ru: 'Дать странице товара то, чего не может фотография: покупатель сам вращает модуль.' },
-      limits:   { en: 'Has to load fast on a phone, in the browser — no app, no plugin.',
-                  ru: 'Должно быстро грузиться на телефоне, в браузере — без приложения и без плагина.' },
-      approach: { en: 'The same build script exports geometry-only glTF alongside the stills; a standard web component handles the viewer, so there is no custom WebGL to maintain.',
-                  ru: 'Тот же скрипт сборки экспортирует geometry-only glTF рядом со стиллами; вьюер — стандартный веб-компонент, без своего WebGL на поддержке.' },
-      result:   { en: 'One extra export step, and the product page gets an interactive model already in sync with the catalogue renders.',
-                  ru: 'Один дополнительный шаг экспорта — и страница товара получает интерактивную модель, уже синхронную с каталожными рендерами.' } } }
+      task:     { en: 'Show a dealer who compares two rollers what is inside the tube and how the shaft is held — without taking a unit apart.',
+                  ru: 'Показать дилеру, который сравнивает два ролика, что внутри трубы и как держится ось, — не разбирая изделие.' },
+      limits:   { en: 'A section that lies is worse than none: every wall thickness and seat in the picture is a dimension of the model, and anything the model does not have is not drawn. The bearing is simplified to one ring, and the picture says so.',
+                  ru: 'Врущий разрез хуже, чем его отсутствие: каждая толщина стенки и посадка на картинке — размер модели, а чего в модели нет, того не нарисовано. Подшипник упрощён до одного кольца, и на картинке это указано.' },
+      approach: { en: 'The roller is built as profiles revolved around the axis, so one source gives all three images. The section is a true half-body with the cut faces coloured per part; the numbers sit on 3D points projected through the render camera, not placed by eye.',
+                  ru: 'Ролик строится профилями, вращёнными вокруг оси, поэтому один источник даёт все три картинки. Разрез — настоящая половина тела с сечением, раскрашенным по деталям; номера стоят на 3D-точках, спроецированных через камеру рендера, а не расставлены на глаз.' },
+      result:   { en: 'One model, three deliverables: an exploded view with a bill of materials for the service manual, a section for the product page and an end-support detail for the technical sale.',
+                  ru: 'Одна модель, три материала: взрыв-схема со спецификацией для сервисной документации, разрез для страницы товара и узел опоры для технической продажи.' } } },
+
+  { id: 'case-conveyor-360', index: 'CASE_08', kind: 'case', demo: 'own',
+    sector: { en: 'PRODUCT', ru: 'ПРОДУКТ' },
+    year: '2026',
+    title:  { en: 'MODULAR CONVEYOR — 360° TURNTABLE', ru: 'МОДУЛЬНЫЙ КОНВЕЙЕР — 360° TURNTABLE' },
+    input:  { en: 'The same parametric module as in the catalogue stills', ru: 'Тот же параметрический модуль, что и в каталожных рендерах' },
+    output: { en: 'A seamless 10 s loop, 240 frames, 1280 × 720', ru: 'Бесшовный луп 10 с, 240 кадров, 1280 × 720' },
+    media: { type: 'video', src: 'assets/cases/case-conveyor-360.mp4' },
+    metrics: [
+      { label: { en: 'FRAMES', ru: 'КАДРОВ' }, value: '240', num: 240 },
+      { label: { en: 'LENGTH', ru: 'ДЛИТЕЛЬНОСТЬ' }, value: '10 с', num: 10 },
+      { label: { en: 'FILE SIZE', ru: 'ВЕС ФАЙЛА' }, value: '< 1 МБ', num: 1 } ],
+    description: { en: 'A rotating view from the same scene as the stills: the buyer sees the module from every side, and the video cannot disagree with the catalogue.',
+                   ru: 'Вращение из той же сцены, что и стиллы: покупатель видит модуль со всех сторон, а видео не может разойтись с каталогом.' },
+    story: {
+      task:     { en: 'Show the module from every side on the product page, without a shoot and without a 3D viewer that has to be embedded.',
+                  ru: 'Показать модуль со всех сторон на странице товара — без съёмки и без 3D-просмотрщика, который нужно встраивать.' },
+      limits:   { en: 'The loop has to close without a visible jump and stay small enough to start at once on a phone.',
+                  ru: 'Луп должен замыкаться без заметного скачка и быть достаточно лёгким, чтобы сразу запускаться на телефоне.' },
+      approach: { en: 'The module turns while the camera and the light stand still, so highlights travel over the metal the way they do on a real turntable. Frame 241 would equal frame 1, so rendering frames 1–240 closes the loop.',
+                  ru: 'Вращается модуль, а камера и свет стоят на месте, поэтому блики ходят по металлу так же, как на настоящем поворотном столе. Кадр 241 совпал бы с кадром 1, поэтому кадры 1–240 замыкают луп.' },
+      result:   { en: 'One short file for the product page, a booth screen or a presentation, rendered with the same studio rig as every catalogue frame.',
+                  ru: 'Один короткий файл для страницы товара, экрана стенда или презентации — отрисованный на той же студийной установке, что и все каталожные кадры.' } } },
+
+  { id: 'case-booth', index: 'CASE_09', kind: 'case', demo: 'own',
+    sector: { en: 'OBJECTS', ru: 'ОБЪЕКТЫ' },
+    year: '2026',
+    title:  { en: 'TRADE SHOW PACK — MODULAR CONVEYOR', ru: 'ВЫСТАВОЧНЫЙ ПАКЕТ — МОДУЛЬНЫЙ КОНВЕЙЕР' },
+    input:  { en: 'Our parametric conveyor model — no brand book, no real show', ru: 'Наша параметрическая модель конвейера — без брендбука и без реальной выставки' },
+    output: { en: '3 key frames, a 20 s screen loop, banner, roll-up, A4 sheet', ru: '3 ключевых кадра, луп 20 с для экрана, баннер, ролл-ап, лист А4' },
+    media: { type: 'video', src: 'assets/cases/case-booth-loop.mp4' },
+    gallery: ['assets/cases/case-booth-loop.mp4',
+              'assets/cases/case-booth-02.jpg',
+              'assets/cases/case-booth-03.jpg',
+              'assets/cases/case-booth-04.jpg',
+              'assets/cases/case-booth-05.jpg',
+              'assets/cases/case-booth-06.jpg'],
+    metrics: [
+      { label: { en: 'FORMATS', ru: 'ФОРМАТОВ' }, value: '7', num: 7 },
+      { label: { en: 'SCREEN LOOP', ru: 'ЛУП ДЛЯ ЭКРАНА' }, value: '20 с', num: 20 },
+      { label: { en: 'SOURCE MODELS', ru: 'ИСХОДНЫХ МОДЕЛЕЙ' }, value: '1', num: 1 } ],
+    description: { en: 'A stand kit from one model: a screen loop, three print-size frames, a 3 × 1 m banner, a roll-up and a data sheet in one visual system.',
+                   ru: 'Комплект для стенда из одной модели: луп для экрана, три кадра печатного размера, баннер 3 × 1 м, ролл-ап и каталожный лист в одной визуальной системе.' },
+    story: {
+      task:     { en: 'Prepare the materials for a stand before the product is on the show floor: one visual system from the screen loop to the large-format print.',
+                  ru: 'Подготовить материалы для стенда до того, как изделие появилось в зале: одна визуальная система от лупа на экране до широкоформатной печати.' },
+      limits:   { en: 'Every figure on the layouts — lengths, widths, roller diameters, loads — is a parameter of the model, so the banner and the data sheet cannot disagree with the frames. There is no real company or show behind it, and the layouts say so.',
+                  ru: 'Каждая цифра на макетах — длины, ширины, диаметры роликов, нагрузки — это параметр модели, поэтому баннер и каталожный лист не могут разойтись с кадрами. За ним нет настоящей компании и выставки, и макеты это указывают.' },
+      approach: { en: 'Three print-size key frames come from one studio rig; the loop is the turntable scene with captions; the banner, the roll-up and the sheet are laid out from the same frames and the model’s parameter table.',
+                  ru: 'Три ключевых кадра печатного размера считаются на одной студийной установке; луп — сцена turntable с титрами; баннер, ролл-ап и лист собраны из тех же кадров и таблицы параметров модели.' },
+      result:   { en: 'A stand kit of 7 files in one style, ready to hand to a print shop and a screen operator.',
+                  ru: 'Комплект для стенда из 7 файлов в одном стиле, который можно отдать в типографию и оператору экрана.' } } },
+
+  /* CASE_11 — conditional DN100 PN16 ball valve, two modes, GLB within 1 MB. Not a factory product. */
+  { id: 'case-ball-valve', index: 'CASE_11', kind: 'case', demo: 'model',
+    sector: { en: 'PRODUCT', ru: 'ПРОДУКТ' },
+    year: '2026',
+    title:  { en: 'BALL VALVE — 3D AND SECTION', ru: 'ШАРОВОЙ КРАН — 3D И РАЗРЕЗ' },
+    input:  { en: 'A conditional DN100 PN16 ball-valve model', ru: 'Условная модель шарового крана DN100 PN16' },
+    output: { en: 'Exterior and section in the browser, four section stills', ru: 'Общий вид и разрез в браузере, четыре кадра разреза' },
+    media: { type: 'image', src: 'assets/cases/ball-valve-section.png', fit: 'natural' },
+    href: 'cases/caseballvalve.html',
+    cta: { ru: 'Посмотреть', en: 'View' },
+    metrics: [
+      { label: { en: 'VIEW MODES', ru: 'РЕЖИМА' }, value: '2', num: 2 },
+      { label: { en: 'NOMINAL SIZE', ru: 'ТИПОРАЗМЕР' }, value: 'DN100 PN16', num: 4 },
+      { label: { en: 'GLB SIZE', ru: 'ВЕС GLB' }, value: 'до 1 МБ', num: 1 } ],
+    description: { en: 'A ball valve in 3D and in section. Two modes — exterior and cutaway — on a conditional DN100 PN16 model. Each GLB stays within 1 MB. Demonstration on a conditional model.',
+                   ru: 'Шаровой кран в 3D и в разрезе. Два режима — общий вид и разрез — на условной модели DN100 PN16. Каждый GLB до 1 МБ. Демонстрация на условной модели.' },
+    story: {
+      task:     { en: 'Show how a ball valve is built: the buyer rotates the model and looks inside, instead of seeing only a photo of the body.',
+                  ru: 'Показать, как устроен шаровой кран: покупатель вращает модель и заглядывает внутрь, а не видит только фотографию корпуса.' },
+      limits:   { en: 'A conditional model from typical DN100 PN16 proportions, face-to-face length 230 mm. Not design documentation and not a product of any plant. No stem seals, packing, seat springs, body joint, chamfers or threads; the ball and the stem sit without clearance.',
+                  ru: 'Условная модель по типовым пропорциям DN100 PN16, строительная длина 230 мм. Это не конструкторская документация и не изделие какого-либо завода. Нет уплотнений штока, сальниковой набивки, пружин седел, разъёма корпуса, фасок и резьбы; шар и шпиндель посажены без зазоров.' },
+      approach: { en: 'Two local GLB files — exterior and section — and a local model-viewer. A poster stays up until the model loads, and if the file fails. The switch changes the model.',
+                  ru: 'Два локальных GLB — общий вид и разрез — и локальный model-viewer. Постер виден до загрузки модели и если файл не открылся. Переключатель меняет модель.' },
+      result:   { en: 'Two view modes and four section stills from one conditional model, each GLB within 1 MB.',
+                  ru: 'Два режима просмотра и четыре кадра разреза из одной условной модели, каждый GLB до 1 МБ.' } } },
 ];
 
 /* ---------- BRIEF: steps after send ---------- */
@@ -791,6 +1038,7 @@ const FORM_NEEDS = [
   { en: 'AI pipelines',            ru: 'ИИ-пайплайны / агенты' },
   { en: 'AI consulting',           ru: 'Консультация по ИИ' },
   { en: '3D world',                ru: '3D-мир' },
+  { en: 'Training apps / sites / 3D', ru: 'Обучающие приложения / сайты / 3D-миры' },
   { en: 'Not sure — advise me',    ru: 'Не знаю — подскажите' }
 ];
 
@@ -799,6 +1047,14 @@ const FORM_STAGES = [
   { en: 'Design stage',      ru: 'Проект' },
   { en: 'Under construction', ru: 'Стройка' },
   { en: 'Operating business', ru: 'Действующий бизнес' }
+];
+
+/* Team-size radios for the AI-line fields. `value` is what the brief email receives. */
+const FORM_TEAM = [
+  { value: 'up to 10', en: 'up to 10', ru: 'до 10' },
+  { value: '10\u201350', en: '10\u201350', ru: '10\u201350' },
+  { value: '50\u2013200', en: '50\u2013200', ru: '50\u2013200' },
+  { value: '200+', en: '200+', ru: '200+' }
 ];
 
 const CONTACT_EMAIL = 'mail@monolith.contact';

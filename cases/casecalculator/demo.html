@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="ru" data-palette="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>try{document.documentElement.setAttribute('data-palette',localStorage.getItem('m_palette')||'3')}catch(e){}
+if(/[?&]embed=1/.test(location.search))document.documentElement.classList.add('is-embed');</script>
+<meta name="robots" content="noindex">
+<title>Калькулятор склада из сэндвич-панелей</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+<link rel="stylesheet" href="../case.css">
+<style>
+/* Layout: слева параметры, справа 3D-коробка и расчёт; на телефоне — одна колонка.
+   Палитра и шрифты — из case.css. Цвет 3D-сцены (--scene) не привязан к палитре. */
+:root{ --scene:#E4DED2; --ok:#2F6B3F; }
+.calc{
+  max-width:1180px;margin:0 auto;display:grid;gap:20px;
+  padding:108px max(16px,env(safe-area-inset-right,0px)) 48px max(16px,env(safe-area-inset-left,0px));
+}
+html.is-embed body,body.embed{background:transparent;background-image:none}
+html.is-embed #header,html.is-embed #navScrim,html.is-embed #footer,html.is-embed #backcase,html.is-embed .demo-head h1,html.is-embed .demo-head .tag,
+body.embed #header,body.embed #navScrim,body.embed #footer,body.embed #backcase,body.embed .demo-head h1,body.embed .demo-head .tag{display:none}
+body:not(.embed) #langsw{display:none}
+html.is-embed #langsw{display:flex}
+html.is-embed .calc,body.embed .calc{padding-top:16px;padding-bottom:24px}
+.demo-head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
+#backcase{flex:1 1 100%}
+.demo-head h1{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:600;margin:0;text-wrap:balance;letter-spacing:-.02em}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.box{
+  background:rgba(255,255,255,.86);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  border:1px solid rgba(38,32,27,.08);border-radius:20px;
+  box-shadow:0 10px 28px rgba(38,32,27,.05);
+  padding:18px;
+}
+.controls{display:grid;gap:16px}
+.lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+.lbl b{color:var(--text);font-weight:500}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+button,select,input{font:inherit;color:inherit}
+.seg button{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;
+  background:rgba(255,255,255,.72);border:1.5px solid var(--line);border-radius:0;
+  padding:8px 12px;cursor:pointer;color:var(--muted);
+}
+.seg button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+select,input[type=text],input[type=tel]{width:100%;background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--text)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sw{display:flex;gap:8px;flex-wrap:wrap}
+.sw button{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}
+.sw button[aria-pressed="true"]{outline:2px solid var(--accent);outline-offset:2px}
+.right{display:grid;gap:20px;min-width:0}
+.scene{position:relative;height:clamp(260px,42vw,420px);background:var(--scene);border:1px solid var(--line);border-radius:20px;overflow:hidden;touch-action:none;cursor:grab}
+.scene:active{cursor:grabbing}
+.scene canvas{display:block;width:100%;height:100%}
+.hint{position:absolute;left:12px;bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+.dim{position:absolute;right:12px;top:10px;font-family:'IBM Plex Mono',monospace;font-size:12px;background:rgba(255,255,255,.86);border:1px solid var(--line);border-radius:8px;padding:4px 8px;color:var(--text)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpi .v{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.kpi .u{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.kpi.main .v{color:var(--accent)}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:400}
+td.n,th.n{text-align:right}
+tfoot td{font-weight:600;border-bottom:0}
+.quote{display:grid;gap:12px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;text-align:center;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;
+  background:var(--accent);color:#fff;border:1px solid transparent;border-radius:999px;
+  padding:14px 22px;cursor:pointer;
+}
+.btn:hover{background:var(--accent-2)}
+.btn.ghost{background:var(--surface);color:var(--text);border:1px solid var(--line);font-weight:400}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent);background:var(--surface)}
+pre{margin:0;white-space:pre-wrap;word-break:break-word;font-family:'IBM Plex Mono',monospace;font-size:12.5px;background:color-mix(in srgb,var(--bg) 70%,transparent);border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--text)}
+.note{font-size:12.5px;color:var(--muted)}
+.ok{color:var(--ok);font-size:13px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <a class="brand" href="../../index.html#/main">MONOLITH<span class="brand-ai">.CONTACT</span></a>
+  <nav id="nav">
+    <a href="../../index.html#/main">01 // ГЛАВНАЯ</a>
+    <a href="../../index.html#/lab">02 // КАК ЭТО УСТРОЕНО</a>
+    <a href="../../index.html#/services">03 // УСЛУГИ</a>
+    <a href="../../index.html#/capabilities">04 // РАБОТЫ</a>
+    <a href="../../index.html#/brief">05 // БРИФ</a>
+  </nav>
+  <div class="header-controls">
+    <button id="langBtn" class="ctl" type="button" aria-label="Switch language">EN</button>
+    <button id="burger" class="ctl burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
+  </div>
+</header>
+<div id="navScrim" class="nav-scrim" hidden></div>
+
+<div class="calc">
+  <header class="demo-head">
+    <a class="crumb" id="backcase" href="../casecalculator.html">← к кейсу</a>
+    <h1>Калькулятор склада из сэндвич-панелей</h1>
+    <div class="seg" id="langsw" role="group" aria-label="Language"><button type="button" data-l="ru">RU</button><button type="button" data-l="en">EN</button></div>
+    <span class="tag">Демо MONOLITH · цены условные, $</span>
+  </header>
+
+  <div class="grid">
+    <section class="box controls" aria-label="Параметры здания">
+      <div>
+        <div class="lbl">Тип здания</div>
+        <div class="seg" id="presets"></div>
+        <div class="note" id="about" style="margin-top:8px"></div>
+      </div>
+      <div><div class="lbl">Длина <b id="vL"></b></div><input type="range" id="L" min="12" max="120" step="1"></div>
+      <div><div class="lbl">Ширина <b id="vW"></b></div><input type="range" id="W" min="6" max="60" step="1"></div>
+      <div><div class="lbl">Высота до карниза <b id="vH"></b></div><input type="range" id="H" min="3" max="15" step="0.5"></div>
+      <div class="row2">
+        <div><div class="lbl">Утеплитель</div>
+          <select id="fill"><option value="wool">Минвата</option><option value="pir">PIR</option><option value="pps">ППС</option></select></div>
+        <div><div class="lbl">Ворота 4×4 м</div>
+          <select id="gates"></select></div>
+      </div>
+      <div><div class="lbl">Окна 1,5×1,6 м, шт</div><select id="win"></select></div>
+      <div class="row2">
+        <div><div class="lbl">Стены, мм</div><select id="tw"></select></div>
+        <div><div class="lbl">Кровля, мм</div><select id="tr"></select></div>
+      </div>
+      <div><div class="lbl">Цвет стен</div><div class="sw" id="swW"></div></div>
+      <div><div class="lbl">Цвет кровли</div><div class="sw" id="swR"></div></div>
+      <div><div class="lbl">Окружение <b id="envName"></b></div><div class="sw" id="swE"></div></div>
+    </section>
+
+    <div class="right">
+      <div class="scene" id="scene" aria-label="3D-модель здания">
+        <div class="dim" id="dim"></div>
+        <div class="hint">тяните — вращать · колесо — масштаб</div>
+      </div>
+
+      <div class="kpis">
+        <div class="box kpi"><div class="u">Стеновые панели</div><div class="v" id="kW"></div><div class="u" id="kWs"></div></div>
+        <div class="box kpi"><div class="u">Кровельные панели</div><div class="v" id="kR"></div><div class="u" id="kRs"></div></div>
+        <div class="box kpi"><div class="u">Масса панелей</div><div class="v" id="kM"></div><div class="u">ориентир для доставки</div></div>
+        <div class="box kpi main"><div class="u">Ориентир по цене</div><div class="v" id="kP"></div><div class="u">с доборными и метизами</div></div>
+      </div>
+
+      <div class="box tablewrap">
+        <table>
+          <thead><tr><th>Позиция</th><th class="n">Кол-во</th><th class="n">Ед.</th><th class="n">Сумма, $</th></tr></thead>
+          <tbody id="rows"></tbody>
+          <tfoot><tr><td colspan="3">Итого, ориентир</td><td class="n" id="total"></td></tr></tfoot>
+        </table>
+      </div>
+
+      <div class="box quote">
+        <div class="lbl" style="margin:0">Получить точный расчёт</div>
+        <div class="row2">
+          <input type="text" id="nm" placeholder="Имя" autocomplete="name">
+          <input type="tel" id="ph" placeholder="Телефон или WhatsApp" autocomplete="tel">
+        </div>
+        <button class="btn" id="send" type="button">Подготовить заявку</button>
+        <div id="out" hidden>
+          <div class="note" style="margin-bottom:8px">Так заявка придёт менеджеру в Telegram. В демо она не отправляется.</div>
+          <pre id="msg"></pre>
+          <button class="btn ghost" id="copy" type="button" style="margin-top:8px">Скопировать</button>
+          <span class="ok" id="copied" hidden> Скопировано</span>
+        </div>
+        <a class="btn" id="order" href="https://monolith.contact/?src=calculator#/brief" target="_top" style="text-align:center;text-decoration:none">Хочу такой расчёт для своего продукта</a>
+        <p class="note" style="margin:0">Демо показывает логику: размеры → панели, доборные элементы, цена, 3D. Цены, раскрой и ширина панели (1 м) условные. В рабочей версии подставим ваш прайс и правила расчёта, а заявка пойдёт менеджеру в Telegram и таблицу.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer id="footer">
+  <div class="footer-main">
+    <a class="footer-mail" href="mailto:mail@monolith.contact">MAIL@MONOLITH.CONTACT</a>
+  </div>
+</footer>
+
+<script src="three.r128.min.js"></script>
+<script>
+(function(){
+  // Типы зданий задают стартовый набор: размеры, ворота, окна, утеплитель и толщины.
+  var PRESETS=[
+    {n:'Склад',en:'Warehouse',aboutEn:'Cold warehouse: EPS panels, gates, no windows. The cheapest option per m².',L:48,W:24,H:8,g:2,win:0,fill:'pps',tw:100,tr:150,about:'Холодный склад: ППС, ворота, без окон. Самый дешёвый вариант за м².'},
+    {n:'Цех',en:'Workshop',aboutEn:'Production: 120 mm mineral wool (fire resistance), gates and windows.',L:36,W:18,H:7,g:2,win:6,fill:'wool',tw:120,tr:150,about:'Производство: минвата 120 мм (огнестойкость), ворота и окна.'},
+    {n:'Спортзал',en:'Sports hall',aboutEn:'Long span and height, PIR for warmth, no gates, many windows.',L:40,W:20,H:10,g:0,win:10,fill:'pir',tw:100,tr:120,about:'Большой пролёт и высота, PIR для тепла, без ворот, много окон.'},
+    {n:'АБК',en:'Office block',aboutEn:'Office building: thick insulation, many windows, no gates.',L:24,W:12,H:6,g:0,win:14,fill:'wool',tw:150,tr:200,about:'Офисное здание: толстый утеплитель, много окон, без ворот.'}];
+  var COLORS=[['RAL 9003 белый','#EEF0EE','RAL 9003 white'],['RAL 7004 серый','#9A9DA0','RAL 7004 grey'],['RAL 5005 синий','#1F5A9B','RAL 5005 blue'],
+    ['RAL 6005 зелёный','#2D5A3D','RAL 6005 green'],['RAL 3005 винный','#6A2634','RAL 3005 wine red'],['RAL 8017 коричневый','#4A2E26','RAL 8017 brown'],['RAL 9005 чёрный','#1E1F21','RAL 9005 black']];
+  var THICK={wool:[80,100,120,150,200],pir:[40,60,80,100,120],pps:[50,80,100,120,150]};
+  // условные коэффициенты: цена за м² = a + b*толщина ($)
+  var PRICE={wool:[18,0.10],pir:[20.5,0.094],pps:[11,0.067]};
+  var DENS={wool:100,pir:40,pps:15}; // кг/м³
+  var WIDTH=1.0, SLOPE=8*Math.PI/180, GATE_W=4, GATE_H=4;
+  var $=function(id){return document.getElementById(id)};
+  var ENVS=[{n:'Студия',en:'Studio',sky:null,gr:null},{n:'Степь',en:'Steppe',sky:'#C4D6E2',gr:'#C2AE7E'},{n:'Трава',en:'Grass',sky:'#BDD7EC',gr:'#6F9150'},
+    {n:'Асфальт',en:'Asphalt',sky:'#CBD3D9',gr:'#5A5D61'},{n:'Снег',en:'Snow',sky:'#DCE5EE',gr:'#F1F4F7'},{n:'Закат',en:'Sunset',sky:'#E7B596',gr:'#7B6B5C'}];
+  var st={L:48,W:24,H:8,fill:'pps',gates:2,win:0,tw:100,tr:150,cw:0,cr:2,ce:0,preset:0};
+  var WIN_A=2.4, WIN_TRIM=6.2;
+
+  var EN={
+    'Калькулятор склада из сэндвич-панелей':'Sandwich panel building calculator',
+    'Демо MONOLITH · цены условные, $':'MONOLITH demo · sample prices, $',
+    'Тип здания':'Building type','Длина':'Length','Ширина':'Width','Высота до карниза':'Eaves height',
+    'Утеплитель':'Insulation','Минвата':'Mineral wool','ППС':'EPS','Ворота 4×4 м':'Gates 4×4 m',
+    'Окна 1,5×1,6 м, шт':'Windows 1.5×1.6 m, pcs','Стены, мм':'Walls, mm','Кровля, мм':'Roof, mm',
+    'Цвет стен':'Wall colour','Цвет кровли':'Roof colour','Окружение':'Environment',
+    'тяните — вращать · колесо — масштаб':'drag to rotate · wheel to zoom',
+    'Стеновые панели':'Wall panels','Кровельные панели':'Roof panels','Масса панелей':'Panel weight',
+    'ориентир для доставки':'for delivery planning','Ориентир по цене':'Price estimate',
+    'с доборными и метизами':'incl. trims and fasteners',
+    'Позиция':'Item','Кол-во':'Qty','Ед.':'Unit','Сумма, $':'Amount, $','Итого, ориентир':'Total, estimate',
+    'Получить точный расчёт':'Get an exact quote','Подготовить заявку':'Prepare request',
+    'Так заявка придёт менеджеру в Telegram. В демо она не отправляется.':'This is how the request reaches a manager in Telegram. The demo does not send it.',
+    'Скопировать':'Copy','Скопировано':'Copied',
+    'Демо показывает логику: размеры → панели, доборные элементы, цена, 3D. Цены, раскрой и ширина панели (1 м) условные. В рабочей версии подставим ваш прайс и правила расчёта, а заявка пойдёт менеджеру в Telegram и таблицу.':'The demo shows the logic: dimensions → panels, trims, price, 3D. Prices, cutting and panel width (1 m) are sample values. In the working version we plug in your price list and calculation rules, and the request goes to a manager in Telegram and a spreadsheet.',
+    'Хочу такой расчёт для своего продукта':'Get a calculator like this for your product','Имя':'Name','Телефон или WhatsApp':'Phone or WhatsApp',
+    '← к кейсу':'← back to the case',
+    '01 // ГЛАВНАЯ':'01 // MAIN',
+    '02 // КАК ЭТО УСТРОЕНО':'02 // HOW IT WORKS',
+    '03 // УСЛУГИ':'03 // SERVICES',
+    '04 // РАБОТЫ':'04 // WORK',
+    '05 // БРИФ':'05 // BRIEF'};
+  var LANG='ru';
+  function T(k){return LANG==='en'&&EN[k]?EN[k]:k}
+  var U={ru:{m:'м',m2:'м²',pcs:'шт',t:'т',lm:'м.п.',mm:'мм'},en:{m:'m',m2:'m²',pcs:'pcs',t:'t',lm:'lm',mm:'mm'}};
+  function u(k){return U[LANG][k]}
+  function money(n){return LANG==='en'?'$'+fmt(n):fmt(n)+' $'}
+  function nm(o){return LANG==='en'&&o.en?o.en:o.n}
+  function cn(c){return LANG==='en'?c[2]:c[0]}
+  function fmt(n,d){return Number(n).toLocaleString(LANG==='en'?'en-US':'ru-RU',{maximumFractionDigits:d||0})}
+  function applyStatic(){
+    var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null),n,list=[];
+    while((n=w.nextNode())){var p=n.parentNode;if(p&&(p.tagName==='SCRIPT'||p.tagName==='STYLE'))continue;list.push(n)}
+    list.forEach(function(n){
+      if(n.__k===undefined){var t=n.nodeValue.trim();n.__k=EN[t]?t:''}
+      if(n.__k){var m=n.nodeValue.match(/^(\s*)[\s\S]*?(\s*)$/);n.nodeValue=m[1]+T(n.__k)+m[2]}
+    });
+    document.querySelectorAll('[placeholder]').forEach(function(e){
+      if(!e.__ph)e.__ph=e.getAttribute('placeholder');e.setAttribute('placeholder',T(e.__ph))});
+    document.title=T('Калькулятор склада из сэндвич-панелей');
+    document.documentElement.lang=LANG;
+  }
+  function setLang(l,save){
+    LANG=l;applyStatic();
+    Array.prototype.forEach.call(document.querySelectorAll('#langsw button'),function(b){b.setAttribute('aria-pressed',String(b.dataset.l===l))});
+    var lb=document.getElementById('langBtn');
+    if(lb)lb.textContent=l==='en'?'RU':'EN';
+    if(save){try{localStorage.setItem('m_lang',l)}catch(e){}}
+    var i=st.preset;
+    seg('presets',PRESETS.map(nm),i,setPreset);
+    $('about').textContent=i>=0?(LANG==='en'?PRESETS[i].aboutEn:PRESETS[i].about):'';
+    swatches('swW','cw');swatches('swR','cr');swatchesEnv();render();
+  }
+
+  function calc(s){
+    var per=2*(s.L+s.W);
+    var wallPcs=Math.ceil((per-s.gates*GATE_W)/WIDTH);
+    var wallArea=wallPcs*WIDTH*s.H;
+    var rafter=(s.W/2)/Math.cos(SLOPE)+0.3;
+    var roofPcs=Math.ceil(s.L/WIDTH)*2;
+    var roofArea=roofPcs*WIDTH*rafter;
+    var pw=PRICE[s.fill], wallSum=wallArea*(pw[0]+pw[1]*s.tw), roofSum=roofArea*(pw[0]+pw[1]*s.tr);
+    var wt=function(t){return 8+DENS[s.fill]*t/1000};
+    var mass=wallArea*wt(s.tw)+roofArea*wt(s.tr);
+    var corners=4*s.H, ridge=s.L, eave=2*s.L, gateTrim=s.gates*(2*GATE_H+GATE_W), base=per, winTrim=s.win*WIN_TRIM;
+    var trimLen=corners+ridge+eave+gateTrim+base+winTrim;
+    var trimSum=trimLen*4.7;
+    var screws=Math.ceil((wallArea+roofArea)*6/50)*50, screwSum=screws*0.043;
+    var rows=[
+      [T('Стеновые панели')+' '+s.tw+' '+u('mm'),wallPcs+' '+u('pcs')+' · '+fmt(wallArea,1)+' '+u('m2'),'',wallSum],
+      [T('Кровельные панели')+' '+s.tr+' '+u('mm'),roofPcs+' '+u('pcs')+' · '+fmt(roofArea,1)+' '+u('m2'),'',roofSum],
+      [LANG==='en'?'Trims (corners, ridge, eaves, gates, windows, base)':'Доборные элементы (углы, конёк, карниз, ворота, окна, цоколь)',fmt(trimLen,1),u('lm'),trimSum],
+      [LANG==='en'?'Screws and sealant':'Саморезы и герметик',fmt(screws),u('pcs'),screwSum]];
+    return {rows:rows,wallPcs:wallPcs,wallArea:wallArea,roofPcs:roofPcs,roofArea:roofArea,mass:mass,total:wallSum+roofSum+trimSum+screwSum,rafter:rafter};
+  }
+
+  function render(){
+    var r=calc(st);
+    $('vL').textContent=st.L+' '+u('m');$('vW').textContent=st.W+' '+u('m');$('vH').textContent=st.H+' '+u('m');
+    $('dim').textContent=st.L+' × '+st.W+' × '+st.H+' '+u('m')+' · '+fmt(st.L*st.W)+' '+u('m2');
+    $('kW').textContent=r.wallPcs+' '+u('pcs');$('kWs').textContent=fmt(r.wallArea,0)+' '+u('m2')+' · '+(LANG==='en'?'length ':'длина ')+st.H+' '+u('m');
+    $('kR').textContent=r.roofPcs+' '+u('pcs');$('kRs').textContent=fmt(r.roofArea,0)+' '+u('m2')+' · '+(LANG==='en'?'length ':'длина ')+fmt(r.rafter,1)+' '+u('m');
+    $('kM').textContent=fmt(r.mass/1000,1)+' '+u('t');
+    $('kP').textContent=money(r.total);
+    $('rows').innerHTML=r.rows.map(function(x){return '<tr><td>'+x[0]+'</td><td class="n">'+x[1]+'</td><td class="n">'+x[2]+'</td><td class="n">'+money(x[3])+'</td></tr>'}).join('');
+    $('total').textContent=money(r.total);
+    build();
+    var tp=st.preset>=0?nm(PRESETS[st.preset]):(LANG==='en'?'custom size':'свои размеры');
+    r.msg=(LANG==='en'?[
+      'New quote request (demo)',
+      'Type: '+tp+'. Building: '+st.L+' × '+st.W+' × '+st.H+' m, gates: '+st.gates+', windows: '+st.win,
+      'Walls: '+fill(st.fill)+' '+st.tw+' mm, '+cn(COLORS[st.cw]),'Roof: '+fill(st.fill)+' '+st.tr+' mm, '+cn(COLORS[st.cr]),'Environment: '+nm(ENVS[st.ce]),
+      'Panels: walls '+r.wallPcs+' pcs, roof '+r.roofPcs+' pcs ('+fmt(r.wallArea+r.roofArea,0)+' m²)',
+      'Estimate: $'+fmt(r.total)+' (sample prices)',
+      'Client: '+($('nm').value||'—')+', '+($('ph').value||'—')]:[
+      'Новая заявка на расчёт (демо)',
+      'Тип: '+tp+'. Здание: '+st.L+' × '+st.W+' × '+st.H+' м, ворота: '+st.gates+', окна: '+st.win,
+      'Стены: '+fill(st.fill)+' '+st.tw+' мм, '+cn(COLORS[st.cw]),'Кровля: '+fill(st.fill)+' '+st.tr+' мм, '+cn(COLORS[st.cr]),'Окружение: '+nm(ENVS[st.ce]),
+      'Панелей: стен '+r.wallPcs+' шт, кровли '+r.roofPcs+' шт ('+fmt(r.wallArea+r.roofArea,0)+' м²)',
+      'Ориентир: '+fmt(r.total)+' $ (условный прайс)',
+      'Клиент: '+($('nm').value||'—')+', '+($('ph').value||'—')]).join('\n');
+    window.__last=r;
+  }
+  function fill(f){return LANG==='en'?{wool:'mineral wool',pir:'PIR',pps:'EPS'}[f]:{wool:'минвата',pir:'PIR',pps:'ППС'}[f]}
+
+  // ---------- controls ----------
+  function seg(id,items,cur,cb){
+    var el=$(id);el.innerHTML='';
+    items.forEach(function(t,i){var b=document.createElement('button');b.type='button';b.textContent=t;
+      b.setAttribute('aria-pressed',String(i===cur));b.onclick=function(){cb(i)};el.appendChild(b)});
+  }
+  function swatches(id,key){
+    var el=$(id);el.innerHTML='';
+    COLORS.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.title=cn(c);b.setAttribute('aria-label',cn(c));
+      b.style.background=c[1];b.setAttribute('aria-pressed',String(st[key]===i));
+      b.onclick=function(){st[key]=i;swatches(id,key);render()};el.appendChild(b)});
+  }
+  function swatchesEnv(){
+    var el=$('swE');el.innerHTML='';
+    ENVS.forEach(function(e,i){var b=document.createElement('button');b.type='button';b.title=nm(e);b.setAttribute('aria-label',T('Окружение')+': '+nm(e));
+      b.style.background=e.sky?'linear-gradient(180deg,'+e.sky+' 50%,'+e.gr+' 50%)':'linear-gradient(180deg,var(--scene) 50%,var(--line) 50%)';
+      b.setAttribute('aria-pressed',String(st.ce===i));
+      b.onclick=function(){st.ce=i;swatchesEnv();render()};el.appendChild(b)});
+    $('envName').textContent=nm(ENVS[st.ce]);
+  }
+  function thickOptions(){
+    var o=THICK[st.fill];
+    ['tw','tr'].forEach(function(k){
+      var el=$(k);el.innerHTML=o.map(function(t){return '<option value="'+t+'">'+t+'</option>'}).join('');
+      if(o.indexOf(st[k])<0)st[k]=o[Math.min(2,o.length-1)];el.value=st[k];
+    });
+  }
+  function setPreset(i){
+    var p=PRESETS[i];st.L=p.L;st.W=p.W;st.H=p.H;st.gates=p.g;st.win=p.win;st.fill=p.fill;st.tw=p.tw;st.tr=p.tr;st.preset=i;
+    $('L').value=st.L;$('W').value=st.W;$('H').value=st.H;$('gates').value=st.gates;$('win').value=st.win;$('fill').value=st.fill;thickOptions();
+    $('about').textContent=LANG==='en'?p.aboutEn:p.about;
+    seg('presets',PRESETS.map(nm),i,setPreset);render();
+  }
+  $('gates').innerHTML=[0,1,2,3,4].map(function(n){return '<option value="'+n+'">'+n+'</option>'}).join('');
+  $('win').innerHTML=[0,2,4,6,8,10,12,14,16,20,24].map(function(n){return '<option value="'+n+'">'+n+'</option>'}).join('');
+  ['L','W','H'].forEach(function(k){$(k).oninput=function(){st[k]=parseFloat(this.value);st.preset=-1;seg('presets',PRESETS.map(nm),-1,setPreset);$('about').textContent='';render()}});
+  $('gates').onchange=function(){st.gates=parseInt(this.value,10);render()};
+  $('win').onchange=function(){st.win=parseInt(this.value,10);render()};
+  $('fill').onchange=function(){st.fill=this.value;thickOptions();render()};
+  $('tw').onchange=function(){st.tw=parseInt(this.value,10);render()};
+  $('tr').onchange=function(){st.tr=parseInt(this.value,10);render()};
+  $('nm').oninput=render;$('ph').oninput=render;
+  $('send').onclick=function(){$('msg').textContent=window.__last.msg;$('out').hidden=false;$('copied').hidden=true};
+  $('copy').onclick=function(){
+    var t=$('msg').textContent;
+    var ok=function(){$('copied').hidden=false};
+    var fb=function(){var r=document.createRange();r.selectNodeContents($('msg'));var s=getSelection();s.removeAllRanges();s.addRange(r)};
+    try{navigator.clipboard.writeText(t).then(ok,fb)}catch(e){fb()}
+  };
+
+  // ---------- 3D ----------
+  var scene,camera,renderer,group,yaw=-0.6,pitch=0.38,dist=60,target=new THREE.Vector3(0,3,0),dirty=true;
+  function lineTex(kind,color){
+    var c=document.createElement('canvas');c.width=64;c.height=64;var g=c.getContext('2d');
+    g.fillStyle=color;g.fillRect(0,0,64,64);
+    g.fillStyle='rgba(0,0,0,.28)';g.fillRect(0,0,2,64);
+    if(kind==='wall'){g.fillStyle='rgba(255,255,255,.10)';g.fillRect(2,0,3,64);g.fillStyle='rgba(0,0,0,.08)';for(var x=16;x<64;x+=16)g.fillRect(x,0,1,64)}
+    else{g.fillStyle='rgba(255,255,255,.14)';g.fillRect(8,0,4,64);g.fillRect(24,0,4,64);g.fillRect(40,0,4,64);g.fillRect(56,0,4,64)}
+    var t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;return t;
+  }
+  function plane(w,h,mat){
+    var geo=new THREE.PlaneGeometry(w,h);var uv=geo.attributes.uv;
+    for(var i=0;i<uv.count;i++)uv.setXY(i,uv.getX(i)*w,uv.getY(i)*h);
+    return new THREE.Mesh(geo,mat);
+  }
+  function build(){
+    if(!scene)return;
+    while(group.children.length){var o=group.children.pop();if(o.geometry)o.geometry.dispose()}
+    var L=st.L,W=st.W,H=st.H,rid=Math.tan(SLOPE)*W/2;
+    var wm=new THREE.MeshLambertMaterial({map:lineTex('wall',COLORS[st.cw][1]),side:THREE.DoubleSide});
+    var rm=new THREE.MeshLambertMaterial({map:lineTex('roof',COLORS[st.cr][1]),side:THREE.DoubleSide});
+    var dm=new THREE.MeshLambertMaterial({color:0x2a2c2e});
+    var front=plane(L,H,wm);front.position.set(0,H/2,W/2);group.add(front);
+    var back=plane(L,H,wm);back.position.set(0,H/2,-W/2);back.rotation.y=Math.PI;group.add(back);
+    [1,-1].forEach(function(sx){
+      var e=plane(W,H,wm);e.position.set(sx*L/2,H/2,0);e.rotation.y=sx*Math.PI/2;group.add(e);
+      var sh=new THREE.Shape();sh.moveTo(-W/2,0);sh.lineTo(W/2,0);sh.lineTo(0,rid);
+      var gg=new THREE.ShapeGeometry(sh);var uv=gg.attributes.uv,pos=gg.attributes.position;
+      for(var i=0;i<uv.count;i++)uv.setXY(i,pos.getX(i)+W/2,pos.getY(i));
+      var m=new THREE.Mesh(gg,wm);m.position.set(sx*L/2,H,0);m.rotation.y=sx*Math.PI/2;group.add(m);
+    });
+    var rl=Math.sqrt(W*W/4+rid*rid)+0.3;
+    [1,-1].forEach(function(sz){
+      var x0=-L/2-0.3,x1=L/2+0.3,yE=-Math.tan(SLOPE)*0.15,zE=sz*(W/2+0.15);
+      var v=new Float32Array([x0,rid,0, x1,rid,0, x1,yE,zE, x0,yE,zE]);
+      var uvs=new Float32Array([0,0, L+0.6,0, L+0.6,rl, 0,rl]);
+      var g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(v,3));
+      g.setAttribute('uv',new THREE.BufferAttribute(uvs,2));
+      g.setIndex(sz>0?[0,2,1,0,3,2]:[0,1,2,0,2,3]);g.computeVertexNormals();
+      var m=new THREE.Mesh(g,rm);m.position.y=H;group.add(m);
+    });
+    for(var i=0;i<st.gates;i++){
+      var gx=-L/2+(i+1)*L/(st.gates+1);
+      var gate=new THREE.Mesh(new THREE.PlaneGeometry(GATE_W,GATE_H),dm);gate.position.set(gx,GATE_H/2,W/2+0.03);group.add(gate);
+    }
+    if(st.win>0){
+      var wmat=new THREE.MeshLambertMaterial({color:0x35506b});
+      var perRow=Math.min(st.win,Math.max(1,Math.floor(L/4)));
+      for(var w=0;w<st.win;w++){
+        var row=Math.floor(w/perRow),col=w%perRow,cnt=Math.min(perRow,st.win-row*perRow);
+        var wx=-L/2+(col+1)*L/(cnt+1);
+        var win=new THREE.Mesh(new THREE.PlaneGeometry(1.5,1.6),wmat);win.position.set(wx,Math.min(H-1.2,3.2+row*2.2),W/2+0.03);group.add(win);
+      }
+    }
+    var env=ENVS[st.ce];
+    scene.background=env.sky?new THREE.Color(env.sky):null;
+    var gr=new THREE.Mesh(new THREE.PlaneGeometry(400,400),new THREE.MeshBasicMaterial({color:env.gr?new THREE.Color(env.gr):groundColor()}));
+    gr.rotation.x=-Math.PI/2;gr.position.y=-0.02;group.add(gr);
+    dist=Math.max(L,W*1.4)*1.55+12;target.set(0,H/2,0);dirty=true;
+  }
+  /* the site has no dark theme: the studio ground is always the light value */
+  function groundColor(){return 0xcfc8b9}
+  function placeCam(){
+    camera.position.set(target.x+dist*Math.cos(pitch)*Math.sin(yaw),target.y+dist*Math.sin(pitch),target.z+dist*Math.cos(pitch)*Math.cos(yaw));
+    camera.lookAt(target);
+  }
+  function initGL(){
+    var host=$('scene');
+    try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true})}catch(e){host.insertAdjacentHTML('beforeend','<div class="hint" style="top:50%">3D недоступно в этом браузере</div>');return}
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));host.insertBefore(renderer.domElement,host.firstChild);
+    scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(35,1,1,1000);group=new THREE.Group();scene.add(group);
+    scene.add(new THREE.HemisphereLight(0xffffff,0x888070,0.75));
+    var sun=new THREE.DirectionalLight(0xffffff,0.85);sun.position.set(40,60,30);scene.add(sun);
+    function size(){var w=host.clientWidth,h=host.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();dirty=true}
+    new ResizeObserver(size).observe(host);size();
+    var drag=null;
+    host.addEventListener('pointerdown',function(e){drag={x:e.clientX,y:e.clientY};host.setPointerCapture(e.pointerId)});
+    host.addEventListener('pointermove',function(e){if(!drag)return;yaw-=(e.clientX-drag.x)*0.008;pitch=Math.max(0.05,Math.min(1.3,pitch+(e.clientY-drag.y)*0.006));drag={x:e.clientX,y:e.clientY};dirty=true});
+    host.addEventListener('pointerup',function(){drag=null});
+    host.addEventListener('wheel',function(e){e.preventDefault();dist=Math.max(15,Math.min(300,dist*(1+e.deltaY*0.001)));dirty=true},{passive:false});
+    var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+    (function loop(){if(!reduce&&!drag){yaw+=0.0025;dirty=true}
+      if(dirty){placeCam();renderer.render(scene,camera);dirty=false}requestAnimationFrame(loop)})();
+  }
+
+    swatches('swW','cw');swatches('swR','cr');swatchesEnv();
+  $('L').value=st.L;$('W').value=st.W;$('H').value=st.H;$('gates').value=st.gates;
+  setPreset(0);
+  Array.prototype.forEach.call(document.querySelectorAll('#langsw button'),function(b){b.onclick=function(){setLang(b.dataset.l,true)}});
+  var langBtn=document.getElementById('langBtn');
+  if(langBtn)langBtn.onclick=function(){setLang(LANG==='en'?'ru':'en',true)};
+  var burger=document.getElementById('burger'),navScrim=document.getElementById('navScrim');
+  function closeNav(){document.body.classList.remove('nav-open');if(burger)burger.setAttribute('aria-expanded','false')}
+  if(burger)burger.onclick=function(){var open=document.body.classList.toggle('nav-open');burger.setAttribute('aria-expanded',open?'true':'false')};
+  if(navScrim)navScrim.onclick=closeNav;
+  Array.prototype.forEach.call(document.querySelectorAll('#nav a'),function(a){a.addEventListener('click',closeNav)});
+  var q=(location.search.match(/[?&]lang=(ru|en)/)||[])[1],sv=null;
+  try{sv=localStorage.getItem('m_lang')}catch(e){}
+  if(sv!=='ru'&&sv!=='en')sv=null;
+  var initial=q||sv||'ru';
+  if(/[?&]embed=1/.test(location.search))document.body.classList.add('embed');
+  setLang(initial,false);
+  if(window.THREE)initGL();else window.__threeReady=function(){initGL();render()};
+  function postH(){try{parent!==window&&parent.postMessage({type:'monolith-calc-height',h:document.body.offsetHeight},'*')}catch(e){}}
+  window.addEventListener('load',postH);new ResizeObserver(postH).observe(document.body);
+  render();
+})();
+</script>
+
+</body>
+</html>

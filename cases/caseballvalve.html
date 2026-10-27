@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ru" data-palette="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>try{document.documentElement.setAttribute('data-palette',localStorage.getItem('m_palette')||'3')}catch(e){}</script>
+<title>Разрез и 3D изделия — кейс MONOLITH</title>
+<meta name="description" content="Демонстрационный кейс: шаровой кран в 3D, который можно покрутить, и кадры разреза. Демонстрация на условной модели.">
+<meta property="og:title" content="Разрез и 3D изделия — кейс MONOLITH">
+<meta property="og:description" content="Шаровой кран в 3D и в разрезе. Демонстрация на условной модели.">
+<meta property="og:image" content="../assets/cases/ball-valve-section.png">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+<link rel="stylesheet" href="case.css">
+</head>
+<body>
+
+<header id="header">
+  <a class="brand" href="../index.html#/main">MONOLITH<span class="brand-ai">.CONTACT</span></a>
+  <nav id="nav">
+    <a href="../index.html#/main" data-ru="01 // ГЛАВНАЯ" data-en="01 // MAIN">01 // ГЛАВНАЯ</a>
+    <a href="../index.html#/lab" data-ru="02 // КАК ЭТО УСТРОЕНО" data-en="02 // HOW IT WORKS">02 // КАК ЭТО УСТРОЕНО</a>
+    <a href="../index.html#/services" data-ru="03 // УСЛУГИ" data-en="03 // SERVICES">03 // УСЛУГИ</a>
+    <a href="../index.html#/capabilities" data-ru="04 // РАБОТЫ" data-en="04 // WORK">04 // РАБОТЫ</a>
+    <a href="../index.html#/brief" data-ru="05 // БРИФ" data-en="05 // BRIEF">05 // БРИФ</a>
+  </nav>
+  <div class="header-controls">
+    <button id="langBtn" class="ctl" type="button" aria-label="Switch language">EN</button>
+    <button id="burger" class="ctl burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
+  </div>
+</header>
+<div id="navScrim" class="nav-scrim" hidden></div>
+
+<main class="wrap">
+  <a class="crumb" href="../index.html#/capabilities" data-ru="← MONOLITH // Услуги и кейсы" data-en="← MONOLITH // Services and cases">← MONOLITH // Услуги и кейсы</a>
+
+  <header class="hero">
+    <p class="label" data-ru="CASE // S_03 · Техническая графика изделия" data-en="CASE // S_03 · Product technical graphics">CASE // S_03 · Техническая графика изделия</p>
+    <h1 class="hero-title" data-ru="Изделие, которое можно покрутить и заглянуть внутрь" data-en="A product you can rotate and look inside">Изделие, которое можно покрутить и заглянуть внутрь</h1>
+    <div class="hero-card">
+      <p class="lead" data-ru="3D-модель и кадры разреза для каталога, сайта и тендерной презентации. Покупатель видит, как устроена арматура, а не только фотографию корпуса." data-en="A 3D model and section views for a catalogue, a website and tender presentations. The buyer sees how the valve is built, not just a photo of the body.">3D-модель и кадры разреза для каталога, сайта и тендерной презентации. Покупатель видит, как устроена арматура, а не только фотографию корпуса.</p>
+      <dl class="meta">
+        <div><dt data-ru="Тип работы" data-en="Type">Тип работы</dt><dd data-ru="Техническая графика" data-en="Technical graphics">Техническая графика</dd></div>
+        <div><dt data-ru="Отрасль" data-en="Industry">Отрасль</dt><dd data-ru="Трубопроводная арматура" data-en="Pipeline valves">Трубопроводная арматура</dd></div>
+        <div><dt data-ru="Пилот" data-en="Pilot">Пилот</dt><dd data-ru="1 изделие, от 1 800 $" data-en="1 product, from $1,800">1 изделие, от 1 800 $</dd></div>
+        <div><dt data-ru="Пакет" data-en="Package">Пакет</dt><dd data-ru="5 изделий, от 4 800 $" data-en="5 products, from $4,800">5 изделий, от 4 800 $</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="stage-wrap">
+    <div class="stage stage-3d" id="stage">
+      <img id="mv-fallback" src="../assets/cases/ball-valve-full.png" alt="3D-модель условного фланцевого шарового крана DN100 PN16">
+      <div class="tabs" role="group" aria-label="View">
+        <button type="button" data-m="full" aria-pressed="true" data-ru="Общий вид" data-en="Exterior">Общий вид</button>
+        <button type="button" data-m="section" aria-pressed="false" data-ru="Разрез" data-en="Section">Разрез</button>
+      </div>
+      <model-viewer id="mv" src="../assets/models/valve-full.glb" poster="../assets/cases/ball-valve-full.png"
+        camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="2500" rotation-per-second="14deg"
+        shadow-intensity="0.8" exposure="1.1" environment-image="neutral" interaction-prompt="none"
+        camera-orbit="35deg 70deg auto" min-camera-orbit="auto auto 0.25m" max-camera-orbit="auto auto 1.2m"
+        alt="3D-модель условного фланцевого шарового крана DN100 PN16" loading="lazy" reveal="auto"></model-viewer>
+      <div class="hint" data-ru="Потяните, чтобы повернуть · колесо — масштаб" data-en="Drag to rotate · wheel to zoom">Потяните, чтобы повернуть · колесо — масштаб</div>
+    </div>
+    <div class="cap">
+      <span data-ru="Демонстрация на условной модели. Это не изделие заказчика." data-en="Demonstration on a conditional model. This is not a client product.">Демонстрация на условной модели. Это не изделие заказчика.</span>
+      <a href="../assets/models/valve-section.glb" download data-ru="Скачать GLB разреза ↓" data-en="Download section GLB ↓">Скачать GLB разреза ↓</a>
+    </div>
+  </div>
+
+  <article>
+    <section class="block" id="frames">
+      <h2><span class="label">01 // <span data-ru="Кадры разреза" data-en="Section views">Кадры разреза</span></span><span class="case-h" data-ru="Четыре кадра, которые объясняют конструкцию" data-en="Four views that explain the design">Четыре кадра, которые объясняют конструкцию</span></h2>
+      <p data-ru="Разрез по оси потока: корпус, шар с проходом, седла, шпиндель. Срез окрашен в цвет кортена, поэтому детали читаются по материалам." data-en="A section along the flow axis: body, ball with bore, seats, stem. The cut face is corten-coloured, so parts read by material.">Разрез по оси потока: корпус, шар с проходом, седла, шпиндель. Срез окрашен в цвет кортена, поэтому детали читаются по материалам.</p>
+      <div class="frames">
+        <figure class="wide"><img src="../assets/cases/ball-valve-section.png" alt="Разрез крана, общий вид 3/4" loading="lazy"><figcaption data-ru="Разрез 3/4: все узлы в одном кадре" data-en="Three-quarter section: all parts in one view">Разрез 3/4: все узлы в одном кадре</figcaption></figure>
+        <figure><img src="../assets/cases/ball-valve-section-side.png" alt="Разрез, вид сбоку" loading="lazy"><figcaption data-ru="Профиль: проход, камера, фланцы" data-en="Profile: bore, chamber, flanges">Профиль: проход, камера, фланцы</figcaption></figure>
+        <figure><img src="../assets/cases/ball-valve-section-ball.png" alt="Разрез, шар и седла" loading="lazy"><figcaption data-ru="Крупно: шар и седла" data-en="Close-up: ball and seats">Крупно: шар и седла</figcaption></figure>
+        <figure><img src="../assets/cases/ball-valve-section-stem.png" alt="Разрез, шпиндель" loading="lazy"><figcaption data-ru="Крупно: шпиндель и горловина" data-en="Close-up: stem and neck">Крупно: шпиндель и горловина</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="block" id="model">
+      <h2><span class="label">02 // <span data-ru="Что это за модель" data-en="About the model">Что это за модель</span></span><span class="case-h" data-ru="Условная модель, а не чертёж изделия" data-en="A conditional model, not a product drawing">Условная модель, а не чертёж изделия</span></h2>
+      <p data-ru="Кран DN100 PN16 построен параметрически по типовым пропорциям: строительная длина 230 мм, фланцы с восемью шпильками, шар с проходом, седла, шпиндель. Это показатель стиля и подачи, а не конструкторская документация и не изделие какого-либо завода." data-en="The DN100 PN16 valve is built parametrically from typical proportions: 230 mm face-to-face length, flanges with eight studs, a ball with a bore, seats and a stem. It shows style and presentation, it is not design documentation and not a product of any plant.">Кран DN100 PN16 построен параметрически по типовым пропорциям: строительная длина 230 мм, фланцы с восемью шпильками, шар с проходом, седла, шпиндель. Это показатель стиля и подачи, а не конструкторская документация и не изделие какого-либо завода.</p>
+      <p class="note" data-ru="В работе для заказчика модель строится по его чертежам или STEP-файлам, а размеры и материалы сверяет его конструктор." data-en="In client work the model is built from their drawings or STEP files, and their engineer verifies dimensions and materials.">В работе для заказчика модель строится по его чертежам или STEP-файлам, а размеры и материалы сверяет его конструктор.</p>
+    </section>
+
+    <section class="block" id="price">
+      <h2><span class="label">03 // <span data-ru="Сроки и цена" data-en="Timeline and price">Сроки и цена</span></span><span class="case-h" data-ru="Начинаем с одного изделия" data-en="We start with one product">Начинаем с одного изделия</span></h2>
+      <div class="table-wrap"><table class="table">
+        <thead><tr><th data-ru="Этап" data-en="Stage">Этап</th><th data-ru="Что входит" data-en="Includes">Что входит</th><th data-ru="Цена" data-en="Price">Цена</th></tr></thead>
+        <tbody>
+          <tr><td data-ru="Проба" data-en="Trial">Проба</td><td data-ru="1 кадр по вашему чертежу" data-en="1 view from your drawing">1 кадр по вашему чертежу</td><td class="n" data-ru="бесплатно" data-en="free">бесплатно</td></tr>
+          <tr><td data-ru="Пилот" data-en="Pilot">Пилот</td><td data-ru="Общий вид, 3 кадра разреза, 3D для сайта" data-en="Exterior, 3 section views, 3D for the web">Общий вид, 3 кадра разреза, 3D для сайта</td><td class="n" data-ru="от 1 800 $" data-en="from $1,800">от 1 800 $</td></tr>
+          <tr><td data-ru="Пакет" data-en="Package">Пакет</td><td data-ru="5 изделий в едином стиле" data-en="5 products in one style">5 изделий в едином стиле</td><td class="n" data-ru="от 4 800 $" data-en="from $4,800">от 4 800 $</td></tr>
+          <tr><td data-ru="Ретейнер" data-en="Retainer">Ретейнер</td><td data-ru="Новые изделия и обновления каталога" data-en="New products and catalogue updates">Новые изделия и обновления каталога</td><td class="n" data-ru="от 5 000 $ / мес" data-en="from $5,000 / mo">от 5 000 $ / мес</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+  </article>
+
+  <section class="cta">
+    <div class="label" data-ru="Следующий шаг" data-en="Next step">Следующий шаг</div>
+    <h2 data-ru="Покажем ваше изделие в разрезе" data-en="We will show your product in section">Покажем ваше изделие в разрезе</h2>
+    <p data-ru="Пришлите чертёж или STEP-файл одного изделия. Первый кадр делаем бесплатно." data-en="Send a drawing or a STEP file of one product. The first view is free.">Пришлите чертёж или STEP-файл одного изделия. Первый кадр делаем бесплатно.</p>
+    <a class="submit-btn" href="../index.html?src=caseballvalve#/brief" data-ru="Отправить бриф →" data-en="Send a brief →">Отправить бриф →</a>
+    <a class="cta-quiet" href="../index.html#/services" data-ru="3D и интерактив — все услуги" data-en="3D and interactive — all services">3D и интерактив — все услуги</a>
+  </section>
+</main>
+
+<footer id="footer">
+  <div class="footer-main">
+    <a class="footer-mail" href="mailto:mail@monolith.contact">MAIL@MONOLITH.CONTACT</a>
+    <span class="footer-note">MONOLITH // CASES</span>
+    <span class="footer-note" data-ru="Демонстрация на условной модели" data-en="Demonstration on a conditional model">Демонстрация на условной модели</span>
+  </div>
+</footer>
+
+<script src="../assets/vendor/model-viewer.min.js" type="module"></script>
+<script>
+(function(){
+  var MODELS={full:'../assets/models/valve-full.glb',section:'../assets/models/valve-section.glb'};
+  var POSTERS={full:'../assets/cases/ball-valve-full.png',section:'../assets/cases/ball-valve-section.png'};
+  var $=function(s){return document.querySelector(s)};
+  var mv=$('#mv');
+  var fb=document.getElementById('mv-fallback');
+  document.querySelectorAll('[data-en]').forEach(function(el){el.dataset.ru=el.textContent});
+  function setLang(l,save){
+    document.documentElement.lang=l;
+    document.querySelectorAll('[data-en]').forEach(function(el){el.textContent=l==='en'?el.dataset.en:el.dataset.ru});
+    var btn=document.getElementById('langBtn');
+    if(btn)btn.textContent=l==='en'?'RU':'EN';
+    document.title=l==='en'?'Product section and 3D — MONOLITH case':'Разрез и 3D изделия — кейс MONOLITH';
+    if(save){try{localStorage.setItem('m_lang',l)}catch(e){}}
+  }
+  document.getElementById('langBtn').onclick=function(){
+    var cur=document.documentElement.lang==='en'?'en':'ru';
+    setLang(cur==='en'?'ru':'en',true);
+  };
+  var burger=document.getElementById('burger'),scrim=document.getElementById('navScrim');
+  function closeNav(){document.body.classList.remove('nav-open');if(burger)burger.setAttribute('aria-expanded','false')}
+  if(burger)burger.onclick=function(){
+    var open=document.body.classList.toggle('nav-open');
+    burger.setAttribute('aria-expanded',open?'true':'false');
+  };
+  if(scrim)scrim.onclick=closeNav;
+  document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',closeNav)});
+  document.querySelectorAll('.tabs button').forEach(function(b){b.onclick=function(){
+    var m=b.dataset.m;
+    mv.classList.remove('is-broken');
+    mv.setAttribute('poster',POSTERS[m]);
+    if(fb)fb.src=POSTERS[m];
+    mv.src=MODELS[m];
+    document.querySelectorAll('.tabs button').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});
+  }});
+  mv.addEventListener('error',function(){mv.classList.add('is-broken')});
+  var q=(location.search.match(/[?&]lang=(ru|en)/)||[])[1],sv=null;
+  try{sv=localStorage.getItem('m_lang')}catch(e){}
+  if(sv!=='ru'&&sv!=='en')sv=null;
+  setLang(q||sv||'ru',false);
+})();
+</script>
+</body>
+</html>
