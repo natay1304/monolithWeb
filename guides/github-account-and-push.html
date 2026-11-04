@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub: аккаунт и заливка проекта — MONOLITH Гайды</title>
+  <meta name="description" content="Как завести аккаунт на GitHub, создать репозиторий и отправить туда папку с проектом: через нейронку, через программу с кнопками или командами в терминале.">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link rel="stylesheet" href="guides.css">
+</head>
+<body>
+
+  <nav class="g-nav">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="g-burger" type="button" aria-label="Меню гайдов" aria-expanded="false" data-sidebar-toggle>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4h14M1 8h14M1 12h14"/></svg>
+      </button>
+      <a class="g-brand" href="index.html"><b>MONOLITH</b><span>// ГАЙДЫ // THIRD BRAIN</span></a>
+    </div>
+  </nav>
+
+  <div class="g-sidebar-scrim" data-sidebar-scrim></div>
+
+  <div class="g-shell">
+    <aside class="g-sidebar" data-sidebar>
+      <p class="g-side-label">Гайды MONOLITH</p>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Подготовка</p>
+        <ul>
+          <li><span class="g-side-soon">Регистрация в Cloudflare <span class="g-tiny">скоро</span></span></li>
+          <li><a href="github-account-and-push.html" class="is-active">GitHub: аккаунт и заливка</a></li>
+          <li><a href="git-save-and-rollback.html">Git: сохранения и откаты</a></li>
+          <li><a href="domain-cloudflare-regru.html">Покупка домена</a></li>
+        </ul>
+      </div>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Сайт</p>
+        <ul>
+          <li><a href="deploy-cloudflare-github.html">Деплой через GitHub</a></li>
+          <li><span class="g-side-soon">Почта через Resend <span class="g-tiny">скоро</span></span></li>
+        </ul>
+      </div>
+      <div class="g-side-group">
+        <p class="g-side-group-title">Инструменты</p>
+        <ul>
+          <li><a href="claude-code-tricks.html">Фишки Claude Code</a></li>
+          <li><a href="skill-third-brain-web.html">Скилл для Claude Code</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="g-main">
+
+  <header class="g-article-head">
+    <a class="g-back mono" href="index.html">← Все гайды</a>
+    <p class="g-eyebrow mono">Польза // GitHub</p>
+    <h1>GitHub: аккаунт и заливка проекта</h1>
+    <div class="g-article-meta">
+      <span>Анастасия Малютина</span>
+      <span>·</span>
+      <span>MONOLITH</span>
+      <span>·</span>
+      <span>~10 мин чтения</span>
+    </div>
+    <p class="g-lead">Как завести аккаунт на GitHub, создать репозиторий и отправить туда папку с проектом: через нейронку, через программу с кнопками или командами. После этого код лежит в облаке и готов к публикации сайта.</p>
+  </header>
+
+  <nav class="g-toc" aria-label="Содержание">
+    <p class="g-toc-label mono">Содержание</p>
+    <ol>
+      <li><a href="#chto-takoe">Что такое GitHub и как выбрать путь</a></li>
+      <li><a href="#akkaunt">Шаг 1. Аккаунт на GitHub</a></li>
+      <li><a href="#repo">Шаг 2. Пустой репозиторий</a></li>
+      <li><a href="#neuronka">Через нейронку (самый короткий путь)</a></li>
+      <li><a href="#knopki">Через программу с кнопками</a></li>
+      <li><a href="#terminal">Руками в терминале</a></li>
+      <li><a href="#brauzer">Через браузер</a></li>
+      <li><a href="#oshibki">Если что-то пошло не так</a></li>
+      <li><a href="#public-private">Public или Private</a></li>
+      <li><a href="#chek-list">Чек-лист</a></li>
+      <li><a href="#faq">Частые вопросы</a></li>
+    </ol>
+  </nav>
+
+  <article class="g-article">
+
+    <section id="chto-takoe">
+      <h2><span class="g-h-n">01</span> Что такое GitHub и как выбрать путь</h2>
+      <p>GitHub — сайт, где хранятся проекты с полной историей изменений. Это облачная копия вашей папки: сломался компьютер, а проект жив. Кроме того, отсюда сервисы публикации сайтов (например, Cloudflare) забирают код и выкладывают сайт сами при каждом обновлении.</p>
+      <p><strong>Git и GitHub — не одно и то же.</strong> Git — программа на вашем компьютере, она запоминает версии файлов. GitHub — сайт, куда эти версии отправляют. Подробнее в <a href="git-save-and-rollback.html#git-i-github">гайде про Git</a>.</p>
+      <p><strong>«Залить проект»</strong> значит отправить папку с проектом в репозиторий (хранилище проекта) на GitHub. Команда для этого называется <code>git push</code>, по-русски «запушить».</p>
+
+      <h3>Выберите свой путь</h3>
+      <div class="g-table-wrap">
+      <table class="g-table">
+        <thead><tr><th>Как вы работаете</th><th>Что читать</th></tr></thead>
+        <tbody>
+          <tr><td>Нейронка работает в папке проекта и сама запускает команды (Claude Code, Codex, Cursor)</td><td>Шаги 1–2 руками, потом готовый промт из раздела «Через нейронку»</td></tr>
+          <tr><td>Хочется кнопок вместо команд</td><td>Шаг 1, затем «Через программу с кнопками» (шаг 2 можно пропустить)</td></tr>
+          <tr><td>Нет ни нейронки в папке, ни клиента</td><td>«Руками в терминале»</td></tr>
+          <tr><td>Один раз выложить несколько файлов, без истории</td><td>«Через браузер» (но у способа есть минусы)</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>Что понадобится: компьютер, папка с проектом, почта, на которую можно принять письмо.</p>
+    </section>
+
+    <section id="akkaunt">
+      <h2><span class="g-h-n">02</span> Шаг 1. Аккаунт на GitHub</h2>
+      <p>Это делается руками: вы вводите свою почту и пароль, нейронка этого за вас не сделает.</p>
+      <ol class="g-steps">
+        <li>Откройте <a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a>.</li>
+        <li>Введите почту, придумайте пароль и <strong>username</strong>. Username станет частью адреса всех ваших проектов (<code>github.com/ваш-username/проект</code>), его видят все. Выберите то, что не стыдно показать: имя, ник, название студии. Позже его можно сменить, но ссылки на старый адрес перестанут работать.</li>
+        <li>Пройдите проверку «не робот» и подтвердите почту кодом из письма. Порядок экранов может отличаться.</li>
+        <li>Включите двухфакторную защиту (Settings → Password and authentication → Two-factor authentication). В аккаунте будет лежать код ваших проектов, лучше защитить его вторым шагом входа.</li>
+      </ol>
+      <div class="g-callout">
+        <span class="g-callout-label mono">Почта для коммитов</span>
+        <p>Каждое сохранение в Git подписывается вашей почтой, а в публичном репозитории подпись видна всем. Если не хотите светить настоящую, в настройках GitHub (Settings → Emails) есть пункт «Keep my email addresses private» и специальный адрес вида <code>…@users.noreply.github.com</code>. Его можно указать вместо настоящей почты, когда будете настраивать Git (см. <a href="#terminal">«Руками в терминале»</a>).</p>
+      </div>
+    </section>
+
+    <section id="repo">
+      <h2><span class="g-h-n">03</span> Шаг 2. Пустой репозиторий</h2>
+      <p>Репозиторий (коротко «репо») — папка проекта на GitHub.</p>
+      <ol class="g-steps">
+        <li>Нажмите «+» в правом верхнем углу → <strong>New repository</strong> (или кнопку <strong>New</strong> на главной).</li>
+        <li><strong>Repository name</strong> — название проекта латиницей, без пробелов: <code>my-site</code>.</li>
+        <li>
+          <strong>Public или Private:</strong>
+          <ul style="margin-top:8px;">
+            <li><strong>Public</strong> — код видят все, кто знает ссылку. Подходит для сайта-портфолио.</li>
+            <li><strong>Private</strong> — виден только вам и тем, кого добавите. Выбирайте, если в проекте есть что-то личное.</li>
+          </ul>
+        </li>
+        <li><strong>Ничего больше не отмечайте.</strong> Галочки «Add a README file», «Add .gitignore», «Add a license» оставьте выключенными. Если репозиторий создан с файлами, а на компьютере тоже есть свои, при первой отправке Git откажет (ошибка <code>rejected</code>, см. <a href="#oshibki">ниже</a>), потому что у них разные истории.</li>
+        <li>Нажмите <strong>Create repository</strong>.</li>
+      </ol>
+      <p>Откроется страница с подсказкой «Quick setup». На ней нужна ссылка вида <code>https://github.com/ваш-username/my-site.git</code>. Скопируйте её.</p>
+      <div class="g-callout">
+        <span class="g-callout-label mono">Public и секреты</span>
+        <p>В публичный репозиторий не должны попасть пароли и ключи (файл <code>.env</code>). Если ключ однажды попал на GitHub, считайте его украденным и замените. Подробнее: <a href="git-save-and-rollback.html#bezopasnost">раздел про безопасность в гайде про Git</a>.</p>
+      </div>
+    </section>
+
+    <section id="neuronka">
+      <h2><span class="g-h-n">04</span> Через нейронку (самый короткий путь)</h2>
+      <p>Подходит, если у вас Claude Code, Codex, Cursor или другой клиент, который работает в папке проекта и запускает команды. Шаги 1 и 2 (аккаунт и пустой репозиторий) всё равно делаются руками. Установку Git и вход в GitHub тоже лучше сделать заранее: нейронка может предложить установить <code>gh</code>, но пароль от аккаунта вводите только вы, в браузере.</p>
+      <p>Откройте нейронку в папке проекта и отправьте:</p>
+      <div class="g-prompt">
+        <span class="g-prompt-label mono">Промпт для нейронки — залить проект на GitHub</span>
+        <pre>Я хочу залить этот проект в новый пустой репозиторий на GitHub:
+[вставьте ссылку вида https://github.com/ваш-username/my-site.git]
+
+Сделай по порядку и показывай результат каждой команды:
+1. Проверь, установлен ли git и настроены ли user.name и user.email. Если нет, спроси у меня имя и почту и настрой.
+2. Если в проекте нет git, выполни git init -b main.
+3. Если нет .gitignore, создай подходящий под тип проекта и обязательно добавь туда .env, node_modules и .DS_Store.
+4. До первого коммита покажи список файлов, которые собираешься сохранить, и остановись, если среди них есть пароли, ключи, файлы .env или огромные файлы.
+5. Сделай первый коммит с подписью «Первый коммит».
+6. Привяжи репозиторий по ссылке как origin и отправь ветку main.
+7. Если GitHub попросит войти, не придумывай обходных путей и не проси у меня пароль в чате: подскажи войти через gh auth login или GitHub Desktop.
+В конце покажи ссылку на репозиторий и git log --oneline.</pre>
+      </div>
+      <p>Что происходит под капотом, смотрите в разделе <a href="#terminal">«Руками в терминале»</a>. Это те же команды.</p>
+    </section>
+
+    <section id="knopki">
+      <h2><span class="g-h-n">05</span> Через программу с кнопками</h2>
+      <p>Клиент делает то же, что команды, но кнопками, и сам разбирается со входом в GitHub. Для новичка это самый спокойный путь.</p>
+      <p><strong>GitHub Desktop</strong> (<a href="https://desktop.github.com" target="_blank" rel="noopener">desktop.github.com</a>, бесплатно, Mac и Windows):</p>
+      <ol class="g-steps">
+        <li>Скачайте, установите и войдите в аккаунт GitHub (откроется браузер).</li>
+        <li>File → <strong>Add Local Repository</strong> → выберите папку проекта. Если папка ещё не под Git, программа предложит создать репозиторий (<strong>create a repository</strong>).</li>
+        <li>Слева появится список изменённых файлов. Внизу напишите подпись («Первый коммит») и нажмите <strong>Commit to main</strong>.</li>
+        <li>Нажмите <strong>Publish repository</strong>, выберите Public или Private. Программа сама создаст репозиторий на GitHub и отправит проект.</li>
+      </ol>
+      <p>Если пользуетесь этим способом, шаг 2 (пустой репозиторий на сайте) можно пропустить: «Publish repository» создаёт его сам. Fork и другие клиенты работают по тому же принципу, их выбор разобран в <a href="git-save-and-rollback.html#klienty">гайде про Git</a>. В Fork репозиторий на GitHub создаётся на сайте (шаг 2), а потом в программе добавляется ссылка на него и нажимается Push.</p>
+    </section>
+
+    <section id="terminal">
+      <h2><span class="g-h-n">06</span> Руками в терминале</h2>
+      <p>Нужно, только если нет ни нейронки с доступом к папке, ни клиента. Выполняйте в папке проекта. Как открыть терминал, объяснено в <a href="git-save-and-rollback.html#terminal">гайде про Git</a>.</p>
+      <pre><code>git config --global user.name "Ваше Имя"
+git config --global user.email "you@example.com"
+git init -b main
+git add .
+git status
+git commit -m "Первый коммит"
+git remote add origin https://github.com/ваш-username/my-site.git
+git push -u origin main</code></pre>
+      <p>Что здесь важно знать:</p>
+      <ul>
+        <li><strong>Имя и почта (первые две строки) нужны один раз на компьютере.</strong> Без них коммит не получится (<code>Author identity unknown</code>). Почту можно взять из аккаунта GitHub или специальную <code>noreply</code> (см. шаг 1).</li>
+        <li><strong><code>.gitignore</code> создайте до <code>git add .</code></strong>: файл со списком того, что нельзя сохранять. Впишите туда <code>.env</code>, <code>node_modules/</code>, <code>.DS_Store</code>. Нейронка подготовит список под ваш проект.</li>
+        <li><strong><code>git status</code> перед коммитом</strong> показывает, что попадёт в сохранение. Если видите <code>.env</code> или ключи, остановитесь и поправьте <code>.gitignore</code>.</li>
+        <li><strong>Ссылку для <code>remote add</code></strong> берёте со страницы пустого репозитория (шаг 2).</li>
+        <li><strong>Вход в GitHub.</strong> Пароль от аккаунта Git не принимает (<code>Authentication failed</code>, это нормально). Самый простой вход: установите GitHub CLI (<a href="https://cli.github.com" target="_blank" rel="noopener">cli.github.com</a>) и один раз выполните <code>gh auth login</code>, выбрав вход через браузер. Подробнее про <code>gh</code> в <a href="git-save-and-rollback.html#gh">гайде про Git</a>. Вход можно сделать и в GitHub Desktop. Длинные ключи-токены новичку не нужны.</li>
+      </ul>
+      <p>Проверьте результат: откройте страницу репозитория и обновите её. Должны появиться файлы, подпись «Первый коммит» и счётчик коммитов. Дальше обновления отправляются тремя командами: <code>git add .</code>, <code>git commit -m "..."</code>, <code>git push</code>, или просто фразой «закоммить и запушь» нейронке.</p>
+    </section>
+
+    <section id="brauzer">
+      <h2><span class="g-h-n">07</span> Через браузер (если файлов совсем немного)</h2>
+      <p>На странице пустого репозитория есть ссылка <strong>uploading an existing file</strong>, а в любом репозитории кнопка Add file → <strong>Upload files</strong>: файлы перетаскиваются в окно браузера, внизу нажимается Commit changes. Работает без Git и терминала.</p>
+      <p>Минусы:</p>
+      <ul>
+        <li>у такой загрузки есть лимиты на число и размер файлов (порядка сотни файлов за раз и десятков мегабайт на файл), точные цифры смотрите в документации GitHub;</li>
+        <li>каждое обновление придётся заливать так же вручную;</li>
+        <li>нет привычной истории с подписями;</li>
+        <li>сервисы автодеплоя работают с любым репозиторием, но удобнее всего, когда обновления приходят через <code>git push</code>.</li>
+      </ul>
+      <p>Для одноразовой странички подойдёт, для живого проекта лучше один из способов выше.</p>
+    </section>
+
+    <section id="oshibki">
+      <h2><span class="g-h-n">08</span> Если что-то пошло не так</h2>
+      <div class="g-table-wrap">
+      <table class="g-table">
+        <thead><tr><th>Что видите</th><th>Что случилось</th><th>Что делать</th></tr></thead>
+        <tbody>
+          <tr><td><code>Author identity unknown</code> / <code>Please tell me who you are</code></td><td>Git не знает, кто вы</td><td>Выполните две команды <code>git config --global user.name ...</code> и <code>user.email ...</code> из блока «Руками в терминале», затем повторите <code>git commit</code></td></tr>
+          <tr><td><code>error: src refspec main does not match any</code></td><td>Ветки <code>main</code> ещё нет: не было коммита или ветка названа <code>master</code></td><td>Сначала сделайте коммит (блок «Руками в терминале»), затем <code>git branch -M main</code></td></tr>
+          <tr><td><code>remote origin already exists</code></td><td>Вы уже привязывали репозиторий</td><td>Замените ссылку: <code>git remote set-url origin &lt;новая ссылка&gt;</code></td></tr>
+          <tr><td><code>Authentication failed</code> / <code>Password authentication is not supported</code> / окно просит пароль</td><td>GitHub не принимает пароль от аккаунта</td><td>Войдите через <code>gh auth login</code> или GitHub Desktop</td></tr>
+          <tr><td><code>rejected</code> / <code>fetch first</code> / <code>non-fast-forward</code></td><td>В репозитории на GitHub уже есть файлы (README, лицензия), которых нет у вас</td><td>Проще всего создать новый пустой репозиторий без галочек. Если нужно сохранить оба набора файлов, попросите нейронку: «объедини историю с GitHub и моей папкой, объясни каждый шаг»</td></tr>
+          <tr><td><code>Repository not found</code></td><td>Опечатка в ссылке или репозиторий приватный, а вы не вошли в нужный аккаунт</td><td>Скопируйте ссылку со страницы репозитория заново, проверьте вход</td></tr>
+          <tr><td>В репозитории оказался <code>.env</code> или ключ</td><td>Файл не был в <code>.gitignore</code></td><td>Считайте ключ утёкшим и замените его на сайте сервиса. Дальше поможет <a href="git-save-and-rollback.html#prompt-secret">промт «Секрет попал в репозиторий»</a> из гайда про Git</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </section>
+
+    <section id="public-private">
+      <h2><span class="g-h-n">09</span> Public или Private: что выбрать</h2>
+      <ul>
+        <li><strong>Private</strong> — по умолчанию безопаснее: код видите только вы. Приватные репозитории на личном аккаунте GitHub бесплатны.</li>
+        <li><strong>Public</strong> — разумный выбор для сайта-портфолио, который и так открыт всем. Главное: в публичном репозитории не должно быть ничего личного.</li>
+        <li>Публиковать сайт можно из репозитория любого типа: документация Cloudflare Pages прямо пишет, что поддерживаются и публичные, и приватные репозитории. Так что делать репозиторий публичным ради деплоя не нужно.</li>
+        <li>Видимость можно сменить в любой момент: в Settings репозитория.</li>
+      </ul>
+    </section>
+
+    <section id="chek-list">
+      <h2><span class="g-h-n">10</span> Чек-лист</h2>
+      <ol>
+        <li>Аккаунт создан, почта подтверждена, включена двухфакторная защита.</li>
+        <li>Username такой, который не стыдно показать.</li>
+        <li>Создан пустой репозиторий (без README и лицензии), выбран Public или Private.</li>
+        <li>Git установлен, имя и почта настроены.</li>
+        <li><code>.gitignore</code> создан ДО первого <code>git add</code>, в нём <code>.env</code>.</li>
+        <li>Перед коммитом посмотрела <code>git status</code>: в списке нет паролей и ключей.</li>
+        <li>Вошла в GitHub через <code>gh auth login</code> или GitHub Desktop.</li>
+        <li><code>git push</code> прошёл, файлы видны на странице репозитория.</li>
+      </ol>
+    </section>
+
+    <section id="faq">
+      <h2><span class="g-h-n">11</span> Частые вопросы</h2>
+      <dl class="g-faq">
+        <dt>Это бесплатно?</dt>
+        <dd>Аккаунт и хранение личных проектов, в том числе приватных, бесплатны.</dd>
+        <dt>Нужно ли уметь программировать?</dt>
+        <dd>Нет. Команды одинаковые для любого проекта, их достаточно запомнить как порядок: добавить, сохранить, отправить.</dd>
+        <dt>Нужен ли терминал?</dt>
+        <dd>Нет, если использовать GitHub Desktop или нейронку, которая запускает команды сама.</dd>
+        <dt>Можно ли сменить название репозитория или username потом?</dt>
+        <dd>Можно, но старые ссылки перестанут работать, а локальную привязку придётся обновить командой <code>git remote set-url origin &lt;новая ссылка&gt;</code>.</dd>
+        <dt>Что значит <code>main</code>?</dt>
+        <dd>Название основной ветки проекта. Старые проекты называют её <code>master</code>, смысл тот же.</dd>
+        <dt>Что делать дальше?</dt>
+        <dd>Подключить репозиторий к Cloudflare (<a href="deploy-cloudflare-github.html">гайд про деплой</a>) и привыкнуть сохранять работу коммитами (<a href="git-save-and-rollback.html">гайд про Git</a>).</dd>
+      </dl>
+    </section>
+
+  </article>
+
+  <div class="g-sources">
+    <h3>Источники</h3>
+    <ul>
+      <li><a href="https://github.com/signup" target="_blank" rel="noopener">GitHub: регистрация</a></li>
+      <li><a href="https://desktop.github.com" target="_blank" rel="noopener">GitHub Desktop</a></li>
+      <li><a href="https://cli.github.com" target="_blank" rel="noopener">GitHub CLI</a></li>
+      <li><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git: загрузка</a></li>
+      <li><a href="https://docs.github.com" target="_blank" rel="noopener">Документация GitHub</a></li>
+      <li><a href="https://developers.cloudflare.com/pages/get-started/git-integration/" target="_blank" rel="noopener">Cloudflare Pages: интеграция с Git</a> — про поддержку приватных репозиториев</li>
+      <li><a href="https://docs.github.com/en/enterprise-server@3.0/get-started/getting-started-with-git/why-is-git-always-asking-for-my-password" target="_blank" rel="noopener">GitHub Docs: почему Git просит пароль</a> — про то, что пароль аккаунта для Git не принимается</li>
+    </ul>
+  </div>
+
+  <div class="g-footer-nav">
+    <a href="index.html">← Все гайды</a>
+    <a href="git-save-and-rollback.html">Git: сохранения и откаты →</a>
+  </div>
+
+    </div>
+  </div>
+
+  <script src="guides.js"></script>
+</body>
+</html>
