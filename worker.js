@@ -32,9 +32,37 @@ export default {
       return handleBrief(request, env);
     }
 
+    // Commercial offers (/for/...) sit behind one shared password; any login works.
+    if (url.pathname === '/for' || url.pathname.startsWith('/for/')) {
+      if (!offersAuthorized(request, env)) {
+        return new Response('Password required', {
+          status: 401,
+          headers: { 'WWW-Authenticate': 'Basic realm="MONOLITH offers", charset="UTF-8"', 'Cache-Control': 'no-store' }
+        });
+      }
+      const res = await env.ASSETS.fetch(request);
+      const out = new Response(res.body, res);
+      out.headers.set('Cache-Control', 'private, no-store');
+      out.headers.set('X-Robots-Tag', 'noindex, nofollow');
+      return out;
+    }
+
     return env.ASSETS.fetch(request);
   }
 };
+
+function offersAuthorized(request, env) {
+  const header = request.headers.get('Authorization') || '';
+  if (!header.startsWith('Basic ')) return false;
+  let decoded;
+  try {
+    decoded = new TextDecoder().decode(Uint8Array.from(atob(header.slice(6)), (c) => c.charCodeAt(0)));
+  } catch {
+    return false;
+  }
+  const password = decoded.slice(decoded.indexOf(':') + 1);
+  return password === (env.OFFERS_PASSWORD || '1111');
+}
 
 async function handleBrief(request, env) {
   let data;
