@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>minicut: свой видеоредактор с MCP для Claude — MONOLITH Гайды</title>
+  <meta name="description" content="Как установить и запустить minicut, мини-редактор для вертикальных видео с открытым кодом, смонтировать первый ролик и подключить Claude через MCP, чтобы монтировать вместе с нейронкой.">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link rel="stylesheet" href="guides.css">
+</head>
+<body>
+
+  <nav class="g-nav">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="g-burger" type="button" aria-label="Меню гайдов" aria-expanded="false" data-sidebar-toggle>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4h14M1 8h14M1 12h14"/></svg>
+      </button>
+      <a class="g-brand" href="index.html"><b>MONOLITH</b><span>// ГАЙДЫ // THIRD BRAIN</span></a>
+    </div>
+  </nav>
+
+  <div class="g-sidebar-scrim" data-sidebar-scrim></div>
+
+  <div class="g-shell">
+    <aside class="g-sidebar" data-sidebar>
+      <p class="g-side-label">Гайды MONOLITH</p>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Подготовка</p>
+        <ul>
+          <li><span class="g-side-soon">Регистрация в Cloudflare <span class="g-tiny">скоро</span></span></li>
+          <li><a href="github-account-and-push.html">GitHub: аккаунт и заливка</a></li>
+          <li><a href="git-save-and-rollback.html">Git: сохранения и откаты</a></li>
+          <li><a href="domain-cloudflare-regru.html">Покупка домена</a></li>
+        </ul>
+      </div>
+
+      <div class="g-side-group">
+        <p class="g-side-group-title">Сайт</p>
+        <ul>
+          <li><a href="deploy-cloudflare-github.html">Деплой через GitHub</a></li>
+          <li><span class="g-side-soon">Почта через Resend <span class="g-tiny">скоро</span></span></li>
+        </ul>
+      </div>
+      <div class="g-side-group">
+        <p class="g-side-group-title">Инструменты</p>
+        <ul>
+          <li><a href="claude-code-tricks.html">Фишки Claude Code</a></li>
+          <li><a href="skill-third-brain-web.html">Скилл для Claude Code</a></li>
+          <li><a href="minicut-video-editor-mcp.html" class="is-active">minicut: видеоредактор и MCP</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="g-main">
+
+  <header class="g-article-head">
+    <a class="g-back mono" href="index.html">← Все гайды</a>
+    <p class="g-eyebrow mono">Инструмент // Видео, MCP</p>
+    <h1>minicut: свой видеоредактор, который монтирует вместе с Claude</h1>
+    <div class="g-article-meta">
+      <span>Анастасия Малютина</span>
+      <span>·</span>
+      <span>MONOLITH</span>
+      <span>·</span>
+      <span>~15 мин чтения</span>
+    </div>
+    <p class="g-lead">Как установить мини-редактор для вертикальных видео, запустить его на своём компьютере, смонтировать первый ролик руками и подключить Claude через MCP: нейронка режет и двигает клипы в том же проекте, а вы видите результат сразу.</p>
+  </header>
+
+  <nav class="g-toc" aria-label="Содержание">
+    <p class="g-toc-label mono">Содержание</p>
+    <ol>
+      <li><a href="#chto-eto">Что это и что умеет</a></li>
+      <li><a href="#ponadobitsya">Что понадобится</a></li>
+      <li><a href="#programmy">Шаг 1. Установить программы</a></li>
+      <li><a href="#skachat">Шаг 2. Скачать minicut</a></li>
+      <li><a href="#zapusk">Шаг 3. Запустить</a></li>
+      <li><a href="#pervyj-rolik">Шаг 4. Первый ролик руками</a></li>
+      <li><a href="#mcp">Шаг 5. Подключить Claude через MCP</a></li>
+      <li><a href="#claude-montazh">Шаг 6. Попросить Claude смонтировать</a></li>
+      <li><a href="#bezopasnost">Безопасность</a></li>
+      <li><a href="#oshibki">Если что-то не работает</a></li>
+      <li><a href="#chek-list">Чек-лист</a></li>
+      <li><a href="#faq">Частые вопросы</a></li>
+    </ol>
+  </nav>
+
+  <article class="g-article">
+
+    <section id="chto-eto">
+      <h2><span class="g-h-n">01</span> Что это и что умеет</h2>
+      <p>Я монтирую вертикальные видео (рилсы), и нарезка со вставками съедала больше времени, чем сам ролик. Поэтому собрала небольшой редактор <strong>minicut</strong> и подключила к нему Claude. Часть работы я делаю руками на таймлайне, часть говорю словами («убери паузы, положи графику с третьей секунды»), а результат вижу сразу в том же окне.</p>
+      <p>Код открытый: берите, запускайте у себя и дорабатывайте под свои задачи. Репозиторий: <a href="https://github.com/natay1304/minicut" target="_blank" rel="noopener">github.com/natay1304/minicut</a>.</p>
+
+      <figure class="g-shot">
+        <img src="screenshots/minicut-01-screen.jpg" alt="Интерфейс minicut: превью вертикального видео, слева библиотека, справа свойства клипа, снизу таймлайн с несколькими дорожками" loading="lazy">
+        <figcaption>minicut: библиотека, превью, свойства клипа и таймлайн с несколькими дорожками</figcaption>
+      </figure>
+
+      <h3>Что он умеет</h3>
+      <ul>
+        <li>Основная дорожка с клипами и <strong>до 10 дополнительных дорожек</strong> (оверлеи) для графики, врезок и скринов.</li>
+        <li>У каждого клипа: масштаб, положение, громкость, выключение звука и плавное появление и затухание звука.</li>
+        <li>Нарезка, подрезка краёв, перетаскивание, привязка к краям соседних клипов, выделение нескольких клипов сразу, отмена и повтор.</li>
+        <li>Подписи: добавляются вручную или загружаются из готовых файлов <code>.srt</code> и <code>.ass</code>, настраиваются шрифт, размер, цвет и положение.</li>
+        <li>Удаление пауз по тишине, несколько проектов.</li>
+        <li>Экспорт готового ролика через ffmpeg с индикатором прогресса и кнопкой «Отмена», а также быстрый пробный просмотр в низком качестве.</li>
+        <li>Подключение к Claude через MCP: всё, что делает интерфейс, может делать и нейронка.</li>
+        <li>Всё работает только на вашем компьютере: ни аккаунтов, ни облака, видео никуда не уходят.</li>
+      </ul>
+
+      <h3>Чего он не умеет (честно)</h3>
+      <ul>
+        <li>Нет встроенной расшифровки речи, поэтому «вырезать фразу по тексту» не получится. Субтитры можно загрузить готовыми из <code>.srt</code> или <code>.ass</code>.</li>
+        <li>Это не замена DaVinci Resolve или CapCut: нет цветокоррекции, эффектов и переходов. Это быстрый инструмент для нарезки и вставок.</li>
+        <li>Интерфейс рассчитан на компьютер и мышь.</li>
+        <li>Проверен только на macOS. На Linux и Windows он должен работать (нужны Node и ffmpeg), но я там его не проверяла.</li>
+      </ul>
+    </section>
+
+    <section id="ponadobitsya">
+      <h2><span class="g-h-n">02</span> Что понадобится</h2>
+      <div class="g-table-wrap">
+      <table class="g-table">
+        <thead><tr><th>Что</th><th>Зачем</th><th>Как проверить</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Node.js</strong> версии 20 или новее</td><td>Запускает программу</td><td>В терминале <code>node -v</code></td></tr>
+          <tr><td><strong>ffmpeg</strong></td><td>Режет и собирает видео</td><td><code>ffmpeg -version</code></td></tr>
+          <tr><td><strong>Git</strong></td><td>Скачать код (можно и без него, см. шаг 2)</td><td><code>git --version</code></td></tr>
+          <tr><td>Браузер</td><td>Редактор открывается в нём</td><td>Любой современный</td></tr>
+          <tr><td>Claude (по желанию)</td><td>Чтобы монтировать вместе с нейронкой</td><td>Claude Code, Claude Desktop или Cowork</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>Терминал на Mac открывается через Spotlight: ⌘ + пробел, слово «Терминал». Если не уверены, как с ним работать, начало <a href="git-save-and-rollback.html#terminal">гайда про Git</a> объясняет это по шагам.</p>
+    </section>
+
+    <section id="programmy">
+      <h2><span class="g-h-n">03</span> Шаг 1. Установить программы (macOS)</h2>
+      <p>Проще всего ставить программы на Mac через менеджер <strong>Homebrew</strong>. Если его ещё нет, возьмите команду установки на сайте <a href="https://brew.sh" target="_blank" rel="noopener">brew.sh</a> (там она всегда актуальная) и следуйте подсказкам. Потом одной командой ставим всё нужное:</p>
+      <pre><code>brew install node ffmpeg git</code></pre>
+      <p>Проверьте, что всё встало:</p>
+      <pre><code>node -v      # должно показать v20 или выше
+ffmpeg -version
+git --version</code></pre>
+      <p>Если <code>node -v</code> показывает версию ниже 20, обновите: <code>brew upgrade node</code>.</p>
+    </section>
+
+    <section id="skachat">
+      <h2><span class="g-h-n">04</span> Шаг 2. Скачать minicut</h2>
+      <pre><code>cd ~/Documents
+git clone https://github.com/natay1304/minicut.git
+cd minicut
+npm install</code></pre>
+      <p>Первая строка переходит в папку «Документы», вторая скачивает код проекта, третья заходит в его папку, четвёртая устанавливает нужные библиотеки. Установка занимает около минуты.</p>
+      <p><strong>Без Git:</strong> на странице <a href="https://github.com/natay1304/minicut" target="_blank" rel="noopener">репозитория</a> нажмите зелёную кнопку Code → Download ZIP, распакуйте архив, откройте в терминале папку проекта и выполните <code>npm install</code>.</p>
+      <p><strong>Нужна именно выпущенная версия:</strong> скачайте её со <a href="https://github.com/natay1304/minicut/releases/tag/v0.1.0" target="_blank" rel="noopener">страницы релиза v0.1.0</a> (раздел Assets → Source code) или склонируйте по метке:</p>
+      <pre><code>git clone --branch v0.1.0 https://github.com/natay1304/minicut.git</code></pre>
+      <p>Обычный <code>git clone</code> без метки скачивает самую свежую версию с исправлениями.</p>
+    </section>
+
+    <section id="zapusk">
+      <h2><span class="g-h-n">05</span> Шаг 3. Запустить</h2>
+      <pre><code>npm start</code></pre>
+      <p>В терминале появится строка <code>minicut listening on http://127.0.0.1:4317</code>. Откройте этот адрес в браузере: это и есть редактор.</p>
+      <ul>
+        <li>Окно терминала закрывать нельзя: пока оно открыто, редактор работает. Остановить его можно клавишами <code>Ctrl + C</code>.</li>
+        <li>На Mac можно запускать двойным кликом по файлу <code>scripts/start.command</code>.</li>
+        <li>Если порт 4317 занят, запустите на другом: <code>PORT=4318 npm start</code>, и адрес будет <code>http://127.0.0.1:4318</code>.</li>
+      </ul>
+    </section>
+
+    <section id="pervyj-rolik">
+      <h2><span class="g-h-n">06</span> Шаг 4. Первый ролик руками</h2>
+      <p><strong>Устройство экрана.</strong> Слева библиотека (файлы и папки), в центре превью, справа свойства выбранного клипа и подписи, снизу таймлайн: линейка времени, дорожки (V1 основная, O1…O10 оверлеи) и красная линия плейхеда.</p>
+      <ol class="g-steps">
+        <li><strong>Добавьте видео.</strong> В библиотеке в поле «Импорт по пути» вставьте путь к файлу и нажмите «Импорт». Путь удобно получить так: в Finder выделить файл и нажать ⌥⌘C (скопировать как путь). Или в поле «Папка с видео» укажите папку и нажмите «Открыть»: появится список файлов.</li>
+        <li><strong>Положите на таймлайн.</strong> Выберите в списке «На дорожку» нужную дорожку (по умолчанию V1 · Main) и нажмите на файл в списке «Медиа». Клип появится на дорожке.</li>
+        <li><strong>Нарежьте.</strong> Кликните по линейке, чтобы поставить плейхед туда, где нужен разрез. Выберите клип и нажмите <strong>S</strong>. Лишний кусок выделите и нажмите <strong>Delete</strong>: на основной дорожке остальные клипы сдвинутся и дырки не останется.</li>
+        <li><strong>Подрежьте края.</strong> Потяните за левый или правый край клипа.</li>
+        <li><strong>Добавьте врезку.</strong> Нажмите «+ Дорожка», выберите новую дорожку в списке «На дорожку», добавьте клип. Перетащите его по времени, как нужно. Справа подберите масштаб и положение.</li>
+        <li><strong>Уберите паузы.</strong> Нажмите «Убрать паузы». Рядом две настройки: «Порог, дБ» (по умолчанию −30: чем ближе к нулю, тем больше считается тишиной) и «Мин., с» (по умолчанию 0,4: минимальная длина паузы).</li>
+        <li><strong>Добавьте подписи.</strong> В блоке «Текст» нажмите «Добавить подпись» или загрузите готовый <code>.srt</code> или <code>.ass</code>. Шрифт, размер и положение настраиваются ниже, в блоке «Стиль».</li>
+        <li><strong>Быстро проверьте.</strong> Кнопка «Быстрый предпросмотр» собирает ролик в низком качестве за несколько секунд.</li>
+        <li><strong>Экспортируйте.</strong> Нажмите «Экспорт», укажите, куда сохранить (например, <code>/Users/ваше_имя/Movies/ролик.mp4</code>), разрешение (по умолчанию как у холста, 1080×1920), частоту кадров и качество. Прогресс виден в окне, остановить экспорт можно кнопкой «Отмена».</li>
+      </ol>
+
+      <h3>Горячие клавиши</h3>
+      <div class="g-table-wrap">
+      <table class="g-table">
+        <thead><tr><th>Клавиши</th><th>Что делают</th></tr></thead>
+        <tbody>
+          <tr><td><code>Пробел</code></td><td>Пуск и пауза</td></tr>
+          <tr><td><code>←</code> <code>→</code></td><td>Шаг на один кадр</td></tr>
+          <tr><td><code>S</code></td><td>Разрезать клип на месте плейхеда</td></tr>
+          <tr><td><code>Delete</code></td><td>Удалить выбранное</td></tr>
+          <tr><td><code>J</code> <code>K</code> <code>L</code></td><td>Перемотка назад, стоп, вперёд, как в профессиональных монтажках</td></tr>
+          <tr><td><code>⌘Z</code> и <code>⌘⇧Z</code></td><td>Отмена и повтор</td></tr>
+          <tr><td><code>Shift</code> или <code>⌘</code> и клик, рамка мышью</td><td>Выделить несколько клипов</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <h3>Проекты</h3>
+      <p>Нажмите на название проекта слева вверху: там список проектов, поле «Имя», кнопки «Новый» и «Сохранить как». Проект сохраняется сам после каждого изменения. Файлы лежат в папке <code>data/projects</code> внутри minicut.</p>
+    </section>
+
+    <section id="mcp">
+      <h2><span class="g-h-n">07</span> Шаг 5. Подключить Claude через MCP</h2>
+      <p><strong>Зачем.</strong> Подключив minicut как MCP-сервер, вы даёте Claude «ручки» для монтажа: он может импортировать файлы, резать, двигать, добавлять подписи и собирать ролик. Вы смотрите результат в браузере вживую и можете в любой момент вмешаться руками. Что такое MCP вообще, мы разбирали отдельно; здесь только то, что нужно для minicut.</p>
+      <p>В проекте есть готовый скрипт, который сам подставляет нужные пути.</p>
+
+      <h3>Claude Code (терминал)</h3>
+      <p>В папке minicut выполните:</p>
+      <pre><code>npm run mcp:install -- --code</code></pre>
+      <p>Откройте <strong>новую</strong> сессию Claude Code: инструменты minicut появятся в списке.</p>
+
+      <h3>Claude Desktop и Cowork</h3>
+      <p>В папке minicut выполните:</p>
+      <pre><code>npm run mcp:install -- --desktop</code></pre>
+      <p>Скрипт допишет настройку в конфиг Claude Desktop (рядом останется копия старого файла с суффиксом <code>.bak-before-minicut</code>) и подскажет, что делать дальше: <strong>полностью закройте приложение (⌘Q) и откройте снова</strong>. Просто закрыть окно недостаточно.</p>
+
+      <h3>Другая программа с поддержкой MCP</h3>
+      <p>Выполните <code>npm run mcp:install</code> без параметров. Скрипт покажет готовый блок настроек с вашими путями, который можно вставить в конфиг. Запускаемая команда: <code>node /путь/к/minicut/src/mcp.js</code>, тип подключения stdio.</p>
+
+      <div class="g-callout">
+        <span class="g-callout-label mono">Зачем полный путь к node</span>
+        <p>Программы вроде Claude Desktop не видят то, что установлено через <code>nvm</code>, поэтому скрипт записывает полный путь к <code>node</code>. Если потом смените версию Node, просто запустите <code>npm run mcp:install</code> снова.</p>
+      </div>
+
+      <h3>Проверка подключения</h3>
+      <p>Проще всего вопросом в чате: «покажи проект minicut». Если Claude отвечает списком клипов и дорожек, всё работает.</p>
+      <p><strong>Нужно ли отдельно запускать <code>npm start</code>?</strong> Нет. MCP сам поднимает редактор, если он не запущен (но остановится вместе с программой Claude). Если хотите, чтобы редактор жил отдельно, запустите <code>npm start</code> заранее: MCP подключится к уже работающему.</p>
+    </section>
+
+    <section id="claude-montazh">
+      <h2><span class="g-h-n">08</span> Шаг 6. Попросить Claude смонтировать</h2>
+      <p>Откройте в браузере <code>http://127.0.0.1:4317</code> и в чате Claude напишите задачу обычным языком. Примеры:</p>
+
+      <div class="g-prompt">
+        <span class="g-prompt-label mono">Промпт для Claude — посмотреть проект</span>
+        <pre>Покажи, что сейчас в проекте minicut.</pre>
+      </div>
+      <div class="g-prompt">
+        <span class="g-prompt-label mono">Промпт для Claude — импорт и паузы</span>
+        <pre>Импортируй /Users/ваше_имя/Movies/talk.mp4, убери паузы и положи на основную дорожку.</pre>
+      </div>
+      <div class="g-prompt">
+        <span class="g-prompt-label mono">Промпт для Claude — врезка поверх видео</span>
+        <pre>Добавь поверх с 3-й секунды файл /Users/ваше_имя/Movies/graphic.webm на вторую дорожку, масштаб 0.5, в правый верхний угол.</pre>
+      </div>
+      <div class="g-prompt">
+        <span class="g-prompt-label mono">Промпт для Claude — субтитры</span>
+        <pre>Загрузи субтитры из /Users/ваше_имя/Movies/talk.srt и подними их выше.</pre>
+      </div>
+      <div class="g-prompt">
+        <span class="g-prompt-label mono">Промпт для Claude — быстрая проверка</span>
+        <pre>Собери быстрый предпросмотр.</pre>
+      </div>
+
+      <p>Что важно знать:</p>
+      <ul>
+        <li>Пишите <strong>полные пути</strong> к файлам, как их показывает Finder (⌥⌘C).</li>
+        <li>Изменения Claude появляются в браузере сразу. Можно работать вместе: Claude режет, вы двигаете.</li>
+        <li>Финальный экспорт Claude делает только когда вы скажете «собирай».</li>
+        <li><strong>Любое</strong> действие можно отменить: ⌘Z в браузере или просьба «отмени последнее».</li>
+        <li>Лучше давать задачи небольшими шагами и смотреть результат, чем просить «смонтируй всё».</li>
+      </ul>
+
+      <h3>Что умеет Claude (инструменты)</h3>
+      <div class="g-table-wrap">
+      <table class="g-table">
+        <thead><tr><th>Группа</th><th>Инструменты</th></tr></thead>
+        <tbody>
+          <tr><td>Проект</td><td><code>get_project</code>, <code>list_projects</code>, <code>new_project</code>, <code>load_project</code>, <code>save_project_as</code>, <code>set_canvas</code></td></tr>
+          <tr><td>Файлы</td><td><code>import_media</code></td></tr>
+          <tr><td>Клипы</td><td><code>add_clip</code>, <code>split</code>, <code>trim</code>, <code>remove_clip</code>, <code>remove_clips</code>, <code>move_clip</code>, <code>move_clip_to_track</code>, <code>set_clip</code>, <code>set_clips</code></td></tr>
+          <tr><td>Дорожки</td><td><code>add_overlay_track</code>, <code>remove_overlay_track</code></td></tr>
+          <tr><td>Паузы</td><td><code>detect_silence</code>, <code>remove_silence</code></td></tr>
+          <tr><td>Подписи</td><td><code>add_text</code>, <code>set_text</code>, <code>remove_text</code>, <code>set_style</code>, <code>import_subtitles</code>, <code>import_transcript</code></td></tr>
+          <tr><td>История</td><td><code>undo</code>, <code>redo</code></td></tr>
+          <tr><td>Выдача</td><td><code>preview</code>, <code>render</code>, <code>cancel_render</code></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </section>
+
+    <section id="bezopasnost">
+      <h2><span class="g-h-n">09</span> Безопасность</h2>
+      <ul>
+        <li>Редактор слушает только ваш компьютер (<code>127.0.0.1</code>) и отвергает запросы со сторонних сайтов. Не пробрасывайте его порт в интернет (через туннели и прокси): у него нет пароля.</li>
+        <li>Импортировать и сохранять можно только внутри домашней папки и временной. Скрытые папки (<code>.ssh</code>, <code>.config</code>) закрыты. Если нужна другая папка, добавьте её в переменную <code>MINICUT_ROOTS</code>.</li>
+        <li>Нейронка видит только то, что вы ей даёте: пути к видео и параметры монтажа. Если вы разрешите ей произвольные команды в терминале, это уже настройки самой программы.</li>
+      </ul>
+    </section>
+
+    <section id="oshibki">
+      <h2><span class="g-h-n">10</span> Если что-то не работает</h2>
+      <div class="g-table-wrap">
+      <table class="g-table">
+        <thead><tr><th>Что случилось</th><th>Что делать</th></tr></thead>
+        <tbody>
+          <tr><td><code>command not found: npm</code> или <code>node</code></td><td>Не установлен Node.js. Шаг 1: <code>brew install node</code>.</td></tr>
+          <tr><td><code>ffmpeg: command not found</code> или экспорт сразу падает</td><td>Не установлен ffmpeg: <code>brew install ffmpeg</code>.</td></tr>
+          <tr><td>Редактор не открывается</td><td>Проверьте, что в терминале есть строка <code>minicut listening</code>, и откройте именно <code>http://127.0.0.1:4317</code>. Если порт занят, запустите с <code>PORT=4318</code>.</td></tr>
+          <tr><td>«Видеофайл вне разрешённых папок»</td><td>Файл лежит вне домашней папки (например, на внешнем диске). Запустите с <code>MINICUT_ROOTS="/Volumes/Диск:$HOME" npm start</code>.</td></tr>
+          <tr><td>Подписи в экспорте не того шрифта</td><td>Встроены три шрифта: Cormorant, Manrope и JetBrains Mono. Если в стиле подписи указан другой, программа попробует найти его в системе, а не найдя, подставит JetBrains Mono.</td></tr>
+          <tr><td>У Claude нет инструментов minicut</td><td>Приложение не перезапущено полностью (⌘Q), или в конфиге нет полного пути к <code>node</code>. Запустите <code>npm run mcp:install -- --desktop</code> ещё раз и перезапустите приложение.</td></tr>
+          <tr><td>Claude пишет «server is not reachable»</td><td>Порт 4317 занят чужой программой или сервер упал. Проверьте командой <code>lsof -i :4317</code>.</td></tr>
+          <tr><td>Изменения Claude не видны в браузере</td><td>Обновите страницу и проверьте, что открыт тот же порт.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </section>
+
+    <section id="chek-list">
+      <h2><span class="g-h-n">11</span> Чек-лист</h2>
+      <ol>
+        <li><code>node -v</code> показывает 20 или выше, <code>ffmpeg -version</code> работает.</li>
+        <li>Код скачан, <code>npm install</code> прошёл без ошибок.</li>
+        <li><code>npm start</code> запущен, в браузере открывается <code>http://127.0.0.1:4317</code>.</li>
+        <li>Добавлен первый клип, ролик экспортирован.</li>
+        <li>Для Claude: выполнено <code>npm run mcp:install -- --code</code> или <code>--desktop</code>, приложение перезапущено.</li>
+        <li>Claude отвечает на «покажи проект minicut» списком клипов.</li>
+      </ol>
+    </section>
+
+    <section id="faq">
+      <h2><span class="g-h-n">12</span> Частые вопросы</h2>
+      <dl class="g-faq">
+        <dt>Нужно ли быть программистом?</dt>
+        <dd>Нет. Всё из этого гайда делается копированием команд в терминал. Но один раз с терминалом поработать придётся.</dd>
+        <dt>Это платно?</dt>
+        <dd>Нет. Программа бесплатная и с открытым кодом (лицензия MIT). Платить может понадобиться только за подписку на Claude, если вы хотите работать через него.</dd>
+        <dt>Можно ли без Claude?</dt>
+        <dd>Да, это обычный редактор. MCP нужен, только если хотите монтировать вместе с нейронкой.</dd>
+        <dt>Можно ли пользоваться другой нейронкой?</dt>
+        <dd>Да, любой программой с поддержкой MCP. Подключается так же, см. шаг 5, последний вариант.</dd>
+        <dt>Хочу доработать под себя</dt>
+        <dd>Репозиторий открыт: <a href="https://github.com/natay1304/minicut" target="_blank" rel="noopener">github.com/natay1304/minicut</a>. Структура описана в <code>docs/ARCHITECTURE.md</code>, список операций в <code>docs/API.md</code>. Для разработки есть тесты (<code>npm test</code>) и линтер. Идеи и ошибки можно писать в Issues на GitHub. Если не пользовались GitHub, начните с <a href="github-account-and-push.html">гайда про GitHub</a>.</dd>
+        <dt>Как обновить?</dt>
+        <dd>Если клонировали обычным <code>git clone</code>, в папке minicut выполните <code>git pull</code>, затем <code>npm install</code>. Если брали версию по метке или ZIP, скачайте новую версию со страницы <a href="https://github.com/natay1304/minicut/releases" target="_blank" rel="noopener">релизов</a>.</dd>
+      </dl>
+    </section>
+
+  </article>
+
+  <div class="g-sources">
+    <h3>Источники и ссылки</h3>
+    <ul>
+      <li><a href="https://github.com/natay1304/minicut" target="_blank" rel="noopener">Репозиторий minicut</a> — код, документация и список операций</li>
+      <li><a href="https://github.com/natay1304/minicut/releases/tag/v0.1.0" target="_blank" rel="noopener">Релиз v0.1.0</a> — первая выпущенная версия</li>
+      <li><a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a></li>
+      <li><a href="https://ffmpeg.org" target="_blank" rel="noopener">ffmpeg</a></li>
+      <li><a href="https://brew.sh" target="_blank" rel="noopener">Homebrew</a></li>
+      <li><a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">Model Context Protocol</a> — описание стандарта MCP</li>
+    </ul>
+  </div>
+
+  <div class="g-footer-nav">
+    <a href="index.html">← Все гайды</a>
+    <a href="claude-code-tricks.html">Фишки Claude Code →</a>
+  </div>
+
+    </div>
+  </div>
+
+  <script src="guides.js"></script>
+</body>
+</html>
