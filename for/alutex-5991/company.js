@@ -10,26 +10,28 @@ window.COMPANY={
          fHead:"'Jost',system-ui,sans-serif"},
   ui:{ru:{sticky:'Прислать чертёж объекта',demo:'Демонстрация на условном объекте, не объект ALUTEX.',case:'Кадр'},
       en:{sticky:'Send an object drawing',demo:'Demonstration on a conditional building, not an ALUTEX project.',case:'View'}},
-  contact:{brief:'https://monolith.contact/#/brief?src=alutex'},
+  contact:{brief:'https://monolith.contact/#/brief?src=alutex',stickyTo:'contact',site:'https://monolith.contact'},
+  noDate:true,noFooterNote:true,
   model:{},
-  blocks:['hero','facts','why','deliver','case','visual','steps','pricing','scope','principles','more','about','cta'],
+  blocks:['hero','more','facts','why','deliver','case','visual','steps','pricing','scope','principles','about','cta'],
   nav:[{id:'why',t:{ru:'Задача',en:'The task'}},{id:'deliver',t:{ru:'Результат',en:'Deliverables'}},{id:'case',t:{ru:'Кадры',en:'Views'}},{id:'pricing',t:{ru:'Цены',en:'Pricing'}}],
   hero:{
+    eyebrow:{ru:'Предложение для ALUTEX · визуализация объектов и расчёт КП',en:'A proposal for ALUTEX · object visualisation and quote calculation'},
     viewer:false,img:'assets/facade-day.webp',img2:'assets/facade-evening.webp',
     tags:[{ru:'Условный объект · день / вечер',en:'Conditional building · day / evening'}],
-    h1:{ru:'Застройщик выбирает по картинке. Покажите ему фасад на его объекте.',en:'A developer chooses by the picture. Show them the façade on their building.'},
+    h1:{ru:'Покажем ваш фасад на объекте застройщика и соберём калькулятор КП',en:'We will show your façade on the developer’s building and build a quote calculator'},
     lead:{ru:'Визуализация объекта с вашими конструкциями под каждый тендер: 2–3 кадра по чертежу. И калькулятор, который собирает КП быстрее, чем таблица.',
           en:'A visualisation of the building with your structures for every tender: 2–3 views from the drawing. And a calculator that builds a quote faster than a spreadsheet.'},
-    cta:{ru:'Прислать чертёж объекта',en:'Send an object drawing'},
+    cta:{ru:'Прислать чертёж объекта',en:'Send an object drawing'},ctaTo:'contact',
     cta2:{ru:'Посмотреть кадры',en:'See the views'},cta2to:'case',
     offer:[
       {t:{ru:'Визуализация объекта',en:'Object visualisation'},d:{ru:'2–3 кадра по чертежу, 3–5 дней',en:'2–3 views from the drawing, 3–5 days'}},
       {t:{ru:'Калькулятор и КП',en:'Calculator and quote'},d:{ru:'Конструкции → КП в PDF',en:'Structures → a PDF quote'}},
       {t:{ru:'Портфолио объектов',en:'Project portfolio'},d:{ru:'Страница объектов с визуализациями',en:'A projects page with visualisations'}}]},
   facts:[
-    {n:'1999',count:1999,label:{ru:'год, с которого компания работает. Офис в Ташкенте, представительство в Нью-Йорке',en:'the year the company started work. An office in Tashkent and a representative office in New York'},src:{ru:'alutex.uz, просмотр 30.10.2026',en:'alutex.uz, viewed 30 Oct 2026'}},
-    {n:'20',count:20,label:{ru:'объектов в разделе проектов на сайте: вокзал, университеты, торговые центры. Фасады, окна и перегородки',en:'projects in the projects section of the site: a railway station, universities, shopping centres. Façades, windows and partitions'},src:{ru:'alutex.uz, раздел объектов, просмотр 30.10.2026',en:'alutex.uz, projects section, viewed 30 Oct 2026'}},
-    {n:'5',count:5,label:{ru:'услуг в перечне на сайте: матрицы, экструзия, порошковая покраска, анодирование, заготовки',en:'services listed on the site: dies, extrusion, powder coating, anodising, billets'},src:{ru:'alutex.uz, просмотр 30.10.2026',en:'alutex.uz, viewed 30 Oct 2026'}}],
+    {n:'1999',count:1999,label:{ru:'год, с которого компания работает. Офисы в Ташкенте и Нью-Йорке',en:'the year the company started work. Offices in Tashkent and New York'},src:{ru:'alutex.uz, просмотр 30.10.2026',en:'alutex.uz, viewed 30 Oct 2026'},url:'https://alutex.uz/about'},
+    {n:'20',count:20,label:{ru:'объектов в разделе проектов на сайте (по нашему подсчёту): вокзал, университеты, банки, министерства. Фасады, окна и перегородки',en:'projects in the projects section of the site (by our count): a railway station, universities, banks, ministries. Façades, windows and partitions'},src:{ru:'alutex.uz, раздел объектов, просмотр 30.10.2026',en:'alutex.uz, projects section, viewed 30 Oct 2026'},url:'https://alutex.uz/projects'},
+    {n:'2023',count:2023,label:{ru:'запуск нового завода алюминиевого профиля на 10 га: его посетил президент Узбекистана',en:'launch of a new 10-hectare aluminium profile plant, visited by the President of Uzbekistan'},src:{ru:'alutex.uz, «О компании»',en:'alutex.uz, About us'},url:'https://alutex.uz/about'}],
   why:{
     title:{ru:'Конструкции видят в чертеже, застройщик ждёт картинку',en:'Structures live in a drawing, a developer waits for a picture'},
     paras:[
@@ -37,7 +39,8 @@ window.COMPANY={
        en:'We assume a developer picks a contractor by seeing how the building will look. A drawing and a price table do not show that.'},
       {ru:'Ещё одно предположение: расчёт КП занимает время. Обе гипотезы мы хотим проверить с вами на коротком созвоне.',
        en:'Another assumption: the quote calculation takes time. We want to check both hypotheses with you on a short call.'}],
-    note:{ru:'Мы не видели ваших внутренних материалов: выводы сделаны по открытым источникам.',en:'We have not seen your internal materials: conclusions are based on public sources.'},
+    note:{ru:'Данные из открытых источников:',en:'Data from public sources:'},
+    links:[{t:{ru:'alutex.uz: о компании',en:'alutex.uz: about the company'},url:'https://alutex.uz/about'},{t:{ru:'alutex.uz: объекты',en:'alutex.uz: projects'},url:'https://alutex.uz/projects'}],
     tasks:[
       {ru:'Как сегодня вы показываете застройщику фасад с вашими конструкциями?',en:'How do you show a developer a façade with your structures today?'},
       {ru:'Как считаете КП: в Excel, в программе, на бумаге? Сколько времени занимает один расчёт?',en:'How do you calculate a quote: in Excel, in a program, on paper? How long does one calculation take?'},
@@ -82,7 +85,7 @@ window.COMPANY={
       {d:{ru:'2–3 недели',en:'2–3 weeks'},t:{ru:'Калькулятор',en:'Calculator'},p:{ru:'Прототип на примерных правилах, затем на ваших, когда пришлёте прайс.',en:'A prototype on sample rules, then on yours once you send the price list.'}}]},
   pricing:{
     title:{ru:'Пакеты и цены',en:'Packages and prices'},
-    note:{ru:'Цены «от», в долларах США. Оплата в USD индивидуальному предпринимателю в Грузии. Итоговую цену фиксируем в предложении до начала работы. Сроки считаются от получения исходников.',en:'“From” prices, in US dollars. Payment in USD to a sole proprietor in Georgia. The final price is fixed in the proposal before work starts. Timelines count from receiving your source files.'},
+    note:{ru:'Цены «от», в долларах США. Оплата в USD. Сроки считаются от получения исходников.',en:'“From” prices, in US dollars. Payment in USD. Timelines count from receiving your source files.'},
     plans:[
       {t:{ru:'Визуализация объекта',en:'Object visualisation'},price:{ru:'от 800 $ за объект',en:'from $800 per object'},rec:true,items:[{ru:'2–3 кадра по чертежу объекта',en:'2–3 views from the object drawing'},{ru:'Под каждый тендер, может стать регулярным',en:'For every tender, can become regular'},{ru:'3–5 дней',en:'3–5 days'}]},
       {t:{ru:'Портфолио объектов',en:'Project portfolio'},price:{ru:'от 1 000 $',en:'from $1,000'},items:[{ru:'Страница объектов с визуализациями',en:'A projects page with visualisations'},{ru:'2 недели',en:'2 weeks'}]},
@@ -104,11 +107,20 @@ window.COMPANY={
       {t:{ru:'Два раунда правок на этап',en:'Two edit rounds per stage'},d:{ru:'Заранее понятно, сколько правок входит в цену.',en:'It is clear in advance how many edits the price includes.'}},
       {t:{ru:'Права у вас, NDA до данных',en:'You own the files, NDA first'},d:{ru:'Публикуем только с вашего согласия.',en:'We publish only with your consent.'}}]},
   more:{
-    title:{ru:'Кроме визуала: софт, процессы, консалтинг',en:'Beyond visuals: software, processes, consulting'},
+    label:{ru:'Что мы делаем',en:'What we do'},
+    title:{ru:'Что мы можем сделать для ALUTEX',en:'What we can do for ALUTEX'},
+    lead:{ru:'MONOLITH — студия технической графики, софта и ИИ для промышленных продаж. Чем мы можем быть вам полезны:',en:'MONOLITH is a studio of technical graphics, software and AI for industrial sales. How we can be useful to you:'},
     items:[
-      {i:'01',t:{ru:'Расчёт смет и КП: из Excel в инструмент',en:'Estimates and quotes: from Excel to a tool'},d:{ru:'Обновляем существующий расчёт, чтобы им пользовались менеджеры без правки таблиц.',en:'We update the existing calculation so managers can use it without editing spreadsheets.'}},
-      {i:'02',t:{ru:'Тендерная заявка для застройщика',en:'A tender bid for a developer'},d:{ru:'Шаблоны и автоматическая сборка с помощью ИИ. Пилот на одном процессе от 1 500 $, 2 недели, фиксированная цена.',en:'Templates and automatic assembly with AI. A single-process pilot from $1,500, 2 weeks, fixed price.'}},
-      {i:'03',t:{ru:'Разбор на час',en:'A one-hour review'},d:{ru:'Смотрим ваш процесс и показываем, что автоматизировать первым. Аудит от 600 $, сопровождение от 400 $ в месяц.',en:'We look at your process and show what to automate first. Audit from $600, support from $400 a month.'}}]},
+      {i:'01',t:{ru:'Визуализация объекта',en:'Object visualisation'},d:{ru:'2–3 кадра здания с вашими конструкциями по чертежу под каждый тендер.',en:'2–3 views of the building with your structures from the drawing for every tender.'}},
+      {i:'02',t:{ru:'Разрезы и узлы систем',en:'System sections and details'},d:{ru:'Стойка, ригель, узел примыкания: разрез по сечению из каталога.',en:'Mullion, transom, junction: a section from the catalogue drawing.'}},
+      {i:'03',t:{ru:'Взрыв-схемы монтажа',en:'Installation exploded views'},d:{ru:'Как собирается витраж или окно: схемы для монтажников и дилеров.',en:'How a curtain wall or window is assembled: diagrams for installers and dealers.'}},
+      {i:'04',t:{ru:'Калькулятор смет и КП',en:'Estimate and quote calculator'},d:{ru:'Из Excel в инструмент: менеджеры считают без правки таблиц.',en:'From Excel to a tool: managers calculate without editing spreadsheets.'},href:'../../cases/casecalculator.html'},
+      {i:'05',t:{ru:'Тендерная заявка для застройщика',en:'A tender bid for a developer'},d:{ru:'Шаблоны и автоматическая сборка с помощью ИИ.',en:'Templates and automatic assembly with AI.'}},
+      {i:'06',t:{ru:'Портфолио объектов',en:'Project portfolio'},d:{ru:'Страница объектов с визуализациями вместо списка названий.',en:'A projects page with visualisations instead of a list of names.'}},
+      {i:'07',t:{ru:'Видео и 360°',en:'Video and 360°'},d:{ru:'Ролик об объекте или производстве, вращение системы на 360°.',en:'A clip about a project or production, a 360° turntable of a system.'}},
+      {i:'08',t:{ru:'Каталог систем для дилеров и экспорта',en:'A systems catalogue for dealers and export'},d:{ru:'Единый вид систем, описания на русском, узбекском и английском.',en:'One look for the systems, descriptions in Russian, Uzbek and English.'}},
+      {i:'09',t:{ru:'Конфигуратор для дилеров',en:'Dealer configurator'},d:{ru:'Дилер вводит размеры и видит состав и ориентир цены.',en:'The dealer enters sizes and sees the specification and a price estimate.'},href:'../../cases/casecalculator.html'},
+      {i:'10',t:{ru:'Разбор на час',en:'A one-hour review'},d:{ru:'Смотрим ваш процесс и показываем, что автоматизировать первым.',en:'We look at your process and show what to automate first.'}}]},
   about:{
     title:{ru:'MONOLITH — техническая графика и софт для промышленных продаж',en:'MONOLITH — technical graphics and software for industrial sales'},
     paras:[
@@ -116,6 +128,7 @@ window.COMPANY={
       {ru:'Пока показываем демонстрационные кейсы на условных объектах, поэтому первую работу для вас начинаем с проверки исходника.',en:'For now we show demonstration cases on conditional buildings, which is why your first work starts with a source check.'}]},
   cta:{
     title:{ru:'Пришлите чертёж одного объекта.',en:'Send a drawing of one object.'},
-    lead:{ru:'В первый день скажем, подходит ли он для бесплатного пробного кадра. Дальше решите сами.',en:'On day one we say whether it suits a free trial view. You decide what comes next.'},
-    btn:{ru:'Отправить чертёж или написать',en:'Send a drawing or write to us'}}
+    lead:{ru:'Если чертёж не подойдёт для бесплатного пробного кадра, напишем, что необходимо.',en:'On day one we say whether it suits a free trial view. You decide what comes next.'},
+    btn:{ru:'Заполнить бриф',en:'Fill in the brief'},
+    or:{ru:'или напишите нам на почту:',en:'or write to us by email:'},mail:'mail@monolith.contact'}
 };

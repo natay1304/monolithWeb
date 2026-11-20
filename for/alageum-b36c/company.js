@@ -10,17 +10,19 @@ window.COMPANY={
          fHead:"'Chakra Petch',system-ui,sans-serif",fBody:"'IBM Plex Sans',system-ui,sans-serif"},
   ui:{ru:{sticky:'Написать нам',case:'Пример',demo:'Демонстрация на условной модели, не изделие Alageum Electric.'},
       en:{sticky:'Write to us',case:'Example',demo:'Demonstration on a conditional model, not an Alageum Electric product.'}},
-  contact:{brief:'https://monolith.contact/#/brief?src=alageum'},
+  contact:{brief:'https://monolith.contact/#/brief?src=alageum',stickyTo:'contact',site:'https://monolith.contact'},
+  noDate:true,noFooterNote:true,
   model:{lazy:true,
     full:'assets/transformer-full.glb',section:'assets/transformer-cut.glb',
     posterFull:'assets/transformer-full.webp',posterSection:'assets/transformer-cut.webp'},
-  blocks:['hero','facts','why','deliver','case','steps','pricing','scope','principles','more','about','cta'],
+  blocks:['hero','more','facts','why','deliver','case','steps','pricing','scope','principles','about','cta'],
   nav:[{id:'why',t:{ru:'Задача',en:'The task'}},{id:'deliver',t:{ru:'Результат',en:'Deliverables'}},{id:'case',t:{ru:'Пример',en:'Example'}},{id:'pricing',t:{ru:'Цены',en:'Pricing'}}],
   hero:{
-    h1:{ru:'Что увидит заказчик тендера, когда ваше предложение лежит рядом с Siemens и ABB',en:'What a tender customer sees when your proposal lies next to Siemens and ABB'},
+    eyebrow:{ru:'Предложение для Alageum Electric · материалы для тендеров и стенда',en:'A proposal for Alageum Electric · materials for tenders and stands'},
+    h1:{ru:'Сделаем материалы для ваших тендеров и стенда: кадры, 360°, видео и 3D',en:'We make materials for your tenders and stand: views, 360°, video and 3D'},
     lead:{ru:'Трансформатор нельзя привезти на стенд целиком. Показываем его на экране: общий вид, 360°, видео и 3D на сайте. Цель — материалы, сравнимые с теми, что делают мировые бренды.',
           en:'A transformer cannot be brought to a stand whole. We show it on screen: exterior, 360°, video and 3D on your website. The goal is materials comparable to those of global brands.'},
-    cta:{ru:'Написать нам',en:'Write to us'},
+    cta:{ru:'Написать нам',en:'Write to us'},ctaTo:'contact',
     cta2:{ru:'Посмотреть пример',en:'See the example'},cta2to:'case',
     tags:[{ru:'Условная модель · не изделие Alageum Electric',en:'Conditional model · not an Alageum Electric product'},{ru:'Разрез',en:'Section'}],
     offer:[
@@ -29,9 +31,9 @@ window.COMPANY={
       {t:{ru:'3D на сайте',en:'3D on the website'},d:{ru:'Вращение и разрез в браузере',en:'Rotation and section in the browser'}},
       {t:{ru:'Тендерный отдел',en:'Tender team'},d:{ru:'Быстрее готовить ТКП',en:'Prepare quotes faster'}}]},
   facts:[
-    {n:'№1',label:{ru:'так назвал Alageum Electric Forbes.kz в заголовке статьи: крупнейший производитель трансформаторов на постсоветском пространстве',en:'how Forbes.kz titled its article on Alageum Electric: the largest transformer maker in the post-Soviet space'},src:{ru:'Forbes.kz, заголовок статьи, просмотр 30.10.2026, дата публикации не проверена',en:'Forbes.kz, article headline, viewed 30 Oct 2026, publication date not checked'}},
-    {n:'14',count:14,label:{ru:'действующих заводов и около 4 500 сотрудников; экспорт в страны СНГ и на Ближний Восток',en:'operating plants and about 4,500 employees; exports to CIS countries and the Middle East'},src:{ru:'alageum.com, «О нас», просмотр 30.10.2026',en:'alageum.com, “About us”, viewed 30 Oct 2026'}},
-    {n:'2026',count:2026,label:{ru:'компания названа платиновым партнёром форума Digital Qazaqstan 2026',en:'the company is named a platinum partner of the Digital Qazaqstan 2026 forum'},src:{ru:'Astana Hub, заголовок статьи, просмотр 30.10.2026',en:'Astana Hub, article headline, viewed 30 Oct 2026'}}],
+    {n:'№1',label:{ru:'так назвал Alageum Electric Forbes.kz в заголовке статьи: крупнейший производитель трансформаторов на постсоветском пространстве',en:'how Forbes.kz titled its article on Alageum Electric: the largest transformer maker in the post-Soviet space'},src:{ru:'Forbes.kz, заголовок статьи, просмотр 30.10.2026, дата публикации не проверена',en:'Forbes.kz, article headline, viewed 30 Oct 2026, publication date not checked'},url:'https://forbes.kz/articles/pered_rassvetom_1675100795'},
+    {n:'14',count:14,label:{ru:'действующих заводов и около 4 500 сотрудников; экспорт в страны СНГ и на Ближний Восток',en:'operating plants and about 4,500 employees; exports to CIS countries and the Middle East'},src:{ru:'alageum.com, «О нас», просмотр 30.10.2026',en:'alageum.com, “About us”, viewed 30 Oct 2026'},url:'https://alageum.com/en/kompaniya/o-nas'},
+    {n:'2026',count:2026,label:{ru:'компания названа платиновым партнёром форума Digital Qazaqstan 2026',en:'the company is named a platinum partner of the Digital Qazaqstan 2026 forum'},src:{ru:'Astana Hub, заголовок статьи, просмотр 30.10.2026',en:'Astana Hub, article headline, viewed 30 Oct 2026'},url:'https://astanahub.com/ru/article/alageum-electric-stal-platinovym-partnerom-foruma-digital-qazaqstan-2026'}],
   why:{
     title:{ru:'Тендер выигрывают материалом, который понятен за минуту',en:'A tender is won by material that is clear in a minute'},
     paras:[
@@ -39,7 +41,8 @@ window.COMPANY={
        en:'A customer reads a dozen proposals. Photos of a transformer from outside look alike. Design and quality show in an inside view, in 360° and in video.'},
       {ru:'Вторая часть: сама сборка ТКП. Это гипотеза, и мы хотим проверить её на созвоне.',
        en:'The second part is assembling the quote itself. This is a hypothesis, and we want to check it on a call.'}],
-    note:{ru:'Мы не видели ваших внутренних материалов. Siemens и ABB здесь ориентир по уровню подачи, а не утверждение о конкуренции в каждом тендере.',en:'We have not seen your internal materials. Siemens and ABB here are a benchmark for presentation level, not a claim about competition in every tender.'},
+    note:{ru:'Данные из открытых источников. Siemens и ABB — ориентир по уровню подачи, а не утверждение о конкуренции в каждом тендере. Источники:',en:'Data from public sources. Siemens and ABB are a benchmark for presentation level, not a claim about competition in every tender. Sources:'},
+    links:[{t:{ru:'alageum.com: о компании',en:'alageum.com: about the company'},url:'https://alageum.com/en/kompaniya/o-nas'},{t:{ru:'Forbes.kz: о холдинге',en:'Forbes.kz: on the holding'},url:'https://forbes.kz/articles/pered_rassvetom_1675100795'},{t:{ru:'Forbes.kz: конкуренция с Siemens и ABB',en:'Forbes.kz: competing with Siemens and ABB'},url:'https://forbes.kz/articles/vyisokoe_napryajenie_1541582790'},{t:{ru:'Astana Hub: Digital Qazaqstan 2026',en:'Astana Hub: Digital Qazaqstan 2026'},url:'https://astanahub.com/ru/article/alageum-electric-stal-platinovym-partnerom-foruma-digital-qazaqstan-2026'}],
     tasks:[
       {ru:'Сколько времени уходит на одно ТКП и где команда теряет больше всего?',en:'How long does one quote take and where does the team lose most time?'},
       {ru:'Откуда берутся техописания: из базы, из старых ТКП или из писем?',en:'Where do technical descriptions come from: a database, old quotes or emails?'},
@@ -67,7 +70,7 @@ window.COMPANY={
       {d:{ru:'3–4 недели',en:'3–4 weeks'},t:{ru:'Пилот для тендерного отдела',en:'Tender team pilot'},p:{ru:'Аудит процесса и пилот агента.',en:'A process audit and an agent pilot.'}}]},
   pricing:{
     title:{ru:'Пакеты и цены',en:'Packages and prices'},
-    note:{ru:'Цены «от», в долларах США. Оплата в USD индивидуальному предпринимателю в Грузии. Итоговую цену фиксируем в предложении до начала работы. Сроки считаются от получения исходников.',en:'“From” prices, in US dollars. Payment in USD to a sole proprietor in Georgia. The final price is fixed in the proposal before work starts. Timelines count from receiving your source files.'},
+    note:{ru:'Цены «от», в долларах США. Оплата в USD. Сроки считаются от получения исходников.',en:'“From” prices, in US dollars. Payment in USD. Timelines count from receiving your source files.'},
     plans:[
       {t:{ru:'Проба',en:'Trial'},price:{ru:'0 $',en:'$0'},items:[{ru:'1 пробный кадр, только если исходник подходит',en:'1 trial image, only if the source suits'},{ru:'Решаем в первый день',en:'Decided on day one'}]},
       {t:{ru:'Кадры и 360°',en:'Views and 360°'},price:{ru:'от 1 800 $',en:'from $1,800'},items:[{ru:'Одна модель: кадры и 360°',en:'One model: views and 360°'},{ru:'Разрез при наличии полной сборки',en:'Section if a full assembly exists'},{ru:'7 дней',en:'7 days'}]},
@@ -91,11 +94,20 @@ window.COMPANY={
       {t:{ru:'Два раунда правок на этап',en:'Two edit rounds per stage'},d:{ru:'Заранее понятно, сколько правок входит в цену.',en:'It is clear in advance how many edits the price includes.'}},
       {t:{ru:'Права у вас, NDA до данных',en:'You own the files, NDA first'},d:{ru:'Публикуем только с вашего согласия.',en:'We publish only with your consent.'}}]},
   more:{
-    title:{ru:'Кроме визуала: софт, процессы, консалтинг',en:'Beyond visuals: software, processes, consulting'},
+    label:{ru:'Что мы делаем',en:'What we do'},
+    title:{ru:'Что мы можем сделать для Alageum Electric',en:'What we can do for Alageum Electric'},
+    lead:{ru:'MONOLITH — студия технической графики, софта и ИИ для промышленных продаж. Чем мы можем быть вам полезны:',en:'MONOLITH is a studio of technical graphics, software and AI for industrial sales. How we can be useful to you:'},
     items:[
-      {i:'01',t:{ru:'Сайт и база для тендеров',en:'A site and database for tenders'},d:{ru:'3D-каталог и техописания в одном месте.',en:'A 3D catalogue and technical descriptions in one place.'}},
-      {i:'02',t:{ru:'Сборка ТКП агентом',en:'Quote assembly by an agent'},d:{ru:'ИИ собирает черновик из базы, сотрудник проверяет. Пилот на одном процессе от 1 500 $, 2 недели, фиксированная цена.',en:'AI assembles a draft from the database, an employee reviews it. A single-process pilot from $1,500, 2 weeks, fixed price.'}},
-      {i:'03',t:{ru:'Аудит и сопровождение',en:'Audit and support'},d:{ru:'Для тендерного отдела. Аудит от 600 $, сопровождение от 400 $ в месяц.',en:'For the tender team. Audit from $600, support from $400 a month.'}}]},
+      {i:'01',t:{ru:'Кадры и 360°',en:'Views and 360°'},d:{ru:'Трансформатор снаружи по фото и каталогу, вращение на 360° для сайта и тендера.',en:'The transformer outside from photos and the catalogue, a 360° rotation for the site and tenders.'}},
+      {i:'02',t:{ru:'Разрез и взрыв-схема',en:'Section and exploded view'},d:{ru:'Устройство изнутри по полной 3D-сборке: обмотки, магнитопровод, бак.',en:'The design inside from a full 3D assembly: windings, core, tank.'}},
+      {i:'03',t:{ru:'Видео продукта 60 секунд',en:'60-second product video'},d:{ru:'Ролик для стенда, тендера и сайта.',en:'A clip for the stand, tenders and the website.'}},
+      {i:'04',t:{ru:'3D на сайте',en:'3D on the website'},d:{ru:'Заказчик вращает изделие и смотрит разрез прямо в браузере.',en:'The customer rotates the product and views the section right in the browser.'}},
+      {i:'05',t:{ru:'Выставочный пакет',en:'Exhibition package'},d:{ru:'Кадры и петли для экранов стенда, широкоформатные материалы.',en:'Views and loops for stand screens, wide-format materials.'}},
+      {i:'06',t:{ru:'Сборка ТКП агентом',en:'Quote assembly by an agent'},d:{ru:'ИИ собирает черновик ТКП из базы, сотрудник проверяет. Быстрее готовим тендерные заявки.',en:'AI assembles a draft quote from the database, an employee reviews it. Tender bids come out faster.'}},
+      {i:'07',t:{ru:'Сайт и база для тендеров',en:'A site and database for tenders'},d:{ru:'3D-каталог и техописания в одном месте.',en:'A 3D catalogue and technical descriptions in one place.'}},
+      {i:'08',t:{ru:'Подбор трансформатора',en:'Transformer selector'},d:{ru:'Заказчик вводит параметры и получает подходящие модели с техописанием.',en:'The customer enters parameters and gets suitable models with a technical description.'},href:'../../cases/casecalculator.html'},
+      {i:'09',t:{ru:'Каталог на нескольких языках',en:'A multilingual catalogue'},d:{ru:'Описания на русском, казахском и английском из ваших текстов и спецификаций.',en:'Descriptions in Russian, Kazakh and English from your texts and specifications.'}},
+      {i:'10',t:{ru:'Аудит и сопровождение',en:'Audit and support'},d:{ru:'Аудит процесса ТКП и сопровождение для тендерного отдела.',en:'An audit of the quote process and support for the tender team.'}}]},
   about:{
     title:{ru:'MONOLITH — техническая графика и софт для промышленных продаж',en:'MONOLITH — technical graphics and software for industrial sales'},
     paras:[
@@ -104,5 +116,6 @@ window.COMPANY={
   cta:{
     title:{ru:'Расскажите, как сейчас собираете ТКП.',en:'Tell us how you build quotes today.'},
     lead:{ru:'Или пришлите фото и каталог одного трансформатора. Скажем, что можно сделать, и в первый день проверим исходник.',en:'Or send photos and the catalogue of one transformer. We will say what can be done and check the source on day one.'},
-    btn:{ru:'Написать нам',en:'Write to us'}}
+    btn:{ru:'Заполнить бриф',en:'Fill in the brief'},
+    or:{ru:'или напишите нам на почту:',en:'or write to us by email:'},mail:'mail@monolith.contact'}
 };

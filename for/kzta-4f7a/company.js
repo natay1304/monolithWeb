@@ -7,17 +7,19 @@ window.COMPANY={
   /* цвета КЗТА с kzta.kz: синий шапки и логотипа #1755E6 (контраст с белым 6.0), светлая версия на тёмном 7.5 */
   theme:{accent:'#1755E6',accentL:'#7AA2FF',onAccent:'#FFFFFF',dark:'#0B1226',dark2:'#111B36',lineDark:'#243055',bg:'#EEF1F8',bg2:'#E2E7F3',line:'#C5CCE0',fg:'#0C1020'},
   ui:{ru:{case:'Пример'},en:{case:'Example'}},
-  contact:{brief:'https://monolith.contact/#/brief?src=kzta'},
+  contact:{brief:'https://monolith.contact/#/brief?src=kzta',stickyTo:'contact',site:'https://monolith.contact'},
+  noDate:true,noFooterNote:true,
   model:{
     full:'../_shared/assets/models/valve-full.glb',section:'../_shared/assets/models/valve-section.glb',
     posterFull:'../_shared/assets/img/ball-valve-full.webp',posterSection:'../_shared/assets/img/ball-valve-section.webp'},
-  blocks:['hero','facts','why','deliver','case','steps','pricing','scope','principles','more','about','cta'],
+  blocks:['hero','more','facts','why','deliver','case','steps','pricing','scope','principles','about','cta'],
   nav:[{id:'why',t:{ru:'Задача',en:'The task'}},{id:'deliver',t:{ru:'Результат',en:'Deliverables'}},{id:'case',t:{ru:'Пример',en:'Example'}},{id:'pricing',t:{ru:'Цены',en:'Pricing'}}],
   hero:{
-    h1:{ru:'Покажем, как устроена ваша арматура — изнутри',en:'We will show how your valves are built — from the inside'},
+    eyebrow:{ru:'Предложение для КЗТА · разрезы и 3D арматуры для каталога и тендеров',en:'A proposal for KZTA · valve section views and 3D for the catalogue and tenders'},
+    h1:{ru:'Сделаем разрезы, взрыв-схемы и 3D вашей арматуры',en:'We make section views, exploded views and 3D of your valves'},
     lead:{ru:'Разрез, взрыв-схема и 3D в браузере по вашей CAD-модели. Для каталога, тендеров и сайта. Геометрия берётся из модели, ничего не дорисовывается.',
           en:'Section views, exploded views and browser 3D from your CAD model. For catalogues, tenders and your website. Geometry comes from the model, nothing is redrawn.'},
-    cta:{ru:'Получить бесплатный разрез',en:'Get a free section view'},
+    cta:{ru:'Получить бесплатный разрез',en:'Get a free section view'},ctaTo:'contact',
     cta2:{ru:'Покрутить 3D',en:'Rotate the 3D'},
     tags:[{ru:'DN100 · условная модель',en:'DN100 · conditional model'},{ru:'Разрез по оси потока',en:'Section along the flow axis'}],
     offer:[
@@ -33,18 +35,19 @@ window.COMPANY={
       {ru:'Небольшая студия: между вами и тем, кто делает работу, нет прослоек. Пока мы показываем демонстрационные кейсы на условных моделях, а первую работу для вас начинаем с бесплатной пробы.',
        en:'A small studio: there are no layers between you and the person doing the work. For now we show demonstration cases on conditional models, and we start your first work with a free trial.'}]},
   facts:[
-    {n:'×10',count:10,pre:'×',label:{ru:'рост мощности после модернизации: с 4 500 до 45 000 изделий',en:'capacity growth after modernisation: from 4,500 to 45,000 units'},src:{ru:'Фонд развития промышленности, декабрь 2024',en:'Industrial Development Fund, December 2024'}},
-    {n:'5',count:5,label:{ru:'позиций в каталоге: задвижки, вентиль, шаровой кран, дисковый затвор',en:'catalogue items: gate valves, a globe valve, a ball valve and a disc butterfly valve'},src:{ru:'По данным сайта kzta.kz',en:'Based on kzta.kz'}},
-    {n:'3–5',label:{ru:'рабочих дней до первого кадра по вашей модели',en:'working days to the first view from your model'}},
-    {n:'0 $',label:{ru:'стоит первый разрез вашего изделия, если модель подходит',en:'is the cost of the first section view of your product, if the model suits'}}],
+    {n:'160',count:160,label:{ru:'квалифицированных специалистов на заводе',en:'qualified specialists at the plant'},src:{ru:'kzta.kz, главная страница',en:'kzta.kz, home page'},url:'https://kzta.kz/'},
+    {n:'5 500',label:{ru:'кв. м производственных площадей на территории 2,5 га',en:'sq. m of production area on a 2.5-hectare site'},src:{ru:'kzta.kz, главная страница',en:'kzta.kz, home page'},url:'https://kzta.kz/'},
+    {n:'5',count:5,label:{ru:'позиций в каталоге: задвижки, вентиль, шаровой кран, дисковый затвор',en:'catalogue items: gate valves, a globe valve, a ball valve and a disc butterfly valve'},src:{ru:'kzta.kz, каталог',en:'kzta.kz, catalogue'},url:'https://kzta.kz/'}],
+
   why:{
-    title:{ru:'Рост выпуска требует продаж, а продажам нужен показ',en:'Growing output needs sales, and sales need a showcase'},
+    title:{ru:'Продажам арматуры нужен показ изнутри',en:'Valve sales need a view from the inside'},
     paras:[
-      {ru:'КЗТА завершила модернизацию и готовится выпускать в разы больше. Чтобы поставки росли вместе с производством, изделие нужно быстро и понятно показывать: закупщику, проектному институту, дилеру.',
-       en:'KZTA has completed modernisation and is preparing to produce many times more. For deliveries to grow with production, the product must be shown quickly and clearly: to buyers, design institutes and dealers.'},
+      {ru:'КЗТА выпускает задвижки, вентили, шаровые краны и дисковые затворы. Чтобы закупщик, проектный институт и дилер быстро понимали изделие, его нужно показывать наглядно: не только корпус на фото, но и устройство внутри.',
+       en:'KZTA makes gate valves, globe valves, ball valves and disc butterfly valves. For buyers, design institutes and dealers to understand the product quickly, it must be shown clearly: not only the body in a photo, but the design inside.'},
       {ru:'На сайте сейчас фотографии изделий и цеха. Фото показывает корпус, но не показывает, как работает затвор, где седло и какая стенка. Разрез и 3D отвечают на эти вопросы до звонка.',
        en:'The website currently has photos of products and the plant. A photo shows the body, but not how the closure works, where the seat is and how thick the wall is. A section view and 3D answer these questions before the call.'}],
-    note:{ru:'Мы не видели ваших внутренних материалов: выводы сделаны по сайту и открытым публикациям и проверяются на созвоне.',en:'We have not seen your internal materials: conclusions are based on the website and public sources and will be checked on a call.'},
+    note:{ru:'Данные из открытых источников:',en:'Data from public sources:'},
+    links:[{t:{ru:'kzta.kz: сайт завода',en:'kzta.kz: the plant website'},url:'https://kzta.kz/'}],
     tasks:[
       {ru:'Закупщик и проектный институт по фото не видят, как устроено изделие',en:'Buyers and design institutes cannot see how a product is built from a photo'},
       {ru:'Тендеру нужна графика, которую можно приложить к чертежу',en:'Tenders need graphics that can be laid next to the drawing'},
@@ -75,7 +78,7 @@ window.COMPANY={
       {d:{ru:'Дальше',en:'Next'},t:{ru:'Серия и поддержка',en:'Series and support'},p:{ru:'Ряд типоразмеров и обновления при новых изделиях.',en:'A range of sizes and updates when new products appear.'}}]},
   pricing:{
     title:{ru:'Начинаем с бесплатной пробы',en:'We start with a free trial'},
-    note:{ru:'Это стартовые условия для первых проектов, цена фиксируется в предложении до начала работы. Оплата в $ на счёт ИП в Грузии, предоплата 50%. Точная цена зависит от числа деталей и сложности сборки.',en:'These are launch terms for our first projects; the price is fixed in the proposal before work starts. Payment in USD to a sole proprietor account in Georgia, 50% prepayment. The exact price depends on the number of parts and assembly complexity.'},
+    note:{ru:'Это стартовые условия для первых проектов, оплата в $, предоплата 50%. Точная цена зависит от числа деталей и сложности сборки.',en:'These are launch terms for our first projects; payment in USD, 50% prepayment. The exact price depends on the number of parts and assembly complexity.'},
     plans:[
       {t:{ru:'Проба',en:'Trial'},price:{ru:'0 $',en:'$0'},items:[{ru:'1 кадр разреза по вашей модели',en:'1 section view from your model'},{ru:'3–5 рабочих дней, если STEP подходит',en:'3–5 working days, if the STEP file suits'}]},
       {t:{ru:'Пилот',en:'Pilot'},price:{ru:'от 1 800 $',en:'from $1,800'},rec:true,items:[{ru:'1 изделие: общий вид и 3 кадра разреза',en:'1 product: exterior and 3 section views'},{ru:'3D для сайта',en:'3D for the website'},{ru:'2 недели от получения модели',en:'2 weeks from receiving the model'}]},
@@ -99,13 +102,23 @@ window.COMPANY={
       {t:{ru:'Единый свет и ракурс',en:'One light and angle'},d:{ru:'Весь ряд снят одним сетапом, поэтому каталог читается как серия.',en:'The whole range uses one setup, so the catalogue reads as a series.'}},
       {t:{ru:'Права у вас',en:'You own the files'},d:{ru:'Ваши файлы остаются у вас, публикуем только с вашего согласия.',en:'Your files stay with you, we publish only with your consent.'}}]},
   more:{
-    title:{ru:'Что ещё можем для вас',en:'What else we can do'},
+    label:{ru:'Что мы делаем',en:'What we do'},
+    title:{ru:'Что мы можем сделать для КЗТА',en:'What we can do for KZTA'},
+    lead:{ru:'MONOLITH — студия технической графики, софта и ИИ для промышленных продаж. Чем мы можем быть вам полезны:',en:'MONOLITH is a studio of technical graphics, software and AI for industrial sales. How we can be useful to you:'},
     items:[
-      {i:'01',t:{ru:'Поиск по документации',en:'AI catalogue search'},d:{ru:'Вопрос обычным языком, ответ со ссылкой на документ и страницу. Пилот от 1 500 $.',en:'A plain-language question, an answer with a document and page link. Pilot from $1,500.'}},
-      {i:'02',t:{ru:'Калькулятор и конфигуратор',en:'Calculator and configurator'},d:{ru:'Клиент вводит параметры и сразу видит состав и ориентир цены.',en:'The client enters parameters and instantly sees the specification and a price estimate.'},href:'../../cases/casecalculator.html'},
-      {i:'03',t:{ru:'Бот заявок в Telegram',en:'Telegram request bot'},d:{ru:'Собирает параметры и передаёт менеджеру готовую заявку. От 400 $.',en:'Collects parameters and hands the manager a ready request. From $400.'}}]},
+      {i:'01',t:{ru:'Разрезы арматуры',en:'Valve section views'},d:{ru:'Внутреннее устройство по оси потока: седло, шток, стенка. По вашей CAD-модели.',en:'The internal design along the flow axis: seat, stem, wall. From your CAD model.'}},
+      {i:'02',t:{ru:'Взрыв-схемы',en:'Exploded views'},d:{ru:'Как собрана задвижка или кран: схемы для каталога и документации.',en:'How a gate or ball valve is assembled: diagrams for the catalogue and documentation.'}},
+      {i:'03',t:{ru:'3D в браузере',en:'3D in the browser'},d:{ru:'Закупщик и проектный институт вращают изделие и смотрят разрез на сайте.',en:'Buyers and design institutes rotate the product and view the section on the site.'}},
+      {i:'04',t:{ru:'Каталог и техлисты',en:'Catalogue and data sheets'},d:{ru:'Единый свет и ракурс на весь ряд, чтобы каталог читался как серия.',en:'One light and angle across the whole range, so the catalogue reads as a series.'}},
+      {i:'05',t:{ru:'Видео работы затвора',en:'Valve operation video'},d:{ru:'Показываем, как работает изделие: для выставки и тендера.',en:'We show how the product works: for exhibitions and tenders.'}},
+      {i:'06',t:{ru:'Выставочный пакет',en:'Exhibition package'},d:{ru:'Кадры и петли для экранов стенда, широкоформатные материалы.',en:'Views and loops for stand screens, wide-format materials.'}},
+      {i:'07',t:{ru:'Поиск по документации',en:'AI catalogue search'},d:{ru:'Вопрос обычным языком, ответ со ссылкой на документ и страницу.',en:'A plain-language question, an answer with a document and page link.'}},
+      {i:'08',t:{ru:'Калькулятор и конфигуратор',en:'Calculator and configurator'},d:{ru:'Клиент вводит параметры и сразу видит состав и ориентир цены.',en:'The client enters parameters and instantly sees the specification and a price estimate.'},href:'../../cases/casecalculator.html'},
+      {i:'09',t:{ru:'Бот заявок в Telegram',en:'Telegram request bot'},d:{ru:'Собирает параметры и передаёт менеджеру готовую заявку.',en:'Collects parameters and hands the manager a ready request.'}},
+      {i:'10',t:{ru:'Описания на нескольких языках',en:'Multilingual descriptions'},d:{ru:'Карточки изделий на русском, казахском и английском из ваших текстов.',en:'Product cards in Russian, Kazakh and English from your texts.'}}]},
   cta:{
     title:{ru:'Пришлите STEP одного изделия',en:'Send a STEP file of one product'},
-    lead:{ru:'Если модель подходит, первый разрез вернём бесплатно через 3–5 рабочих дней. Если нет — скажем в первый день. Дальше решите сами.',en:'If the model suits, we return the first section view free in 3–5 working days. If not, we say so on day one. You decide what comes next.'},
-    btn:{ru:'Отправить файл или написать',en:'Send a file or write to us'}}
+    lead:{ru:'Если модель подходит, первый разрез вернём бесплатно через 3–5 рабочих дней. Если нет — напишем, что необходимо.',en:'If the model suits, we return the first section view free in 3–5 working days. If not, we say so on day one. You decide what comes next.'},
+    btn:{ru:'Заполнить бриф',en:'Fill in the brief'},
+    or:{ru:'или напишите нам на почту:',en:'or write to us by email:'},mail:'mail@monolith.contact'}
 };
