@@ -105,7 +105,7 @@ if (!res.ok) throw new Error('send failed');
 | Что | Где | Как |
 |---|---|---|
 | «MONOLITH **is is** a digital production studio» | `content.js`, `hero.p1` | убрать дубль |
-| Почта `hello@monolith.ai` против `hello@monolith.studio` | `index.html` против `CONTACT_EMAIL` | одна почта, которую реально читаете |
+| Почта `hello@monolith.ai` против `mail@monolith.contact` | `index.html` против `CONTACT_EMAIL` | одна почта, которую реально читаете |
 | LinkedIn / Vimeo / Behance на `href="#"` | `index.html`, `.footer-links` | скрыть до появления профилей |
 | Язык по умолчанию `en` | `app.js`, `state.lang` | сменить на `ru`, `localStorage` оставить |
 

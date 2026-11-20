@@ -48,7 +48,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=18">
+  <link rel="stylesheet" href="styles.css?v=20">
 </head>
 <body>
 
@@ -88,16 +88,17 @@
           <div class="hero-manifesto">
             <p data-i18n="hero.p1"></p>
             <p data-i18n="hero.p2"></p>
-            <p class="hero-p3" data-i18n="hero.p3"></p>
           </div>
           <div class="hero-cta">
             <a class="submit-btn" href="#/brief" data-intent="trial" data-i18n="hero.ctaTrial">Получить тестовый рендер</a>
             <a class="cta-ghost" href="#/brief" data-need="AI consulting" data-i18n="hero.ctaAi">Обсудить ИИ-задачу</a>
-            <a class="cta-ghost" href="#/lab" data-i18n="hero.ctaLab">Как это устроено</a>
           </div>
         </div>
 
-        <div class="metrics" id="heroMetrics" data-animate></div>
+        <div class="block" data-animate id="aboutBlock">
+          <p class="label" data-i18n="about.title">КТО МЫ</p>
+          <div class="about" id="about"></div>
+        </div>
 
         <div class="ticker-band" data-animate>
           <div class="ticker" id="inputTicker" aria-hidden="true"></div>
@@ -109,10 +110,7 @@
         </div>
 
         <div class="block" data-animate>
-          <p class="label" data-i18n="economy.title">СКОЛЬКО СТОИТ ЗАКРЫТЬ КАТАЛОГ</p>
-          <div class="table economy" id="economy"></div>
-          <p class="table-note" data-i18n="economy.note"></p>
-          <p class="label packs-label" data-i18n="packs.title">ПАКЕТЫ ОТ</p>
+          <p class="label" data-i18n="packs.title">ПАКЕТЫ ОТ</p>
           <div class="packs" id="packs"></div>
           <p class="table-note" data-i18n="packs.note"></p>
         </div>
@@ -131,10 +129,6 @@
             <a class="submit-btn" href="#/brief" data-need="AI consulting" data-i18n="ai.cta">Обсудить задачу</a>
             <a class="cta-ghost" href="#/services" data-i18n="ai.all">Все услуги</a>
           </div>
-        </div>
-
-        <div class="ticker-band accent-band" data-animate>
-          <div class="ticker" id="scenarioTicker" aria-hidden="true"></div>
         </div>
 
         <div class="block" data-animate>
@@ -412,7 +406,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
-  <script src="content.js?v=18"></script>
-  <script src="app.js?v=18"></script>
+  <script src="content.js?v=23"></script>
+  <script src="app.js?v=21"></script>
 </body>
 </html>

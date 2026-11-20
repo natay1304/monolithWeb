@@ -97,7 +97,7 @@ body.fine select, body.fine textarea, body.fine label, body.fine summary { curso
 }
 
 /* ---------- Particle fog layer: above scrim/grid, below content ---------- */
-#fog { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+#fog { position: fixed; inset: 0; z-index: 1; pointer-events: none; width: 100%; height: 100%; }
 
 /* ---------- Custom cursor ---------- */
 #cursor { position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none; display: none; }
@@ -170,7 +170,7 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 }
 /* word-mask reveal: .w clips, .wi slides out; padding trick keeps descenders visible */
 .hero-title .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.14em; margin-bottom: -0.14em; }
-.hero-title .wi { display: inline-block; will-change: transform; }
+.hero-title .wi { display: inline-block; }
 .page-title {
   font-size: clamp(1.9rem, 4.4vw, 3.6rem);
   font-weight: 600; line-height: 1.08; letter-spacing: -0.015em;
@@ -179,9 +179,7 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .hero-manifesto {
   display: grid; grid-template-columns: 1fr 1fr; column-gap: 48px; row-gap: 22px; align-items: start;
   max-width: 980px; margin-top: 32px;
-  background: rgba(255, 255, 255, 0.86);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.94);
   border: 1px solid rgba(38, 32, 27, 0.08);
   border-radius: 20px;
   box-shadow: 0 10px 28px rgba(38, 32, 27, 0.05);
@@ -218,12 +216,10 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .economy .trow.ours > div { background: color-mix(in srgb, var(--accent) 6%, transparent); }
 
 .block { margin-top: 72px; }
-/* Same frosted sheet the ≤1024px card rule gives every .block.
+/* Same solid sheet the ≤1024px card rule gives every .block.
    One rule for every width; the later media queries keep the tighter padding. */
 .block-panel {
-  background: rgba(255, 255, 255, 0.86);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.94);
   border: 1px solid rgba(38, 32, 27, 0.08);
   border-radius: 20px;
   box-shadow: 0 10px 28px rgba(38, 32, 27, 0.05);
@@ -251,6 +247,7 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
   overflow: hidden; padding: 14px 0; white-space: nowrap;
 }
 .ticker { display: inline-flex; will-change: transform; animation: marquee 42s linear infinite; }
+.ticker.ticker-off { animation-play-state: paused; }
 .ticker span {
   font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em;
   color: var(--muted); padding-right: 16px;
@@ -268,11 +265,9 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .oldway {
   border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 0;
   /* the home page field now stays on screen behind this table, so the rows sit
-     on the same frosted sheet the narrow layouts put under every text block.
+     on the same solid sheet the narrow layouts put under every text block.
      The negative margin lets the sheet bleed past the text without moving it. */
-  background: rgba(255, 255, 255, 0.78);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.94);
   border-radius: 14px;
   padding: 0 22px;
   margin: 0 -22px;
@@ -342,6 +337,17 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .principle h3 { font-size: 18px; font-weight: 600; margin: 14px 0 10px; letter-spacing: 0.01em; }
 .principle p { font-size: 14.5px; color: var(--muted); line-height: 1.65; }
 .principles-line { margin-top: 28px; font-size: 11px; letter-spacing: 0.16em; color: var(--muted); }
+
+.about { display: grid; grid-template-columns: minmax(200px, 300px) 1fr; gap: 40px; align-items: start; border: 1px solid var(--line); background: var(--bg); padding: 32px 28px; }
+.about.no-photo { grid-template-columns: 1fr; }
+.about.no-photo .about-photo { display: none; }
+.about-photo { margin: 0; }
+.about-photo img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--line); }
+.about-photo figcaption { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.about-photo figcaption b { font-size: 15px; font-weight: 600; }
+.about-photo figcaption span { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.about-text h3 { font-size: 20px; font-weight: 600; line-height: 1.3; margin: 0 0 18px; letter-spacing: 0.01em; }
+.about-text p { font-size: 14.5px; color: var(--muted); line-height: 1.7; margin: 0 0 14px; max-width: 62ch; }
 .ai-price {
   display: block; margin-top: 14px;
   font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.08em;
@@ -363,12 +369,10 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .stage .s-id { font-family: 'IBM Plex Mono', monospace; font-size: 15.5px; letter-spacing: 0.14em; color: var(--accent); }
 .stage h3 { margin: 0; font-size: clamp(1.5rem, 3.6vw, 3.1rem); font-weight: 600; letter-spacing: -0.01em; }
 /* the field sits right behind this column, so the description gets its own
-   frosted sheet — the heading is heavy enough to hold on its own */
+   solid sheet — the heading is heavy enough to hold on its own */
 .stage p {
   margin: 0; font-size: 21.5px; color: var(--muted); line-height: 1.6; max-width: 52ch;
-  background: rgba(255, 255, 255, 0.6);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.94);
   border-radius: 12px;
   padding: 14px 18px;
 }
@@ -389,11 +393,9 @@ body.nav-open .burger i:nth-child(2) { transform: translateY(-3px) rotate(-45deg
 .trow > div.hl { color: var(--text); background: color-mix(in srgb, var(--accent) 6%, transparent); }
 .trow > div.dim { color: var(--muted); }
 .table-note { margin-top: 18px; font-size: 13.5px; color: var(--muted); max-width: 68ch; }
-/* frosted sheet under the caption, same treatment as the lab-page text over the field */
+/* solid sheet under the caption, same treatment as the lab-page text over the field */
 .cap-footnote {
-  background: rgba(255, 255, 255, 0.32);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.94);
   border-radius: 12px;
   padding: 14px 18px;
   max-width: fit-content;
@@ -696,12 +698,10 @@ body.fine .srv-card { cursor: none; }
 .done-mail:hover { background: var(--accent); color: #fff; }
 
 .brief-aside { display: flex; flex-direction: column; gap: 40px; border-left: 1px solid var(--line); padding-left: 48px; }
-/* the field runs right behind this column too — give it the same frosted
+/* the field runs right behind this column too — give it the same solid
    sheet the mobile layout already uses below, so text stays readable */
 .aside-block {
-  background: rgba(255, 255, 255, 0.5);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.94);
   border: 1px solid rgba(38, 32, 27, 0.08);
   border-radius: 20px;
   padding: 24px 28px;
@@ -755,8 +755,7 @@ body.fine .srv-card { cursor: none; }
 /* ---------- Route transition overlay ---------- */
 #overlay {
   position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center;
-  background: color-mix(in srgb, var(--bg) 55%, transparent);
-  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
   opacity: 0; visibility: hidden; pointer-events: none;
 }
 .ov-inner { font-size: 12px; letter-spacing: 0.18em; color: var(--text); text-align: center; }
@@ -788,9 +787,7 @@ body.fine .srv-card { cursor: none; }
   .srv-plate,
   .brief-form,
   .brief-done {
-    background: rgba(255, 255, 255, 0.86);
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.94);
     border: 1px solid rgba(38, 32, 27, 0.08);
     border-radius: 20px;
     box-shadow: 0 10px 28px rgba(38, 32, 27, 0.05);
@@ -821,7 +818,7 @@ body.fine .srv-card { cursor: none; }
     margin-top: 0;
     border-radius: 0;
   }
-  /* here the parent .block / .pipeline is already a frosted panel, so the
+  /* here the parent .block / .pipeline is already a solid panel, so the
      desktop-only sheets under the oldway table and the pipeline copy would
      only stack a second white layer on top of it */
   .oldway, .stage p {
@@ -832,17 +829,19 @@ body.fine .srv-card { cursor: none; }
     padding: 0;
     margin: 0;
   }
-  /* the +20% type and the frosted sheet are a desktop-only fix, where the
+  /* the +20% type and the solid sheet are a desktop-only fix, where the
      field shows through behind the pipeline */
   .stage p { font-size: 15px; }
   .stage h3 { font-size: clamp(1.5rem, 3vw, 2.6rem); }
   .stage .s-id { font-size: 12px; }
-  .pipeline { background: rgba(255, 255, 255, 0.6); }
+  .pipeline { background: rgba(255, 255, 255, 0.94); }
   .hero-manifesto p,
   .lab-tech,
   .table-note,
   .deliverable p,
   .principle p,
+  .about-text p,
+  .about-photo figcaption span,
   .oldway-pain p,
   .industries-open,
   .faq-a p,
@@ -854,9 +853,7 @@ body.fine .srv-card { cursor: none; }
     color: rgba(38, 32, 27, 0.82);
   }
   .footer-main {
-    background: rgba(255, 255, 255, 0.88);
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.94);
   }
 }
 /* nav/burger toggle needs more room than the header itself does: RU labels in
@@ -923,9 +920,7 @@ body.fine .srv-card { cursor: none; }
   }
   .metrics {
     grid-template-columns: repeat(2, 1fr);
-    background: rgba(255, 255, 255, 0.74);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.94);
     border: 1px solid rgba(38, 32, 27, 0.12);
     padding: 6px 10px 10px;
   }
@@ -949,6 +944,8 @@ body.fine .srv-card { cursor: none; }
   .deliverables, .principles, .iterations { grid-template-columns: 1fr; }
   .deliverable { padding: 20px 20px 22px; }
   .principle { padding: 20px 20px 22px; }
+  .about { grid-template-columns: 1fr; gap: 24px; padding: 20px; }
+  .about-photo { max-width: 260px; }
   .matrix-desktop, .compare-desktop, .economy-desktop { display: none; }
   .matrix-mobile, .compare-mobile { display: block; }
   .econ-mobile { display: grid; gap: 10px; }
@@ -1111,9 +1108,7 @@ body.fine .srv-card { cursor: none; }
   }
   .brief-aside .aside-block,
   #checklistBlock {
-    background: rgba(255, 255, 255, 0.82);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
+    background: rgba(255, 255, 255, 0.94);
     border: 1px solid rgba(38, 32, 27, 0.08);
     border-radius: 20px;
     padding: 18px 16px 20px;
@@ -1233,7 +1228,7 @@ body.no-gl #gl, body.no-gl #fog { display: none !important; }
 }
 
 /* Lab automation: same stage row as the pipeline, quieter type so five
-   steps stay a list. The panel behind them already frosts the field,
+   steps stay a list. The panel behind them already covers the field,
    so the desktop sheet on .stage p is turned off here only. */
 .lab-auto .lab-steps { border-top: 1px solid var(--line); margin-top: 28px; }
 .lab-auto .stage { min-width: 0; }

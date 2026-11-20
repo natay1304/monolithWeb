@@ -26,6 +26,14 @@
 
   if (MOBILE) document.body.classList.add('lite-gl');
 
+  const stCurEl = $('#stCur');
+  const stFpsEl = $('#stFps');
+  const stTimeEl = $('#stTime');
+  let scrollSpan = 1;
+  function updateScrollSpan() {
+    scrollSpan = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  }
+
   /* shared so goTo() works with or without the scene */
   const w  = { normal: 1, wireframe: 0, metric: 0, exploded: 0 };
   const fx = { converge: 0, pulse: 0 };
@@ -50,6 +58,7 @@
   let setHistogram = function () {};
   let startLoop = function () {};
   let stopLoop = function () {};
+  let wakeLoop = function () {};
   let freezeField = function () {};
   let setFogBoost = function () {};
   let staticFrame = function () {};
@@ -66,9 +75,43 @@
 
   if (typeof THREE !== 'undefined') {
   const canvas   = $('#gl');
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, alpha: true });
-  renderer.setPixelRatio(MOBILE ? 1 : Math.min(window.devicePixelRatio, 1.75));
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  const dpr0 = window.devicePixelRatio || 1;
+  // MSAA only on ordinary screens; above 1.25× the extra samples don't show. Phones stay at ratio 1, AA off.
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE && dpr0 < 1.25, alpha: true });
+  let quality = 0;          // Q0 base, Q1, Q2 — auto only steps down
+  let qualityLock = false;
+  {
+    const qArg = new URLSearchParams(location.search).get('q');
+    if (qArg === '0' || qArg === '1' || qArg === '2') { quality = +qArg; qualityLock = true; }
+  }
+  function pixelRatio() {
+    if (MOBILE) return quality >= 2 ? 0.75 : 1;
+    if (quality <= 0) return Math.min(window.devicePixelRatio || 1, 1.25);
+    return quality === 1 ? 1 : 0.75;
+  }
+  function applyPixelRatio() {
+    renderer.setPixelRatio(pixelRatio());
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+  applyPixelRatio();
+  if (stFpsEl) stFpsEl.textContent = 'FPS 60 · Q' + quality;
+  // Unplugged at startup → Q1. Plugging in later does not step back up. No API (Safari) → stay at Q0.
+  if (!qualityLock) {
+    try {
+      if (typeof navigator.getBattery === 'function') {
+        Promise.resolve(navigator.getBattery()).then((bat) => {
+          if (!bat || bat.charging !== false || qualityLock || quality !== 0) return;
+          quality = 1;
+          applyPixelRatio();
+          if (stFpsEl) {
+            const t = stFpsEl.textContent || '';
+            stFpsEl.textContent = /Q\d/.test(t) ? t.replace(/Q\d/, 'Q' + quality) : ('FPS 60 · Q' + quality);
+          }
+          if (REDUCED) staticFrame();
+        }).catch(() => {});
+      }
+    } catch (e) {}
+  }
   renderer.setClearColor(0x000000, 0);
 
   const scene  = new THREE.Scene();
@@ -123,12 +166,62 @@
 
   const mouse = { x: 0, y: 0, lx: 0, ly: 0 };
   const scroll = { y: window.scrollY, ly: window.scrollY };
-  window.addEventListener('scroll', () => { scroll.y = window.scrollY; }, { passive: true });
+  let curX = 0, curY = 0, curDirty = false, curAt = 0;
+  let lastInput = performance.now();
+  let idle = false;                                 // 30 fps after 2s with no input
+  let deepIdle = false;                             // 15 fps after 10s with no input
+  let lastRender = performance.now();
+  let lastFog = 0;                                  // rAF time of the last fog blit; 0 = draw on the next field frame
+  let hzSamples = [];
+  let hzT0 = 0, rafPrev = 0, hiHz = false, hzKnown = false;
+  let qWindowStart = 0, qFrames = 0, qLow = 0;
+  let qGraceUntil = performance.now() + 4000;       // ignore quality windows through the intro
+  const FRAME_60 = 1000 / 60;
+  const FRAME_30 = 1000 / 30;
+  const FRAME_15 = 1000 / 15;
+  const FOG_MS_ACTIVE = 31.5;                       // ≤ ~30/s — every other draw on a 60 Hz grid
+  const FOG_MS_IDLE = 65;                           // ≤ ~15/s in idle and deep idle (grid 1000/15)
+
+  function markInput() {
+    lastInput = performance.now();
+    if (!idle && !deepIdle) return;
+    idle = false;
+    deepIdle = false;
+    lastRender = lastInput - 100;                   // next callback draws immediately, back at 60
+    qWindowStart = 0; qFrames = 0;
+  }
+  // History, route tweens and palette changes are not input, so idle would
+  // otherwise keep drawing them at 30/15. holdMs keeps lastInput in the future
+  // for the tween; graceMs extends the quality-window exemption. hz samples stay put.
+  wakeLoop = function (holdMs, graceMs) {
+    const now = performance.now();
+    idle = false;
+    deepIdle = false;
+    lastRender = now - 100;
+    qWindowStart = 0; qFrames = 0;
+    lastInput = Math.max(lastInput, now + (holdMs || 0));
+    qGraceUntil = Math.max(qGraceUntil, now + (graceMs || 0));
+  };
+  function resetLimiter() {
+    const t = performance.now();
+    lastRender = t;
+    lastInput = t;
+    lastFog = 0;
+    idle = false;
+    deepIdle = false;
+    qWindowStart = 0; qFrames = 0; qLow = 0;
+    if (!hzKnown) { hzSamples = []; hzT0 = 0; rafPrev = 0; }
+  }
+  window.addEventListener('scroll', () => { scroll.y = window.scrollY; markInput(); }, { passive: true });
   window.addEventListener('mousemove', (e) => {
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
-    $('#stCur').textContent = 'CUR ' + (e.clientX / window.innerWidth).toFixed(3) + ' / ' + (e.clientY / window.innerHeight).toFixed(3);
+    curX = e.clientX; curY = e.clientY; curDirty = true;
+    markInput();
     if (FINE) cursorMove(e.clientX, e.clientY);
+  });
+  ['wheel', 'touchstart', 'touchmove', 'pointerdown', 'keydown'].forEach((ev) => {
+    window.addEventListener(ev, markInput, { passive: true });
   });
 
   const CAMERA_STATES = {
@@ -204,6 +297,7 @@
   };
 
   pulse = function () {
+    wakeLoop(1300, 0);
     if (REDUCED) return;
     gsap.fromTo(pulseLightSrc, { intensity: 2.2 }, { intensity: 0, duration: 1.1, ease: 'power2.out', overwrite: 'auto' });
   };
@@ -222,6 +316,7 @@
       histCurrent[c] += (histTarget[c] - histCurrent[c]) * Math.min(1, dt * 4);
     }
     const keep = 1 - fx.converge * 0.92;
+    const drawWire = w.wireframe > 0.01 || (quality === 0 && !MOBILE);
     let i = 0;
     for (let r = 0; r < ROWS; r++) {
       for (let c = 0; c < COLS; c++, i++) {
@@ -245,18 +340,25 @@
         dummy.rotation.set(0, 0, 0);
         dummy.updateMatrix();
         mesh.setMatrixAt(i, dummy.matrix);
-        if (!MOBILE || w.wireframe > 0.01) wire.setMatrixAt(i, dummy.matrix);
+        if (drawWire) wire.setMatrixAt(i, dummy.matrix);
       }
     }
     mesh.instanceMatrix.needsUpdate = true;
-    if (!MOBILE || w.wireframe > 0.01) wire.instanceMatrix.needsUpdate = true;
     wireMat.opacity = w.wireframe * 0.7;
+    // Q0 keeps the wire mesh (opacity follows the mode). Q1/Q2 drop the draw unless wireframe is on
+    const showWire = quality === 0 || w.wireframe > 0.01;
+    if (wire.visible !== showWire) wire.visible = showWire;
+    if (drawWire) wire.instanceMatrix.needsUpdate = true;
   }
 
-  function renderFrame() {
-    mouse.lx += (mouse.x - mouse.lx) * 0.04;                  // inertia lerp 0.04
-    mouse.ly += (mouse.y - mouse.ly) * 0.04;
-    scroll.ly += (scroll.y - scroll.ly) * 0.06;
+  // 0.04 at 60 Hz, ~0.0202 at 120 Hz — same time constant either way
+  function damp(k, dt) { return 1 - Math.pow(1 - k, dt * 60); }
+
+  function renderFrame(dt) {
+    const mk = damp(0.04, dt), sk = damp(0.06, dt);
+    mouse.lx += (mouse.x - mouse.lx) * mk;
+    mouse.ly += (mouse.y - mouse.ly) * mk;
+    scroll.ly += (scroll.y - scroll.ly) * sk;
     const sf = scroll.ly / Math.max(1, window.innerHeight);   // pages scrolled
 
     // mouse tilts the whole field in 3D, scroll slowly rotates and sinks it
@@ -267,8 +369,7 @@
     // MAIN: scroll drives a camera rail — orbit around the field, descend, widen fov
     let bx = camPos.x, by = camPos.y, bz = camPos.z, fovAdd = 0;
     if (state.route === 'main') {
-      const denom = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const p = Math.min(1, scroll.ly / denom);
+      const p = Math.min(1, scroll.ly / scrollSpan);
       const a = p * 0.65;
       const cs = Math.cos(a), sn = Math.sin(a);
       const nx = bx * cs - bz * sn, nz = bx * sn + bz * cs;
@@ -292,25 +393,98 @@
 
   function loop(now) {
     rafId = requestAnimationFrame(loop);
-    const dt = Math.min(0.05, (now - lastT) / 1000);
+    // median rAF gap over the first ~1.2 s: a short gap (< 11 ms) means the panel is ≥ ~90 Hz
+    if (!hzKnown) {
+      if (!hzT0) { hzT0 = now; rafPrev = now; }
+      else {
+        hzSamples.push(now - rafPrev);
+        rafPrev = now;
+        if (now - hzT0 >= 1200 && hzSamples.length >= 8) {
+          // lower quartile, not the median: a 120 Hz panel under load alternates 8.3 / 16.7 ms
+          // frames, the median can read as 60 Hz while the short gaps still give it away
+          const s = hzSamples.slice().sort((a, b) => a - b);
+          hiHz = s[s.length >> 2] < 11;
+          hzKnown = true;
+        }
+      }
+    }
+    if (curDirty && stCurEl && now - curAt >= 100) {
+      const iw = window.innerWidth || 1, ih = window.innerHeight || 1;
+      stCurEl.textContent = 'CUR ' + (curX / iw).toFixed(3) + ' / ' + (curY / ih).toFixed(3);
+      curDirty = false; curAt = now;
+    }
+    const settled = Math.abs(scroll.y - scroll.ly) < 0.5 && Math.abs(mouse.x - mouse.lx) < 0.002;
+    if ((idle || deepIdle) && !settled) {
+      idle = false; deepIdle = false; lastRender = now - 100; qWindowStart = 0; qFrames = 0;
+    } else if (!idle && settled && now - lastInput >= 2000) {
+      idle = true; qWindowStart = 0; qFrames = 0; qLow = 0;
+    }
+    if (idle && now - lastInput >= 10000) deepIdle = true;
+    // ≤ ~85 Hz draws every callback; faster panels lock to 60.
+    // 2s idle → 30, 10s deep idle → 15. Gates sit just under the 1000/n grid.
+    if (deepIdle || idle || hiHz) {
+      const interval = deepIdle ? FRAME_15 : idle ? FRAME_30 : FRAME_60;
+      const gate = deepIdle ? 65 : idle ? 31.5 : 15.5;
+      if (now - lastRender < gate) return;
+      const steps = Math.max(1, Math.floor((now - lastRender) / interval));
+      lastRender += steps * interval;             // stay on the interval grid, no phase drift
+    } else {
+      lastRender = now;
+    }
+    // deep idle frames are ~67 ms; the 0.05 cap would slow the waves, so let simT track real time
+    const dt = Math.min(deepIdle ? 0.12 : 0.05, (now - lastT) / 1000);
     lastT = now;
+    // sample only after the refresh rate is known, so the uncapped probe can't force a step down.
+    // grace covers the intro and route tweens; a step-down also waits out the canvas resize.
+    if (now < qGraceUntil) {
+      qWindowStart = 0; qFrames = 0; qLow = 0;
+    } else if (!qualityLock && !idle && hzKnown && qWindowStart && now - qWindowStart >= 1000) {
+      const avg = qFrames * 1000 / (now - qWindowStart);
+      if (avg < 60 * 0.8) {
+        qLow++;
+        if (qLow >= 3 && quality < 2) { quality++; applyPixelRatio(); qLow = 0; qGraceUntil = Math.max(qGraceUntil, now + 2000); }
+        else if (qLow >= 3) qLow = 0;
+      } else qLow = 0;
+      qWindowStart = 0; qFrames = 0;
+    }
     if (fieldFrozen) {
-      scroll.ly += (scroll.y - scroll.ly) * 0.06;   // renderFrame is skipped, but the fog reads this
+      // render is skipped; fog still reads scroll.ly, and idle waits for the mouse to settle
+      const mk = damp(0.04, dt), sk = damp(0.06, dt);
+      mouse.lx += (mouse.x - mouse.lx) * mk;
+      mouse.ly += (mouse.y - mouse.ly) * mk;
+      scroll.ly += (scroll.y - scroll.ly) * sk;
     } else {
       updateField(dt);
-      renderFrame();
+      renderFrame(dt);
     }
-    fogUpdate(dt);
+    // Fog drifts slowly: ≤30/s while active (every other frame on the 60 grid), ≤15/s when idle.
+    // dt is wall time since the previous blit, capped so a multi-second stall can't jump the particles.
+    {
+      const fogGate = (deepIdle || idle) ? FOG_MS_IDLE : FOG_MS_ACTIVE;
+      if (lastFog === 0 || now - lastFog >= fogGate) {
+        const fogDt = Math.min(0.25, lastFog === 0 ? dt : (now - lastFog) / 1000);
+        fogUpdate(fogDt);
+        lastFog = now;
+      }
+    }
     frames++;
+    if (!qualityLock && !idle && hzKnown && now >= qGraceUntil) {
+      if (!qWindowStart) qWindowStart = now;
+      qFrames++;
+    }
     if (now - fpsLast > 500) {
-      $('#stFps').textContent = 'FPS ' + Math.round(frames * 1000 / (now - fpsLast));
+      const n = Math.round(frames * 1000 / (now - fpsLast));
+      if (stFpsEl) stFpsEl.textContent = 'FPS ' + n + ' · Q' + quality;
       frames = 0; fpsLast = now;
     }
   }
 
-  startLoop = function () { fieldFrozen = false; if (rafId === null && !REDUCED) { lastT = performance.now(); rafId = requestAnimationFrame(loop); } };
-  stopLoop  = function () { if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; } };
-  staticFrame = function () { updateField(0.016); renderFrame(); fogUpdate(0.016); };
+  startLoop = function () {
+    fieldFrozen = false;
+    if (rafId === null && !REDUCED) { lastT = performance.now(); resetLimiter(); rafId = requestAnimationFrame(loop); }
+  };
+  stopLoop  = function () { if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; } resetLimiter(); };
+  staticFrame = function () { updateField(0.016); renderFrame(0.016); fogUpdate(0.016); };
   // exposes the field-freeze switch to code outside this THREE-guarded block (the loop keeps
   // running so fog keeps drifting; only the field's own update/render is skipped)
   freezeField = function (v) { fieldFrozen = v; };
@@ -320,8 +494,9 @@
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    applyPixelRatio();
     fogResize();
+    updateScrollSpan();
     if (REDUCED) staticFrame();
   });
 
@@ -357,7 +532,11 @@
       c.fillStyle = grad; c.fillRect(0, 0, 256, 256);
       fogSprite = s;
     };
-    fogResize = function () { fogCanvas.width = window.innerWidth; fogCanvas.height = window.innerHeight; };
+    const FOG_PX = 0.5;   // half-res bitmap, CSS stretches it back to the screen
+    fogResize = function () {
+      fogCanvas.width = Math.max(1, Math.round(window.innerWidth * FOG_PX));
+      fogCanvas.height = Math.max(1, Math.round(window.innerHeight * FOG_PX));
+    };
     let fogT = 0;
     // dialled up on pages that have no field to lean on (e.g. brief on a phone,
     // where the field is frozen out) so the fog reads as the scene, not a hint of one
@@ -367,17 +546,20 @@
       if (!fogSprite) return;
       fogT += dt;
       const wpx = fogCanvas.width, hpx = fogCanvas.height;
+      // Q1 keeps half the blobs, Q2 a quarter — same sprite, fewer of them
+      const nFog = quality <= 0 ? FOG_N : quality === 1 ? Math.ceil(FOG_N / 2) : Math.max(4, Math.ceil(FOG_N / 4));
       fctx.clearRect(0, 0, wpx, hpx);
       const sv = Math.max(-600, Math.min(600, scroll.y - scroll.ly));
       const rScale = 1 + (fogBoost - 1) * 0.3;
-      for (const p of fogParts) {
+      for (let fi = 0; fi < nFog; fi++) {
+        const p = fogParts[fi];
         p.u += dt * 0.006 * p.dp - sv * dt * 0.00022 * p.dp;
         p.v += Math.sin(fogT * 0.25 + p.ph) * dt * 0.01 - sv * dt * 0.00006 * p.dp;
         if (p.u > 1.12) p.u = -0.12; else if (p.u < -0.12) p.u = 1.12;
         if (p.v > 1.12) p.v = -0.12; else if (p.v < -0.12) p.v = 1.12;
-        const x = p.u * wpx + Math.sin(fogT * 0.18 + p.ph) * 36 * p.dp;
-        const y = p.v * hpx + Math.cos(fogT * 0.14 + p.ph * 1.7) * 24 * p.dp;
-        const r = p.r * rScale;
+        const x = p.u * wpx + Math.sin(fogT * 0.18 + p.ph) * (36 * FOG_PX) * p.dp;
+        const y = p.v * hpx + Math.cos(fogT * 0.14 + p.ph * 1.7) * (24 * FOG_PX) * p.dp;
+        const r = p.r * rScale * FOG_PX;
         fctx.globalAlpha = Math.min(1, 0.16 * p.dp * fogBoost);
         fctx.drawImage(fogSprite, x - r, y - r, r * 2, r * 2);
       }
@@ -394,6 +576,7 @@
   ];
 
   window.__monolithApply3D = function (n, instant) {
+    wakeLoop(1500, 0);
     const p = PALETTES_3D[n];
     const dur = (instant || REDUCED) ? 0 : 1.2;
     const cFog = new THREE.Color(p.fog), cCol = new THREE.Color(p.col),
@@ -452,14 +635,34 @@
     el.innerHTML = TICKER_ANIMATED ? one + one : one;
   }
 
+  // Pause the marquee when its band is off-screen, the tab is hidden, or the route
+  // isn't main. Non-main pages already set .page { display: none }, which drops the
+  // bands from the compositor; the class still covers the hidden tab and off-screen bands.
+  const tickerInView = new Map();
+  function syncTickers() {
+    const forceOff = document.hidden || state.route !== 'main';
+    $$('.ticker-band').forEach((band) => {
+      const ticker = $('.ticker', band);
+      if (!ticker) return;
+      const seen = tickerInView.has(band);
+      const offscreen = seen && tickerInView.get(band) !== true;
+      ticker.classList.toggle('ticker-off', forceOff || offscreen);
+    });
+  }
+  function watchTickers() {
+    document.addEventListener('visibilitychange', syncTickers);
+    if (typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => tickerInView.set(en.target, en.isIntersecting));
+      syncTickers();
+    }, { root: null, threshold: 0 });
+    $$('.ticker-band').forEach((band) => io.observe(band));
+  }
+
   function renderDynamic() {
     const L = state.lang;
 
-    $('#heroMetrics').innerHTML = HERO_METRICS.map((m) =>
-      `<div class="metric"><div class="metric-value">${esc(typeof m.value === 'object' ? m.value[L] : m.value)}</div><div class="metric-label">${esc(m.label[L])}</div></div>`).join('');
-
     renderTicker($('#inputTicker'), ['INPUT:', ...INPUT_TICKER[L]], ' /');
-    renderTicker($('#scenarioTicker'), SCENARIO_TICKER[L], ' //');
 
     $('#oldway').innerHTML = OLDWAY_ROWS.map((r) =>
       `<article class="oldway-card">
@@ -506,6 +709,10 @@
 
     $('#principles').innerHTML = PRINCIPLES.map((p) =>
       `<div class="principle"><span class="p-index">${p.index} //</span><h3>${esc(p.title[L])}</h3><p>${esc(p.text[L])}</p></div>`).join('');
+
+    $('#about').innerHTML =
+      `<figure class="about-photo"><img src="${esc(ABOUT.photo)}" alt="${esc(ABOUT.name[L])}" loading="lazy" onerror="this.closest('.about').classList.add('no-photo')"><figcaption><b>${esc(ABOUT.name[L])}</b><span>${esc(ABOUT.role[L])}</span></figcaption></figure>
+       <div class="about-text"><h3>${esc(ABOUT.title[L])}</h3>${ABOUT.paras.map((p) => `<p>${esc(p[L])}</p>`).join('')}</div>`;
 
     $('#pipeline').innerHTML = PIPELINE.map((s) =>
       `<div class="stage" data-stage="${s.id}"><span class="s-id">${s.id} //</span><h3>${esc(s.name[L] || s.name)}</h3><p>${esc(s.text[L])}</p></div>`).join('');
@@ -786,6 +993,7 @@
       b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
     if (changed && typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+    if (changed) updateScrollSpan();
   }
 
   /* ---------- 04 BRIEF ---------- */
@@ -1082,7 +1290,9 @@
     const text = title.textContent.trim().replace(/\s+/g, ' ');
     title.innerHTML = text.split(' ').map((wd) => `<span class="w"><span class="wi">${esc(wd)}</span></span>`).join(' ');
     gsap.fromTo('#page-main .wi', { yPercent: 115 }, {
-      yPercent: 0, duration: 0.95, ease: 'power3.out', stagger: 0.065, delay: 0.12
+      yPercent: 0, duration: 0.95, ease: 'power3.out', stagger: 0.065, delay: 0.12,
+      onStart() { this.targets().forEach((el) => { el.style.willChange = 'transform'; }); },
+      onComplete() { this.targets().forEach((el) => { el.style.willChange = 'auto'; }); }
     });
   }
 
@@ -1101,7 +1311,7 @@
 
   /* MAIN scroll choreography: each section retunes the geometry state */
   const MAIN_CHOREO = [
-    ['#heroMetrics',  { normal: 0.25, wireframe: 0, metric: 0.75, exploded: 0 }],
+    ['#aboutBlock',   { normal: 0.25, wireframe: 0, metric: 0.75, exploded: 0 }],
     ['#oldway',       STATE_WEIGHTS.main],
     ['#deliverables', { normal: 0.45, wireframe: 0.55, metric: 0, exploded: 0 }],
     ['#industries',   STATE_WEIGHTS.main],
@@ -1116,7 +1326,7 @@
     const noMotion = MOBILE && route === 'brief';
     setFogBoost(noMotion ? 2.4 : 1);
     if (noMotion) { freezeField(true); gsap.set('#gl', { opacity: 0 }); }
-    if (REDUCED || document.hidden) return;   // hidden tab: show content plainly, no reveal tweens
+    if (REDUCED || document.hidden) { updateScrollSpan(); return; }   // hidden tab: show content plainly, no reveal tweens
     ScrollTrigger.getAll().forEach((t) => t.kill());
     if (!noMotion) {
       $$('#page-' + route + ' [data-animate]').forEach((el) => {
@@ -1128,10 +1338,6 @@
     }
     if (route === 'main') {
       heroEntrance();
-      ScrollTrigger.create({
-        trigger: '#heroMetrics', start: 'top 85%', once: true,
-        onEnter: () => $$('.metric-value').forEach(scramble)
-      });
       MAIN_CHOREO.forEach(([sel, tw], idx) => ScrollTrigger.create({
         trigger: sel, start: 'top 70%',
         onEnter:     () => tweenWeights(tw, 1.1),
@@ -1142,6 +1348,7 @@
     // fades it, so it stops fighting body text; scrolling back brings it in
     if (!noMotion && (route === 'main' || route === 'brief')) buildHeroRecede(route);
     ScrollTrigger.refresh();
+    updateScrollSpan();
   }
 
   function showPage(route) {
@@ -1150,6 +1357,7 @@
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });   // bypass smooth scroll: new page always opens at the top
     focusCase(route);
     focusSrv(route);
+    syncTickers();
   }
 
   /* footer "AI audit" link: same idea as m_case, scroll to the build group after the route lands */
@@ -1184,6 +1392,7 @@
   }
 
   function goTo(route, instant) {
+    wakeLoop(1700, 4000);
     const prev = state.route;
     state.route = route;
     setNav(route);
@@ -1219,6 +1428,7 @@
     if (REDUCED) {
       showPage(route);
       state.transitioning = false;
+      updateScrollSpan();
       staticFrame();
       return;
     }
@@ -1233,6 +1443,7 @@
   }
 
   window.addEventListener('hashchange', () => {
+    wakeLoop(1700, 4000);
     const route = routeFromHash();
     if (route !== state.route) goTo(route);
     document.body.classList.remove('nav-open');
@@ -1247,7 +1458,7 @@
      ========================================================== */
   function tickTime() {
     const d = new Date();
-    $('#stTime').textContent = [d.getHours(), d.getMinutes(), d.getSeconds()]
+    stTimeEl.textContent = [d.getHours(), d.getMinutes(), d.getSeconds()]
       .map((n) => String(n).padStart(2, '0')).join(':');
   }
   setInterval(tickTime, 1000); tickTime();
@@ -1336,7 +1547,19 @@
   renderDynamic();
   bindDynamic();
   captureSource();
+  watchTickers();
   goTo(routeFromHash(), true);
+  updateScrollSpan();
+  {
+    let spanRaf = 0;
+    const pagesEl = $('#pages');
+    if (pagesEl && typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(() => {
+        if (spanRaf) return;
+        spanRaf = requestAnimationFrame(() => { spanRaf = 0; updateScrollSpan(); });
+      }).observe(pagesEl);
+    }
+  }
 
   if (REDUCED) {
     simT = 1.6;
