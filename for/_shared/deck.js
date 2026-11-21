@@ -115,6 +115,6 @@
   function setLang(l,save){LANG=l;render();onScroll();if(save){try{localStorage.setItem('monolith-lang',l)}catch(e){}}}
   var q=(location.search.match(/[?&]lang=(ru|en)/)||[])[1],sv=null;
   try{sv=localStorage.getItem('monolith-lang')}catch(e){}
-  LANG=q||sv||((navigator.language||'ru').slice(0,2)==='ru'?'ru':'en');
+  LANG=q||sv||C.lang||'ru';
   render();onScroll();
 })();
