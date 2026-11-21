@@ -25,6 +25,9 @@ window.COMPANY={
  "ui": {
   "ru": {
    "sticky": "Получить бесплатный разрез"
+  },
+  "en": {
+   "sticky": "Get a free section view"
   }
  },
  "contact": {
@@ -45,121 +48,274 @@ window.COMPANY={
  "nav": [
   {
    "id": "why",
-   "t": "Задача"
+   "t": {
+    "ru": "Задача",
+    "en": "The task"
+   }
   },
   {
    "id": "deliver",
-   "t": "Результат"
+   "t": {
+    "ru": "Результат",
+    "en": "Deliverables"
+   }
   },
   {
    "id": "pricing",
-   "t": "Цены"
+   "t": {
+    "ru": "Цены",
+    "en": "Pricing"
+   }
   }
  ],
  "hero": {
   "viewer": false,
-  "eyebrow": "Предложение для Арматурный завод",
-  "h1": "Разрезы, взрыв-схемы и 3D вашей арматуры вместо PDF-каталога",
-  "lead": "Более 20 000 наименований удобнее выбирать на сайте, чем в PDF. Делаем разрезы, взрыв-схемы и 3D-просмотрщик по вашим данным, а коммерческие предложения собираем ИИ из каталога.",
-  "cta": "Получить бесплатный разрез",
+  "eyebrow": {
+   "ru": "Предложение для Арматурный завод",
+   "en": "A proposal for Armaturny Zavod"
+  },
+  "h1": {
+   "ru": "Разрезы, взрыв-схемы и 3D вашей арматуры вместо PDF-каталога",
+   "en": "Cut-aways, exploded views and 3D of your valves instead of a PDF catalogue"
+  },
+  "lead": {
+   "ru": "Более 20 000 наименований удобнее выбирать на сайте, чем в PDF. Делаем разрезы, взрыв-схемы и 3D-просмотрщик по вашим данным, а коммерческие предложения собираем ИИ из каталога.",
+   "en": "With over 20,000 items, choosing on a website is easier than in a PDF. We make cut-aways, exploded views and a 3D viewer from your data, and AI assembles commercial proposals from the catalogue."
+  },
+  "cta": {
+   "ru": "Получить бесплатный разрез",
+   "en": "Get a free section view"
+  },
   "ctaTo": "contact",
-  "cta2": "Что вы получите",
+  "cta2": {
+   "ru": "Что вы получите",
+   "en": "What you get"
+  },
   "cta2to": "deliver",
   "offer": [
    {
-    "t": "Разрез",
-    "d": "Внутреннее устройство по оси потока"
+    "t": {
+     "ru": "Разрез",
+     "en": "Section"
+    },
+    "d": {
+     "ru": "Внутреннее устройство по оси потока",
+     "en": "Internal design along the flow axis"
+    }
    },
    {
-    "t": "Взрыв-схема",
-    "d": "Детали с нумерацией для каталога"
+    "t": {
+     "ru": "Взрыв-схема",
+     "en": "Exploded view"
+    },
+    "d": {
+     "ru": "Детали с нумерацией для каталога",
+     "en": "Numbered parts for the catalogue"
+    }
    },
    {
-    "t": "3D для сайта",
-    "d": "Вращается в браузере, есть разрез"
+    "t": {
+     "ru": "3D для сайта",
+     "en": "3D for the web"
+    },
+    "d": {
+     "ru": "Вращается в браузере, есть разрез",
+     "en": "Rotates in the browser, with section"
+    }
    },
    {
-    "t": "Подбор и КП",
-    "d": "Опросный лист → готовое КП"
+    "t": {
+     "ru": "Подбор и КП",
+     "en": "Selection and quotation"
+    },
+    "d": {
+     "ru": "Опросный лист → готовое КП",
+     "en": "Questionnaire → ready quotation"
+    }
    }
   ]
  },
  "why": {
-  "title": "Что можно улучшить",
+  "title": {
+   "ru": "Что можно улучшить",
+   "en": "What could be improved"
+  },
   "paras": [
-   "Арматурный завод: Трубопроводная арматура: клапаны, задвижки, краны, затворы. Ниже коротко, чем мы можем быть полезны.",
-   "Более 20 000 наименований, каталог в PDF; 3D, чертежей и онлайн-подбора на сайте нет. Мы смотрели только открытые источники, поэтому не утверждаем, что у вас именно так: это типичные задачи компаний вашего профиля."
+   {
+    "ru": "Арматурный завод: Трубопроводная арматура: клапаны, задвижки, краны, затворы. Ниже коротко, чем мы можем быть полезны.",
+    "en": "Armaturny Zavod: pipeline valves: valves, gate valves, ball valves, butterfly valves. Below is a short note on how we can help."
+   },
+   {
+    "ru": "Более 20 000 наименований, каталог в PDF; 3D, чертежей и онлайн-подбора на сайте нет. Мы смотрели только открытые источники, поэтому не утверждаем, что у вас именно так: это типичные задачи компаний вашего профиля.",
+    "en": "Over 20,000 items, a PDF catalogue; the site has no 3D, drawings or online selection. We looked only at open sources, so we do not claim this is how it is for you: these are typical tasks for companies like yours."
+   }
   ],
   "tasks": [
-   "Каталог на 20 000+ позиций только в PDF: закупщику трудно найти и сравнить изделие",
-   "Нет 3D и чертежей на сайте: внутреннее устройство не видно до звонка",
-   "Подбор и КП, вероятно, идут вручную через менеджера"
+   {
+    "ru": "Каталог на 20 000+ позиций только в PDF: закупщику трудно найти и сравнить изделие",
+    "en": "A 20,000+ item catalogue only as a PDF: it is hard for a buyer to find and compare a product"
+   },
+   {
+    "ru": "Нет 3D и чертежей на сайте: внутреннее устройство не видно до звонка",
+    "en": "No 3D or drawings on the site: the inner design is not visible until a call"
+   },
+   {
+    "ru": "Подбор и КП, вероятно, идут вручную через менеджера",
+    "en": "Selection and quotations probably go through a manager by hand"
+   }
   ]
  },
  "deliver": {
-  "title": "Что вы получите",
+  "title": {
+   "ru": "Что вы получите",
+   "en": "What you get"
+  },
   "items": [
    {
-    "t": "Разрез по оси потока",
-    "d": "Седло, затвор, шток, толщина стенки. Режется в вашей CAD-модели, а не рисуется поверх."
+    "t": {
+     "ru": "Разрез по оси потока",
+     "en": "Section along the flow axis"
+    },
+    "d": {
+     "ru": "Седло, затвор, шток, толщина стенки. Режется в вашей CAD-модели, а не рисуется поверх.",
+     "en": "Seat, disc, stem, wall thickness. Cut in your CAD model, not drawn over it."
+    }
    },
    {
-    "t": "Взрыв-схема",
-    "d": "Разнос по оси сборки с нумерацией, как в руководстве по эксплуатации."
+    "t": {
+     "ru": "Взрыв-схема",
+     "en": "Exploded view"
+    },
+    "d": {
+     "ru": "Разнос по оси сборки с нумерацией, как в руководстве по эксплуатации.",
+     "en": "Parts spread along the assembly axis with numbering, as in an operation manual."
+    }
    },
    {
-    "t": "3D в браузере",
-    "d": "Вращается мышью и пальцем, переключается на разрез. Встраивается на ваш сайт."
+    "t": {
+     "ru": "3D в браузере",
+     "en": "3D in the browser"
+    },
+    "d": {
+     "ru": "Вращается мышью и пальцем, переключается на разрез. Встраивается на ваш сайт.",
+     "en": "Rotates by mouse and touch, switches to section. Embeds on your website."
+    }
    },
    {
-    "t": "Серия по типоразмерам",
-    "d": "Единый свет и ракурс на весь ряд: каталог читается как одна серия."
+    "t": {
+     "ru": "Серия по типоразмерам",
+     "en": "Series by size"
+    },
+    "d": {
+     "ru": "Единый свет и ракурс на весь ряд: каталог читается как одна серия.",
+     "en": "The same light and angle across the whole range: the catalogue reads as one series."
+    }
    }
   ]
  },
  "pricing": {
-  "title": "Начинаем с бесплатной пробы",
-  "note": "Стартовые условия для первых проектов, оплата в $, предоплата 50%. Точная цена зависит от исходных данных и объёма.",
+  "title": {
+   "ru": "Начинаем с бесплатной пробы",
+   "en": "We start with a free trial"
+  },
+  "note": {
+   "ru": "Стартовые условия для первых проектов, оплата в $, предоплата 50%. Точная цена зависит от исходных данных и объёма.",
+   "en": "Starting terms for the first projects: payment in USD, 50% prepayment. The exact price depends on the source data and scope."
+  },
   "plans": [
    {
-    "t": "Проба",
+    "t": {
+     "ru": "Проба",
+     "en": "Trial"
+    },
     "price": "0 $",
     "items": [
-     "1 кадр разреза по вашей модели",
-     "Если модель подходит"
+     {
+      "ru": "1 кадр разреза по вашей модели",
+      "en": "1 section view from your model"
+     },
+     {
+      "ru": "Если модель подходит",
+      "en": "If the model fits"
+     }
     ]
    },
    {
-    "t": "Пилот",
-    "price": "от 1 800 $",
+    "t": {
+     "ru": "Пилот",
+     "en": "Pilot"
+    },
+    "price": {
+     "ru": "от 1 800 $",
+     "en": "from $1,800"
+    },
     "rec": true,
     "items": [
-     "1 изделие: общий вид и 3 кадра разреза",
-     "3D для сайта"
+     {
+      "ru": "1 изделие: общий вид и 3 кадра разреза",
+      "en": "1 product: exterior and 3 section views"
+     },
+     {
+      "ru": "3D для сайта",
+      "en": "3D for the web"
+     }
     ]
    },
    {
-    "t": "Пакет",
-    "price": "от 4 800 $",
+    "t": {
+     "ru": "Пакет",
+     "en": "Package"
+    },
+    "price": {
+     "ru": "от 4 800 $",
+     "en": "from $4,800"
+    },
     "items": [
-     "5 изделий в едином стиле",
-     "Взрыв-схемы и 3D"
+     {
+      "ru": "5 изделий в едином стиле",
+      "en": "5 products in one style"
+     },
+     {
+      "ru": "Взрыв-схемы и 3D",
+      "en": "Exploded views and 3D"
+     }
     ]
    }
   ]
  },
  "about": {
-  "title": "MONOLITH — студия технической графики, софта и ИИ для промышленных продаж",
+  "title": {
+   "ru": "MONOLITH — студия технической графики, софта и ИИ для промышленных продаж",
+   "en": "MONOLITH — a studio of technical graphics, software and AI for industrial sales"
+  },
   "paras": [
-   "Из чертежей и данных клиента делаем визуал: разрезы систем, сцены применения, ролики, каталоги на нескольких языках, 3D и AR на сайте, калькуляторы для дилеров и внутренние инструменты, без дополнительных съёмок.",
-   "Проект ведёт и отвечает за результат Анастасия Малютина: 8+ лет в IT, 7+ лет коммерческой разработки. Пока мы показываем демонстрационные кейсы, поэтому первый кадр делаем бесплатно по вашим данным."
+   {
+    "ru": "Из чертежей и данных клиента делаем визуал: разрезы систем, сцены применения, ролики, каталоги на нескольких языках, 3D и AR на сайте, калькуляторы для дилеров и внутренние инструменты, без дополнительных съёмок.",
+    "en": "From a client’s drawings and data we make visuals: system cut-aways, application scenes, videos, multilingual catalogues, 3D and AR on the site, dealer calculators and internal tools, with no extra shooting."
+   },
+   {
+    "ru": "Проект ведёт и отвечает за результат Анастасия Малютина: 8+ лет в IT, 7+ лет коммерческой разработки. Пока мы показываем демонстрационные кейсы, поэтому первый кадр делаем бесплатно по вашим данным.",
+    "en": "The project is led, and the result is owned, by Anastasiya Malyutina: 8+ years in IT, 7+ years of commercial development. For now we show demonstration cases, so we make the first view for free from your data."
+   }
   ]
  },
  "cta": {
-  "title": "Пришлите STEP одного изделия",
-  "lead": "Если модель подходит, первый разрез вернём бесплатно. Если нет, напишем, что необходимо.",
-  "btn": "Заполнить бриф",
-  "or": "или напишите нам на почту:",
+  "title": {
+   "ru": "Пришлите STEP одного изделия",
+   "en": "Send a STEP file of one product"
+  },
+  "lead": {
+   "ru": "Если модель подходит, первый разрез вернём бесплатно. Если нет, напишем, что необходимо.",
+   "en": "If the model fits, we will return the first section for free. If not, we will tell you what is needed."
+  },
+  "btn": {
+   "ru": "Заполнить бриф",
+   "en": "Fill in the brief"
+  },
+  "or": {
+   "ru": "или напишите нам на почту:",
+   "en": "or write to us by email:"
+  },
   "mail": "mail@monolith.contact"
  }
 };

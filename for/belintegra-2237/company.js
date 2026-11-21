@@ -25,6 +25,9 @@ window.COMPANY={
  "ui": {
   "ru": {
    "sticky": "Получить бесплатный кадр"
+  },
+  "en": {
+   "sticky": "Get a free view"
   }
  },
  "contact": {
@@ -45,121 +48,274 @@ window.COMPANY={
  "nav": [
   {
    "id": "why",
-   "t": "Задача"
+   "t": {
+    "ru": "Задача",
+    "en": "The task"
+   }
   },
   {
    "id": "deliver",
-   "t": "Результат"
+   "t": {
+    "ru": "Результат",
+    "en": "Deliverables"
+   }
   },
   {
    "id": "pricing",
-   "t": "Цены"
+   "t": {
+    "ru": "Цены",
+    "en": "Pricing"
+   }
   }
  ],
  "hero": {
   "viewer": false,
-  "eyebrow": "Предложение для ЗАО «Белинтегра»",
-  "h1": "Онлайн-подбор, сцены применения и многоязычный каталог вместо PDF",
-  "lead": "Каталоги сейчас в PDF, подбор идёт через заявку. Есть представительства в Москве и Алматы, поэтому собираем каталог на нескольких языках, онлайн-подбор светильников и кадры в сценах применения.",
-  "cta": "Получить бесплатный кадр",
+  "eyebrow": {
+   "ru": "Предложение для ЗАО «Белинтегра»",
+   "en": "A proposal for Belintegra"
+  },
+  "h1": {
+   "ru": "Онлайн-подбор, сцены применения и многоязычный каталог вместо PDF",
+   "en": "Online selection, application scenes and a multilingual catalogue instead of a PDF"
+  },
+  "lead": {
+   "ru": "Каталоги сейчас в PDF, подбор идёт через заявку. Есть представительства в Москве и Алматы, поэтому собираем каталог на нескольких языках, онлайн-подбор светильников и кадры в сценах применения.",
+   "en": "The catalogues are currently PDFs and selection goes through a request. You have offices in Moscow and Almaty, so we build a multilingual catalogue, online luminaire selection and views in application scenes."
+  },
+  "cta": {
+   "ru": "Получить бесплатный кадр",
+   "en": "Get a free view"
+  },
   "ctaTo": "contact",
-  "cta2": "Что вы получите",
+  "cta2": {
+   "ru": "Что вы получите",
+   "en": "What you get"
+  },
   "cta2to": "deliver",
   "offer": [
    {
-    "t": "Фотореалистика",
-    "d": "Изделие на белом и в интерьере"
+    "t": {
+     "ru": "Фотореалистика",
+     "en": "Photorealism"
+    },
+    "d": {
+     "ru": "Изделие на белом и в интерьере",
+     "en": "The product on white and in an interior"
+    }
    },
    {
-    "t": "Сцены применения",
-    "d": "Цех, склад, улица, офис"
+    "t": {
+     "ru": "Сцены применения",
+     "en": "Application scenes"
+    },
+    "d": {
+     "ru": "Цех, склад, улица, офис",
+     "en": "Workshop, warehouse, street, office"
+    }
    },
    {
-    "t": "Каталог",
-    "d": "Единый вид, несколько языков"
+    "t": {
+     "ru": "Каталог",
+     "en": "Catalogue"
+    },
+    "d": {
+     "ru": "Единый вид, несколько языков",
+     "en": "One look, several languages"
+    }
    },
    {
-    "t": "Онлайн-подбор",
-    "d": "Параметры → подходящая модель"
+    "t": {
+     "ru": "Онлайн-подбор",
+     "en": "Online selection"
+    },
+    "d": {
+     "ru": "Параметры → подходящая модель",
+     "en": "Parameters → a suitable model"
+    }
    }
   ]
  },
  "why": {
-  "title": "Что можно улучшить",
+  "title": {
+   "ru": "Что можно улучшить",
+   "en": "What could be improved"
+  },
   "paras": [
-   "ЗАО «Белинтегра»: Светильники, электрощитовое оборудование и шкафы, с 1993 г.. Ниже коротко, чем мы можем быть полезны.",
-   "Каталоги только в PDF, подбор через заявку; есть представительства в Москве и Алматы. Мы смотрели только открытые источники, поэтому не утверждаем, что у вас именно так: это типичные задачи компаний вашего профиля."
+   {
+    "ru": "ЗАО «Белинтегра»: Светильники, электрощитовое оборудование и шкафы, с 1993 г.. Ниже коротко, чем мы можем быть полезны.",
+    "en": "Belintegra: luminaires, switchgear and cabinets, since 1993. Below is a short note on how we can help."
+   },
+   {
+    "ru": "Каталоги только в PDF, подбор через заявку; есть представительства в Москве и Алматы. Мы смотрели только открытые источники, поэтому не утверждаем, что у вас именно так: это типичные задачи компаний вашего профиля.",
+    "en": "Catalogues only as PDFs, selection by request; there are offices in Moscow and Almaty. We looked only at open sources, so we do not claim this is how it is for you: these are typical tasks for companies like yours."
+   }
   ],
   "tasks": [
-   "Каталоги в PDF: подбор светильника идёт через заявку и менеджера",
-   "Рынки в РФ и Казахстане требуют разных версий каталога",
-   "Электрощитовое оборудование трудно показать фото изнутри"
+   {
+    "ru": "Каталоги в PDF: подбор светильника идёт через заявку и менеджера",
+    "en": "PDF catalogues: luminaire selection goes through a request and a manager"
+   },
+   {
+    "ru": "Рынки в РФ и Казахстане требуют разных версий каталога",
+    "en": "The markets in Russia and Kazakhstan need different catalogue versions"
+   },
+   {
+    "ru": "Электрощитовое оборудование трудно показать фото изнутри",
+    "en": "Switchgear is hard to show from the inside in photos"
+   }
   ]
  },
  "deliver": {
-  "title": "Что вы получите",
+  "title": {
+   "ru": "Что вы получите",
+   "en": "What you get"
+  },
   "items": [
    {
-    "t": "Фотореалистичные кадры",
-    "d": "Светильник или шкаф на белом фоне и в сцене применения, без студийной съёмки."
+    "t": {
+     "ru": "Фотореалистичные кадры",
+     "en": "Photorealistic views"
+    },
+    "d": {
+     "ru": "Светильник или шкаф на белом фоне и в сцене применения, без студийной съёмки.",
+     "en": "A luminaire or cabinet on a white background and in an application scene, without studio photography."
+    }
    },
    {
-    "t": "Сцены применения",
-    "d": "Цех, склад, улица, офис при рабочем свете. Показываем распределение света и габарит."
+    "t": {
+     "ru": "Сцены применения",
+     "en": "Application scenes"
+    },
+    "d": {
+     "ru": "Цех, склад, улица, офис при рабочем свете. Показываем распределение света и габарит.",
+     "en": "Workshop, warehouse, street, office in working light. We show the light distribution and the size."
+    }
    },
    {
-    "t": "Каталог на нескольких языках",
-    "d": "Русский, английский, местный язык: один макет, единый визуал."
+    "t": {
+     "ru": "Каталог на нескольких языках",
+     "en": "A multilingual catalogue"
+    },
+    "d": {
+     "ru": "Русский, английский, местный язык: один макет, единый визуал.",
+     "en": "Russian, English, a local language: one layout, one visual style."
+    }
    },
    {
-    "t": "Онлайн-подбор",
-    "d": "Клиент вводит параметры и получает подходящие модели вместо листания PDF."
+    "t": {
+     "ru": "Онлайн-подбор",
+     "en": "Online selection"
+    },
+    "d": {
+     "ru": "Клиент вводит параметры и получает подходящие модели вместо листания PDF.",
+     "en": "The customer enters parameters and gets suitable models instead of paging through a PDF."
+    }
    }
   ]
  },
  "pricing": {
-  "title": "Начинаем с бесплатной пробы",
-  "note": "Стартовые условия для первых проектов, оплата в $, предоплата 50%. Точная цена зависит от исходных данных и объёма.",
+  "title": {
+   "ru": "Начинаем с бесплатной пробы",
+   "en": "We start with a free trial"
+  },
+  "note": {
+   "ru": "Стартовые условия для первых проектов, оплата в $, предоплата 50%. Точная цена зависит от исходных данных и объёма.",
+   "en": "Starting terms for the first projects: payment in USD, 50% prepayment. The exact price depends on the source data and scope."
+  },
   "plans": [
    {
-    "t": "Проба",
+    "t": {
+     "ru": "Проба",
+     "en": "Trial"
+    },
     "price": "0 $",
     "items": [
-     "1 кадр изделия по вашей модели",
-     "Если модель подходит"
+     {
+      "ru": "1 кадр изделия по вашей модели",
+      "en": "1 product view from your model"
+     },
+     {
+      "ru": "Если модель подходит",
+      "en": "If the model fits"
+     }
     ]
    },
    {
-    "t": "Пилот",
-    "price": "от 1 800 $",
+    "t": {
+     "ru": "Пилот",
+     "en": "Pilot"
+    },
+    "price": {
+     "ru": "от 1 800 $",
+     "en": "from $1,800"
+    },
     "rec": true,
     "items": [
-     "3 изделия: белый фон и 2 сцены применения",
-     "Страница каталога"
+     {
+      "ru": "3 изделия: белый фон и 2 сцены применения",
+      "en": "3 products: a white background and 2 application scenes"
+     },
+     {
+      "ru": "Страница каталога",
+      "en": "A catalogue page"
+     }
     ]
    },
    {
-    "t": "Пакет",
-    "price": "от 4 800 $",
+    "t": {
+     "ru": "Пакет",
+     "en": "Package"
+    },
+    "price": {
+     "ru": "от 4 800 $",
+     "en": "from $4,800"
+    },
     "items": [
-     "10 изделий в едином стиле",
-     "Каталог на 2–3 языках"
+     {
+      "ru": "10 изделий в едином стиле",
+      "en": "10 products in one style"
+     },
+     {
+      "ru": "Каталог на 2–3 языках",
+      "en": "A catalogue in 2–3 languages"
+     }
     ]
    }
   ]
  },
  "about": {
-  "title": "MONOLITH — студия технической графики, софта и ИИ для промышленных продаж",
+  "title": {
+   "ru": "MONOLITH — студия технической графики, софта и ИИ для промышленных продаж",
+   "en": "MONOLITH — a studio of technical graphics, software and AI for industrial sales"
+  },
   "paras": [
-   "Из чертежей и данных клиента делаем визуал: разрезы систем, сцены применения, ролики, каталоги на нескольких языках, 3D и AR на сайте, калькуляторы для дилеров и внутренние инструменты, без дополнительных съёмок.",
-   "Проект ведёт и отвечает за результат Анастасия Малютина: 8+ лет в IT, 7+ лет коммерческой разработки. Пока мы показываем демонстрационные кейсы, поэтому первый кадр делаем бесплатно по вашим данным."
+   {
+    "ru": "Из чертежей и данных клиента делаем визуал: разрезы систем, сцены применения, ролики, каталоги на нескольких языках, 3D и AR на сайте, калькуляторы для дилеров и внутренние инструменты, без дополнительных съёмок.",
+    "en": "From a client’s drawings and data we make visuals: system cut-aways, application scenes, videos, multilingual catalogues, 3D and AR on the site, dealer calculators and internal tools, with no extra shooting."
+   },
+   {
+    "ru": "Проект ведёт и отвечает за результат Анастасия Малютина: 8+ лет в IT, 7+ лет коммерческой разработки. Пока мы показываем демонстрационные кейсы, поэтому первый кадр делаем бесплатно по вашим данным.",
+    "en": "The project is led, and the result is owned, by Anastasiya Malyutina: 8+ years in IT, 7+ years of commercial development. For now we show demonstration cases, so we make the first view for free from your data."
+   }
   ]
  },
  "cta": {
-  "title": "Пришлите модель или чертёж одного изделия",
-  "lead": "Если исходник подходит, первый кадр вернём бесплатно. Если нет, напишем, что необходимо.",
-  "btn": "Заполнить бриф",
-  "or": "или напишите нам на почту:",
+  "title": {
+   "ru": "Пришлите модель или чертёж одного изделия",
+   "en": "Send a model or drawing of one product"
+  },
+  "lead": {
+   "ru": "Если исходник подходит, первый кадр вернём бесплатно. Если нет, напишем, что необходимо.",
+   "en": "If the source fits, we will return the first view for free. If not, we will tell you what is needed."
+  },
+  "btn": {
+   "ru": "Заполнить бриф",
+   "en": "Fill in the brief"
+  },
+  "or": {
+   "ru": "или напишите нам на почту:",
+   "en": "or write to us by email:"
+  },
   "mail": "mail@monolith.contact"
  }
 };
