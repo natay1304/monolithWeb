@@ -72,3 +72,5 @@ tools/
 # in assets/cases/ ship to the site. Keep the attribution file, drop the rest.
 assets/sources/*/*
 !assets/sources/*/SOURCE.md
+# Offers live in the private repo natay1304/monolith-offers and are fetched at build time
+/for/
